@@ -1,0 +1,337 @@
+[project]
+name = "api"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+readme = "README.md"
+dependencies = [
+  "boto3>=1.38.36",
+  "fastapi>=0.115.12",
+  "langchain>=0.3.25",
+  "langchain-community>=0.3.25",
+  "langchain-core>=0.3.65",
+  "langchain-openai>=0.3.23",
+  "miro-api>=2.2.4",
+  "pydantic>=2.11.4",
+  "pydantic-settings>=2.9.1",
+  "requests>=2.32.3",
+  "uvicorn[standard]>=0.35.0",
+]
+
+
+[dependency-groups]
+dev = [
+  "pyright>=1.1.400",
+  "pytest>=8.3.5",
+  "python-dotenv>=1.1.0",
+  "ruff>=0.11.10",
+]
+
+[tool.ruff]
+exclude = [
+  ".bzr",
+  ".direnv",
+  ".eggs",
+  ".git",
+  ".git-rewrite",
+  ".hg",
+  ".ipynb_checkpoints",
+  ".mypy_cache",
+  ".nox",
+  ".pants.d",
+  ".pyenv",
+  ".pytest_cache",
+  ".pytype",
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  ".vscode",
+  "__pypackages__",
+  "_build",
+  "buck-out",
+  "build",
+  "dist",
+  "node_modules",
+  "site-packages",
+  "venv",
+]
+line-length = 88
+indent-width = 4
+target-version = "py312"
+
+[tool.ruff.lint]
+preview = true
+select = [
+  # "AIR",  # Airflow
+  # "ERA",   # eradicate
+  "FAST",  # FastAPI
+  "YTT",   # flake8-2020
+  "ANN",   # flake8-annotations
+  "ASYNC", # flake8-async
+  "S",     # flake8-bandit
+  # "BLE",   # flake8-blind-except
+  "FBT", # flake8-boolean-trap
+  "B",   # flake8-bugbear
+  "A",   # flake8-builtins
+  "COM", # flake8-commas
+  "C4",  # flake8-comprehensions
+  "CPY", # flake8-copyright
+  "DTZ", # flake8-datetimez
+  "T10", # flake8-debugger
+  # "DJ",   # flake8-django
+  "EM",   # flake8-errmsg
+  "EXE",  # flake8-executable
+  "FIX",  # flake8-fixme
+  "FA",   # flake8-future-annotations
+  "INT",  # flake8-gettext
+  "ISC",  # flake8-implicit-str-concat
+  "ICN",  # flake8-import-conventions
+  "LOG",  # flake8-logging
+  "G",    # flake8-logging-format
+  "INP",  # flake8-no-pep420
+  "PIE",  # flake8-pie
+  "T20",  # flake8-print
+  "PYI",  # flake8-pyi
+  "PT",   # flake8-pytest-style
+  "Q",    # flake8-quotes
+  "RSE",  # flake8-raise
+  "RET",  # flake8-return
+  "SLF",  # flake8-self
+  "SIM",  # flake8-simplify
+  "SLOT", # flake8-slots
+  "TID",  # flake8-tidy-imports
+  "TD",   # flake8-todos
+  "TC",   # flake8-type-checking
+  "ARG",  # flake8-unused-arguments
+  "PTH",  # flake8-use-pathlib
+  "FLY",  # flynt
+  "I",    # isort
+  "C90",  # mccabe
+  "NPY",  # NumPy-specific rules
+  # "PD",   # pandas-vet
+  "N",    # pep8-naming
+  "PERF", # Perflint
+  "E",    # pycodestyle errors
+  "W",    # pycodestyle warnings
+  "DOC",  # pydoclint
+  "D",    # pydocstyle
+  "F",    # Pyflakes
+  "PGH",  # pygrep-hooks
+  "PL",   # Pylint
+  "UP",   # pyupgrade
+  "FURB", # refurb
+  "RUF",  # Ruff-specific rules
+  # "TRY",   # tryceratops
+]
+ignore = [
+  # The rule has been removed only the documentation is available.
+  # [DELETE] "ANN101",  # missing-type-self
+  # [DELETE] "ANN102",  # missing-type-cls
+  # [DELETE] "S320", # suspicious-xmle-tree-usage
+  # [DELETE] "S410",    # suspicious-lxml-import
+  # [DELETE] "PT004", # pytest-missing-fixture-name-underscore
+  # [DELETE] "PT005", # pytest-incorrect-fixture-name-underscore
+  # [DELETE] "E999",    # syntax-error
+  # [REPLACE] "PGH001",  # eval
+  # [REPLACE] "PGH002",  # deprecated-log-warn
+  # [REPLACE] "PLR1701", # repeated-isinstance-calls
+  # [DELETE] "PLR1706", # and-or-ternary
+  # [DELETE] "UP027",   # unpacked-list-comprehension
+  # [REPLACE] "RUF011", # ruff-static-key-dict-comprehension
+  # [REPLACE] "RUF035", # ruff-unsafe-markup-use
+  # [REPLACE] "TRY200", # reraise-no-cause
+  # The rule has been deprecated and will be removed in a future release.
+  "PD901", # pandas-df-variable-name
+  "UP038", # non-pep604-isinstance
+  # The rule is unstable and is in "preview".
+  "ASYNC116", # long-sleep-not-forever
+  # [CHECK] "ASYNC212", # blocking-http-call-httpx-in-async-function
+  # [CHECK] "ASYNC250", # blocking-input-in-async-function
+  "S401",   # suspicious-telnetlib-import
+  "S402",   # suspicious-ftplib-import
+  "S403",   # suspicious-pickle-import
+  "S404",   # suspicious-subprocess-import
+  "S405",   # suspicious-xml-etree-import
+  "S406",   # suspicious-xml-sax-import
+  "S407",   # suspicious-xml-expat-import
+  "S408",   # suspicious-xml-minidom-import
+  "S409",   # suspicious-xml-pulldom-import
+  "S411",   # suspicious-xmlrpc-import
+  "S412",   # suspicious-httpoxy-import
+  "S413",   # suspicious-pycrypto-import
+  "S415",   # suspicious-pyghmi-import
+  "B901",   # return-in-generator
+  "B903",   # class-as-data-structure
+  "B909",   # loop-iterator-mutation
+  "CPY001", # missing-copyright-notice
+  "LOG004", # log-exception-outside-except-handler
+  "PYI059", # generic-not-last-base-class
+  "PYI061", # redundant-none-literal
+  "PT029",  # pytest-warns-without-warning
+  "TC008",  # quoted-type-alias
+  # [CHECK] "PTH211",  # os-symlink
+  "E111",   # indentation-with-invalid-multiple
+  "E112",   # no-indented-block
+  "E113",   # unexpected-indentation
+  "E114",   # indentation-with-invalid-multiple-comment
+  "E116",   # unexpected-indentation-comment
+  "E117",   # over-indented
+  "E201",   # whitespace-after-open-bracket
+  "E202",   # whitespace-before-close-bracket
+  "E203",   # whitespace-before-punctuation
+  "E204",   # whitespace-after-decorator
+  "E211",   # whitespace-before-parameters
+  "E221",   # multiple-spaces-before-operator
+  "E222",   # multiple-spaces-after-operator
+  "E223",   # tab-before-operator
+  "E224",   # tab-after-operator
+  "E225",   # missing-whitespace-around-operator
+  "E226",   # missing-whitespace-around-arithmetic-operator
+  "E227",   # missing-whitespace-around-bitwise-or-shift-operator
+  "E228",   # missing-whitespace-around-modulo-operator
+  "E231",   # missing-whitespace
+  "E241",   # multiple-spaces-after-comma
+  "E242",   # tab-after-comma
+  "E251",   # unexpected-spaces-around-keyword-parameter-equals
+  "E261",   # too-few-spaces-before-inline-comment
+  "E262",   # no-space-after-inline-comment
+  "E265",   # no-space-after-block-comment
+  "E266",   # multiple-leading-hashes-for-block-comment
+  "E271",   # multiple-spaces-after-keyword
+  "E272",   # multiple-spaces-before-keyword
+  "E273",   # tab-after-keyword
+  "E274",   # tab-before-keyword
+  "E275",   # missing-whitespace-after-keyword
+  "E301",   # blank-line-between-methods
+  "E302",   # blank-lines-top-level
+  "E303",   # too-many-blank-lines
+  "E304",   # blank-line-after-decorator
+  "E305",   # blank-lines-after-function-or-class
+  "E306",   # blank-lines-before-nested-definition
+  "E502",   # redundant-backslash
+  "W391",   # too-many-newlines-at-end-of-file
+  "DOC201", # docstring-missing-returns
+  "DOC202", # docstring-extraneous-returns
+  "DOC402", # docstring-missing-yields
+  "DOC403", # docstring-extraneous-yields
+  "DOC501", # docstring-missing-exception
+  "DOC502", # docstring-extraneous-exception
+  # [CHECK] "PLC0207", # missing-maxsplit-arg
+  "PLC1901", # compare-to-empty-string
+  "PLC2701", # import-private-name
+  "PLC2801", # unnecessary-dunder-call
+  "PLE0304", # invalid-bool-return-type
+  "PLE1141", # dict-iter-missing-items
+  "PLE4703", # modified-iterating-set
+  "PLR0202", # no-classmethod-decorator
+  "PLR0203", # no-staticmethod-decorator
+  "PLR0904", # too-many-public-methods
+  "PLR0914", # too-many-locals
+  "PLR0916", # too-many-boolean-expressions
+  "PLR0917", # too-many-positional-arguments
+  "PLR1702", # too-many-nested-blocks
+  "PLR6104", # non-augmented-assignment
+  "PLR6201", # literal-membership
+  "PLR6301", # no-self-use
+  "PLW0108", #	unnecessary-lambda
+  "PLW0244", #	redefined-slots-in-subclass
+  "PLW1514", #	unspecified-encoding
+  "PLW3201", #	bad-dunder-method-name
+  "UP042",   #	replace-str-enum
+  # [CHECK] "UP050",   #	useless-class-metaclass-type
+  "FURB101", # read-whole-file
+  "FURB103", # write-whole-file
+  "FURB110", # if-exp-instead-of-or-operator
+  "FURB113", # repeated-append
+  "FURB116", # f-string-number-format
+  "FURB118", # reimplemented-operator
+  "FURB131", # delete-full-slice
+  "FURB140", # reimplemented-starmap
+  "FURB142", # for-loop-set-mutations
+  "FURB145", # slice-copy
+  "FURB148", # unnecessary-enumerate
+  "FURB152", # math-constant
+  "FURB154", # repeated-global
+  "FURB156", # hardcoded-string-charset
+  "FURB164", # unnecessary-from-float
+  "FURB171", # single-item-membership-test
+  "FURB180", # meta-class-abc-meta
+  "FURB189", # subclass-builtin
+  "FURB192", # sorted-min-max
+  "RUF027",  # missing-f-string-syntax
+  "RUF029",  # unused-async
+  "RUF031",  # incorrectly-parenthesized-tuple-in-subscript
+  "RUF036",  # none-not-at-end-of-union
+  "RUF037",  # unnecessary-empty-iterable-within-deque-call
+  "RUF038",  # redundant-bool-literal
+  "RUF039",  # unraw-re-pattern
+  "RUF043",  # pytest-raises-ambiguous-pattern
+  "RUF045",  # implicit-class-var-in-dataclass
+  "RUF047",  # needless-else
+  "RUF052",  # used-dummy-variable
+  "RUF054",  # indented-form-feed
+  "RUF055",  # unnecessary-regular-expression
+  "RUF056",  # falsy-dict-get-fallback
+  "RUF059",  # unused-unpacked-variable
+  "RUF060",  # in-empty-collection
+  # [CHECK] "RUF061",  # legacy-form-pytest-raises
+  # [CHECK] "RUF063", # access-annotations-from-class-dict
+  # [CHECK] "RUF064", # non-octal-permissions
+  "RUF102", # invalid-rule-code
+  # My hated rules.
+  "D100", # undocumented-public-module
+  "D101", # undocumented-public-class
+  "D104", # undocumented-public-package
+]
+fixable = ["ALL"]
+unfixable = [
+  # "FAST003", # fast-api-unused-path-parameter
+  # "B007",    # unused-loop-control-variable
+  # "PYI018",  # unused-private-type-var
+  # "PYI046",  # unused-private-protocol
+  # "PYI047",  # unused-private-type-alias
+  # "PYI049",  # unused-private-typed-dict
+  # "ARG001",  # unused-function-argument
+  # "ARG002",  # unused-method-argument
+  # "ARG003",  # unused-class-method-argument
+  # "ARG004",  # unused-static-method-argument
+  # "ARG005",  # unused-lambda-argument
+  # "F401",    # unused-import
+  # "F811",    # redefined-while-unused
+  "F841", # unused-variable
+  #   "F842",    # unused-annotation
+  #   "RUF029",  # unused-async
+  #   "RUF059",  # unused-unpacked-variable
+  #   "RUF100",  # unused-noqa
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = [
+  "F401", # unused-import
+]
+"!main.py" = [
+  "EXE002", # shebang-missing-executable-file
+]
+"tests/*" = [
+  "S101",   # assert
+  "FBT001", # boolean-type-hint-positional-argument
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10 # maximum complexity
+
+[tool.ruff.lint.pydocstyle]
+convention = "google" # docstring style
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "lf"
+docstring-code-format = true
+docstring-code-line-length = "dynamic"
+preview = true
+
+[tool.pyright]
+typeCheckingMode = "strict"

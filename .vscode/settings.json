@@ -1,0 +1,76 @@
+{
+    // ===============
+    // 基本設定
+    // ===============
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.detectIndentation": false,
+    "editor.renderControlCharacters": true,
+    "editor.renderWhitespace": "all",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        // JavaScript Actions
+        "source.organizeImports.biome": "explicit",
+        "source.action.useSortedAttributes.biome": "explicit",
+        // CSS Actions
+        "source.action.useSortedProperties.biome": "explicit",
+        // JSON Actions
+        "source.action.useSortedKeys.biome": "explicit",
+        // All Actions
+        "source.fixAll.biome": "explicit"
+    },
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "files.eol": "\n",
+    "terminal.integrated.defaultProfile.linux": "zsh",
+    "terminal.integrated.profiles.linux": {
+        "zsh": {
+            "path": "/usr/bin/zsh"
+        }
+    },
+    "git.autofetch": true,
+    "git.openRepositoryInParentFolders": "always",
+    "telemetry.feedback.enabled": false,
+    "telemetry.telemetryLevel": "off",
+    "extensions.ignoreRecommendations": false,
+    // ===============
+    // 言語別設定
+    // ===============
+    "eslint.enable": false,
+    "biome.enabled": true,
+    "biome.requireConfiguration": true,
+    "biome.lsp.trace.server": "verbose",
+    "[javascript][javascriptreact][typescript][typescriptreact]": {
+        // "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "biomejs.biome",
+        "editor.formatOnPaste": true,
+        "editor.formatOnType": true
+    },
+    "[css][postcss]": {
+        // "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[json][jsonc]": {
+        // "editor.defaultFormatter": "vscode.json-language-features",
+        "editor.defaultFormatter": "biomejs.biome",
+        "editor.tabSize": 4
+    },
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.tabSize": 4
+    },
+    "[toml]": {
+        "editor.defaultFormatter": "tamasfe.even-better-toml"
+    },
+    "python.defaultInterpreterPath": "backend/.venv/bin/python",
+    // ===============
+    // 拡張機能設定
+    // ===============
+    "continue.telemetryEnabled": false,
+    "chat.agent.enabled": true,
+    "chat.tools.autoApprove": true
+    // "github.copilot.chat.agent.autoFix": true,
+    // "github.copilot.chat.agent.runTasks": true,
+    // "github.copilot.chat.agent.thinkingTool": true,
+}

@@ -1,0 +1,520 @@
+{
+    "$schema": "https://biomejs.dev/schemas/2.2.5/schema.json",
+    // ==============
+    // 他設定ファイルのインポート
+    // ==============
+    // "extends": [],
+    // ==============
+    // root設定
+    // ==============
+    "root": true,
+    // ==============
+    // ファイル設定
+    // ==============
+    "files": {
+        "includes": [
+            "**/*.js", // JavaScript
+            "**/*.jsx", // React JSX
+            "**/*.ts", // TypeScript
+            "**/*.tsx", // React TSX
+            "**/*.vue", // Vue
+            "**/*.html", // HTML
+            // "**/*.cjs", // CommonJS
+            // "**/*.cts", // CommonJS
+            // "**/*.mjs", // ESモジュール
+            // "**/*.mts", // ESモジュール
+            "**/*.css", // CSS
+            "**/*.scss", // SCSS
+            "**/*.sass", // SASS
+            "**/*.pcss", // PostCSS
+            "**/*.json", // JSON
+            "**/*.jsonc", // JSON with Comments
+            "**/*.graphql", // GraphQL
+            "**/*.gql", // GraphQL
+            "**/*.graphqls" // GraphQL Schema
+        ],
+        "ignoreUnknown": false, // 未知のファイル拡張子を無視しない
+        "maxSize": 1048576 // ファイルサイズ上限: 1MB
+    },
+    // ==============
+    // Git統合設定
+    // ==============
+    "vcs": {
+        "enabled": true, // VCS統合を有効化
+        "clientKind": "git", // Gitを使用
+        "useIgnoreFile": true, // .gitignoreファイルを尊重
+        // "root": ".", // リポジトリルートをプロジェクトルートに設定
+        "defaultBranch": "main" // デフォルトブランチ名
+    },
+    // ==============
+    // IDE支援機能の設定
+    // ==============
+    // "assist": {
+    //     "enabled": true,
+    //     "actions": {
+    //         "source": {
+    //             "organizeImports": "on", // インポートの自動整理を有効
+    //         "useSortedAttributes": "on",// HTML属性のソートを有効
+    //         "useSortedKeys": "on",// オブジェクトキーのソートを有効
+    //             "useSortedProperties": "on"// CSSプロパティのソートを有効
+    //         }
+    //     }
+    // },
+    // ==============
+    // リンター設定
+    // ==============
+    "linter": {
+        "enabled": true, // リンターを有効化
+        // "includes": [],
+        "rules": {
+            "recommended": true, // 推奨ルールを有効化
+            "a11y": { // Accessibility関連のルール
+                "recommended": true // 推奨ルールを有効化
+            },
+            "complexity": { // 複雑性関連のルール
+                "recommended": true, // 推奨ルールを有効化
+                "noExcessiveCognitiveComplexity": "error", // 認知的複雑性
+                "noExcessiveLinesPerFunction": "error", // 関数の行数制限
+                "noExcessiveNestedTestSuites": "error", // ネストされたテストスイートの深さ制限
+                "noForEach": "error", // forEachの使用を禁止
+                "noImplicitCoercions": "error", // 暗黙の型変換を禁止
+                "noUselessStringConcat": "error", // 不要な文字列連結を禁止
+                "noVoid": "error", // void演算子の使用を禁止
+                "useSimplifiedLogicExpression": "error" // 複雑な論理式の簡略化を推奨
+            },
+            "correctness": { // 正しさ関連のルール
+                "recommended": true, // 推奨ルールを有効化
+                // "noChildrenProp": "error", // childrenプロパティの誤用を禁止(React)
+                // "noGlobalDirnameFilename": "error", // __dirname/__filenameの誤用を禁止
+                // "noNodejsModules": "error", // Node.js組み込みモジュールの誤用を禁止
+                // "noNestedComponentDefinitions": "error", // ネストされたコンポーネント定義を禁止(React)
+                // "noPrivateImports": "error", // privateインポートを禁止
+                // "noProcessGlobal": "error", // processグローバルの誤用を禁止
+                // "noReactPropAssignments": "error", // React propsの再代入を禁止
+                // "noRenderReturnValue": "error", // Reactのrenderメソッドの戻り値の誤用を禁止
+                // "noRestrictedElements": "error", // 制限されたHTML要素の使用を禁止
+                // "noSolidDestructuredProps": "error", // Solid.jsの分割代入propsの誤用を禁止
+                // "noUndeclaredDependencies": "error", // 未宣言依存関係を禁止
+                // "noUndeclaredVariables": "error", // 未宣言変数を禁止
+                // "useExhaustiveDependencies": "error", // React Hook依存関係の網羅性チェック
+                // "useHookAtTopLevel": "error", // Hookはトップレベルでのみ
+                // "useImportExtensions": "error", // importに拡張子を含めることを強制
+                // "useJsonImportAttributes": "error", // JSON importにassert { type: "json" }を強制
+                // "useJsxKeyInIterable": "error", // イテレータ内のJSX要素にkey属性を強制
+                // "useSingleJsDocAsterisk": "error", // JSDocコメントのアスタリスクを1つに制限
+                // "useUniqueElementIds": "error", // HTML要素のid属性の一意性を強制
+                "noUnusedVariables": "warn", // 未使用変数を禁止
+                "noUnusedImports": "warn" // 未使用インポートを禁止
+            },
+            "nursery": { // 実験的ルール
+                "recommended": true, // 推奨ルールを有効化
+                "noDeprecatedImports": "error", // 非推奨なimportの使用を禁止
+                "noImportCycles": "error", // importの循環参照を禁止
+                // "noJsxLiterals": "error", // JSX内でのリテラル値の使用を禁止
+                // "noNextAsyncClientComponent": "error", // Next.jsのasync client componentの使用を禁止
+                // "noNonNullAssertedOptionalChain": "error", // オプショナルチェーンでの!アサーションを禁止
+                // "noQwikUseVisibleTask": "error", // QwikのuseVisibleTaskの使用を禁止
+                // "noReactForwardRef": "error", // ReactのforwardRefの使用を禁止
+                "noSecrets": "error", // シークレット情報のハードコードを禁止
+                "noShadow": "error", // 変数や関数のシャドウイングを禁止
+                "noUnnecessaryConditions": "error", // 不要な条件分岐を禁止
+                "noUnresolvedImports": "error", // 解決できないimportを禁止
+                "noUnusedExpressions": "warn", // 未使用の式を禁止
+                "noUselessCatchBinding": "error", // 不要なcatchバインディングを禁止
+                "noUselessUndefined": "error", // 不要なundefinedの使用を禁止
+                // "noVueDataObjectDeclaration": "error", // Vueのdataオブジェクト宣言を禁止
+                // "noVueDuplicateKeys": "error", // Vueの重複キーを禁止
+                // "noVueReservedKeys": "error", // Vueの予約キーの使用を禁止
+                // "noVueReservedProps": "error", // Vueの予約propsの使用を禁止
+                // "useAnchorHref": "error", // anchor要素にhref属性を強制
+                // "useConsistentArrowReturn": "error", // アロー関数のreturnの一貫性を強制
+                // "useConsistentTypeDefinitions": "error", // 型定義の一貫性を強制
+                "useExhaustiveSwitchCases": "error", // switch文の網羅性を強制
+                // "useExplicitType": "error", // 明示的な型指定を強制
+                // "useImageSize": "error", // 画像タグにwidth/height属性を強制
+                "useMaxParams": "error" // 関数の引数数の上限を強制
+                // "useQwikClasslist": "error" // Qwikのclasslistの使用を強制
+            },
+            "performance": { // 性能のルール
+                "recommended": true, // 推奨ルールを有効化
+                "noAwaitInLoops": "error", // ループ内でのawait使用を禁止
+                // "noBarrelFile": "error", // バレルファイルの使用を禁止
+                "noDelete": "error", // delete演算子の使用を禁止
+                // "noImgElement": "error", // Next.jsプロジェクトで<img>要素の使用を禁止
+                // "noNamespaceImport": "error", // namespaceインポートの使用を禁止
+                "noReExportAll": "error" // 全ての再エクスポートを禁止
+                // "noUnwantedPolyfillio": "error", // Polyfill.ioの重複ポリフィルを防止
+                // "useGoogleFontPreconnect": "error", // Google Fonts使用時にpreconnect属性を強制
+                // "useSolidForComponent": "error", // Solid.jsで<For />コンポーネントの使用を強制
+                // "useTopLevelRegex": "error" // 正規表現リテラルはトップレベルで宣言を強制
+            },
+            "security": { // セキュリティのルール
+                "recommended": true, // 推奨ルールを有効化
+                // "noDangerouslySetInnerHtml": "error", // 危険なJSXプロパティ(dangerouslySetInnerHTML)の使用を禁止
+                "noDangerouslySetInnerHtmlWithChildren": "error" // childrenとdangerouslySetInnerHTMLの併用を禁止
+            },
+            "style": { // スタイル関連のルール
+                "recommended": true // 推奨ルールを有効化
+                // "noCommonJs": "error", // CommonJS記法を禁止
+                // "noDefaultExport": "error", // デフォルトエクスポートを禁止する（名前付きエクスポートを強制）
+                // "noDoneCallback": "error", // 非同期テストやフックでdoneコールバックの使用を禁止する（Promise/asyncを使用させる）
+                // "noEnum": "error", // TypeScriptのenumの使用を禁止する（ユニオン型やconstオブジェクトを推奨）
+                // "noExportedImports": "error", // インポートした変数を再エクスポートすることを禁止する
+                // "noHeadElement": "error", // Next.jsプロジェクトで直接<head>要素を使用することを禁止する
+                // "noImplicitBoolean": "error", // JSXの真偽値属性で暗黙のtrueを許可しない（明示的な指定を推奨）
+                // "noInferrableTypes": "error", // リテラルで初期化された変数に型注釈を付けることを禁止する（型推論に任せる）
+                // "noMagicNumbers": "error", // マジックナンバーの直接使用を禁止し、定数化を促す
+                // "noNamespace": "error", // namespace記法を禁止
+                // "noNegationElse": "error", // ifの条件で否定を使いelseがあるケースを禁止（可読性向上）
+                // "noNestedTernary": "error", // ネストした三項演算子を禁止して可読性を保つ
+                // "noParameterAssign": "error", // 関数の引数を再代入することを禁止する
+                // "noParameterProperties": "error", // コンストラクタのパラメータプロパティ（public/privateの短縮記法）を禁止する
+                // "noProcessEnv": "error", // process.envの直接利用を禁止（設定は環境変数や設定管理を推奨）
+                // "noRestrictedGlobals": "error", // 禁止したいグローバル変数名を指定して使用を禁止する（プロジェクト固有の禁止設定用）
+                // "noRestrictedImports": "error", // 指定したモジュールのimport/requireを禁止する（代替モジュールを促す）
+                // "noRestrictedTypes": "error", // 特定のユーザー定義型の使用を禁止する（安全でない型を排除）
+                // "noShoutyConstants": "error", // 値が名前の大文字版と同一になる定数の使用を禁止する（意味のある名前を推奨）
+                // "noSubstr": "error", // String.substr/substringの使用を禁止し、String.slice()を推奨する
+                // "noUnusedTemplateLiteral": "error", // 補間や特殊文字処理が不要なテンプレートリテラルの使用を禁止する
+                // "noUselessElse": "error", // 早期リターンがある場合の不必要なelseブロックを禁止する
+                // "noYodaExpression": "error", // リテラルを左側に置くヨーダ式を禁止する（通常の比較を推奨）
+                // "useArrayLiterals": "error", // Array()よりも[]記法を推奨
+                // "useAsConstAssertion": "error", // as constアサーションを推奨
+                // "useAtIndex": "error", // 整数インデックスアクセスの代わりに at() を使用することを推奨する
+                // "useBlockStatements": "off", // ブロック文の強制を無効
+                // "useConsistentBuiltinInstantiation": "error", // 組み込みオブジェクトのnew使用を一貫させることを強制する
+                // "useConsistentCurlyBraces": "error", // JSX属性や子要素内の中括弧使用を一貫させる
+                // "useConsistentMemberAccessibility": "error", // クラスのメンバーに対するアクセス修飾子の一貫性を要求する
+                // "useConsistentObjectDefinitions": "error", // オブジェクトリテラルの定義スタイルを一貫させる
+                // "useDefaultParameterLast": "error", // デフォルト/オプショナルな関数パラメータは末尾に配置することを強制する
+                // "useDefaultSwitchClause": "error", // switch文でdefault句の明示を要求する
+                // "useEnumInitializers": "error", // enumの各メンバーに明示的な初期化子を要求する
+                // "useExplicitLengthCheck": "error", // length/size等は明示的に比較することを強制する
+                // "useExportsLast": "error", // exportは全ての非export文の後に宣言することを要求する
+                // "useFilenamingConvention": "error", // ファイル名の命名規則を強制する（プロジェクト規約に従う）
+                // "useForOf": "error", // 可能な場合はfor...ofを使用することを推奨する（配列反復での可読性向上）
+                // "useFragmentSyntax": "error", // <Fragment>ではなく短縮構文<>...</>を使用することを強制する
+                // "useGroupedAccessorPairs": "error", // getter/setterは隣接してグループ化して定義することを強制する
+                // "useImportType": "error", // 型のみのインポートでtype修飾子を強制
+                // "useNamingConvention": "error", // プロジェクト全体での命名規則を強制する
+                // "useNodeAssertStrict": "error", // node:assert/strictの使用を推奨する
+                // "useNodejsImportProtocol": "off", // Node.js import protocolは無効
+                // "useNumberNamespace": "error", // グローバルではなくNumber名前空間のプロパティ使用を推奨する
+                // "useNumericSeparators": "error", // 数値リテラルに数値セパレータ（_）を使用することを強制する
+                // "useObjectSpread": "error", // 新しいオブジェクト作成時にObject.assignではなくスプレッド構文を推奨する
+                // "useReadonlyClassProperties": "error", // コンストラクタ外で変更されないクラスプロパティにreadonlyを追加することを要求する
+                // "useSelfClosingElements": "error", // 子要素がないコンポーネントは自己終了タグを使用することを推奨する
+                // "useShorthandAssign": "error", // 可能な場合は代入の短縮記法（{ a } = obj）を使用することを要求する
+                // "useSingleVarDeclarator": "error", // 同じ宣言文で複数の変数を宣言することを禁止する
+                // "useSymbolDescription": "error", // Symbol()呼び出しに説明文字列を必須とする
+                // "useThrowNewError": "error", // throw時はnew Errorを使用することを強制する
+                // "useThrowOnlyError": "error", // Errorオブジェクト以外をthrowすることを禁止する
+                // "useTrimStartEnd": "error", // trimLeft/trimRightの代わりにtrimStart/trimEndを使用することを強制する
+                // "useUnifiedTypeSignatures": "error" // 統一可能なオーバーロードは単一署名にまとめることを要求する
+            },
+            "suspicious": { // 疑わしいコード関連のルール
+                "recommended": true // 推奨ルールを有効化
+                // "noAlert": "error", // alert/confirm/promptの使用を禁止
+                // "noArrayIndexKey": "error", // 配列のインデックスをkeyに使用することを禁止(React)
+                // "noBitwiseOperators": "error", // ビット演算子の使用を禁止
+                // "noConsole": "error", // console.log等の使用を警告
+                // "noConstantBinaryExpressions": "error", // 定数の二項演算を禁止
+                // "noDocumentImportInPage": "error", // Next.jsプロジェクトでpagesディレクトリ内でのdocumentのimportを禁止
+                // "noDuplicateTestHooks": "error", // テストフレームワークの重複したフックを禁止
+                // "noEmptyBlockStatements": "error", // 空のブロック文を禁止
+                // "noEvolvingTypes": "error", // 型が進化する変数の使用を禁止
+                // "noExportsInTest": "error", // テストファイルでのexportを禁止
+                // "noFocusedTests": "error", // テストフレームワークのフォーカスされたテストを禁止
+                // "noHeadImportInDocument": "error", // Next.jsプロジェクトで_document.js/ts内でのheadのimportを禁止
+                // "noMisplacedAssertion": "error", // 型アサーションの誤用を禁止
+                // "noReactSpecificProps": "error", // React固有のpropsの誤用を禁止
+                // "noSkippedTests": "error", // テストフレームワークのスキップされたテストを禁止
+                // "noUnassignedVariables": "error", // 代入されていない変数の使用を禁止
+                // "noVar": "error", // var宣言を禁止（ES6+ const/let推奨）
+                // "useAwait": "error", // Promiseをawaitせずに使用することを禁止
+                // "useErrorMessage": "error", // Errorオブジェクトにメッセージを必須とする
+                // "useGuardForIn": "error", // for...inループでのhasOwnPropertyガードを強制
+                // "useNumberToFixedDigitsArgument": "error", // toFixedの引数に数値を強制
+                // "useStaticResponseMethods": "error", // Next.jsのレスポンスメソッドで動的メソッドを禁止
+                // "useStrictMode": "error" // ReactコンポーネントでStrictModeの使用を推奨
+            }
+        }
+    },
+    // フォーマッター設定
+    "formatter": {
+        "enabled": true, // フォーマッターを有効化.
+        "formatWithErrors": true, // リントエラーをフォーマット.
+        "indentStyle": "space", // インデント文字.
+        "indentWidth": 2, // インデントサイズ.
+        "lineEnding": "lf", // 改行コード.
+        "lineWidth": 80, // 行の最大文字数.
+        "attributePosition": "auto", // HTML属性を自動改行.
+        "bracketSpacing": true, // 括弧内と内部の値の間にSPACEを追加.
+        "expand": "auto", // 配列/オブジェクトの自動展開.
+        "useEditorconfig": false // .editorconfig読み込み.
+    },
+    // JavaScript向けの設定
+    "javascript": {
+        "parser": {
+            "unsafeParameterDecoratorsEnabled": false, // パラメータデコレータを無効化
+            "jsxEverywhere": true // JSXをあらゆる場所で許可
+        },
+        "formatter": {
+            "enabled": true, // JavaScriptフォーマッターを有効化
+            "quoteStyle": "double", // ダブルクォートを使用
+            "jsxQuoteStyle": "double", // JSXでダブルクォートを使用
+            "quoteProperties": "asNeeded", // 必要な場合のみプロパティをクォート
+            "trailingCommas": "all", // 末尾カンマを常に付ける
+            "semicolons": "always", // セミコロンを常に付ける
+            "arrowParentheses": "always", // アロー関数の引数を常に括弧で囲む
+            // "indentStyle": "space", // スペースでインデント
+            // "indentWidth": 2, // インデント幅: 2スペース
+            // "lineEnding": "lf", // 改行コード: LF
+            // "lineWidth": 80, // 行の最大幅: 80文字
+            // "bracketSameLine": false, // JSXの開始タグを同じ行に配置しない
+            // "bracketSpacing": true, // オブジェクトリテラルの括弧内にスペースを入れる
+            // "attributePosition": "auto", // HTML属性を自動改行
+            // "expand": "auto", // 配列/オブジェクトの自動展開
+            "operatorLinebreak": "after" // 演算子の改行位置を演算子の後に
+        },
+        "globals": [ // グローバル変数の定義(Miro WebSDKとNode.js環境用)
+            "miro", // Miro WebSDK のグローバルオブジェクト(@mirohq/websdk-types対応)
+            "process", // Node.js process オブジェクト
+            "Buffer", // Node.js Buffer オブジェクト
+            "__dirname", // Node.js __dirname 変数
+            "__filename" // Node.js __filename 変数
+        ],
+        "jsxRuntime": "reactClassic", // Reactの新しいJSX変換を使用(React 17+)
+        "linter": {
+            "enabled": true // JavaScriptリンターを有効化
+        },
+        "assist": {
+            "enabled": true // JavaScriptコードアシストを有効化
+        }
+    },
+    // ==============
+    // JSON設定
+    // ==============
+    "json": {
+        "parser": {
+            "allowComments": true, // JSONCコメントを許可
+            "allowTrailingCommas": false // 末尾カンマを許可
+        },
+        "formatter": {
+            "enabled": true, // JSONフォーマッターを有効化
+            // "indentStyle": "space", // スペースでインデント
+            "indentWidth": 4, // インデント幅: 2スペース
+            // "lineEnding": "lf", // 改行コード: LF
+            // "lineWidth": 80, // 行の最大幅: 80文字
+            "trailingCommas": "none" // 末尾カンマ
+            // "bracketSpacing": true, // オブジェクトリテラルの括弧内にスペースを入れる
+            // "expand": "auto", // 配列/オブジェクトの自動展開
+        },
+        "linter": {
+            "enabled": true
+        },
+        "assist": {
+            "enabled": true
+        }
+    },
+    // ==============
+    // CSS設定
+    // ==============
+    "css": {
+        "parser": {
+            "cssModules": false, // CSS Modulesを無効化
+            "allowWrongLineComments": false // 誤った行コメントを許可しない
+        },
+        "formatter": {
+            "enabled": true // CSSフォーマッターを有効化
+            // "indentStyle": "space", // スペースでインデント
+            // "indentWidth": 2, // インデント幅: 2スペース
+            // "lineEnding": "lf", // 改行コード: LF
+            // "lineWidth": 80, // 行の最大幅: 80文字
+            // "quoteStyle": "double" // ダブルクォートを使用
+        },
+        "linter": {
+            "enabled": true // CSSリンターを有効化
+        },
+        "assist": {
+            "enabled": false
+        }
+    },
+    // ==============
+    // GraphQL設定
+    // ==============
+    "graphql": {
+        "formatter": {
+            "enabled": true // フォーマッターを有効化
+            // "indentStyle": "space", // スペースでインデント
+            // "indentWidth": 2, // インデント幅: 2スペース
+            // "lineEnding": "lf", // 改行コード: LF
+            // "lineWidth": 80, // 行の最大幅: 80文字
+            // "quoteStyle": "double" // ダブルクォートを使用
+        },
+        "linter": {
+            "enabled": true // CSSリンターを有効化
+        },
+        "assist": {
+            "enabled": true
+        }
+    },
+    // ==============
+    // Grit設定
+    // ==============
+    "grit": {
+        "formatter": {
+            "enabled": true // フォーマッターを有効化
+            // "indentStyle": "space", // スペースでインデント
+            // "indentWidth": 2, // インデント幅: 2スペース
+            // "lineEnding": "lf", // 改行コード: LF
+            // "lineWidth": 80, // 行の最大幅: 80文字
+            // "quoteStyle": "double" // ダブルクォートを使用
+        },
+        "linter": {
+            "enabled": true // CSSリンターを有効化
+        },
+        "assist": {
+            "enabled": true
+        }
+    },
+    // ==============
+    // HTML設定 (Experimental)
+    // ==============
+    "html": {
+        "parser": {
+            "interpolation": true // HTMLの補間
+        },
+        "formatter": {
+            "enabled": true, // フォーマッターを有効化
+            // "indentStyle": "space", // スペースでインデント
+            // "indentWidth": 2, // インデント幅: 2スペース
+            // "lineEnding": "lf", // 改行コード: LF
+            // "lineWidth": 80, // 行の最大幅: 80文字
+            "attributePosition": "auto", // HTML属性を自動改行
+            "bracketSameLine": false, // HTMLの開始タグを同じ行に配置しない
+            "whitespaceSensitivity": "ignore", // HTMLの空白感度を無視
+            "indentScriptAndStyle": true, // <script>と<style>内をインデント
+            "selfCloseVoidElements": "never" // 空要素を自己終了タグに
+        }
+        // "linter": {
+        //     "enabled": true // CSSリンターを有効化
+        // },
+        // "assist": {
+        //     "enabled": true
+        // }
+    },
+    // ==============
+    // ライブラリ・フレームワークの設定
+    // ==============
+    "overrides": [
+        // ==============
+        // Reactの設定
+        // ==============
+        {
+            "includes": [
+                "**/*.jsx",
+                "**/*.tsx"
+            ],
+            "linter": {
+                "rules": {
+                    "correctness": {
+                        "noChildrenProp": "error", // childrenプロパティの誤用を禁止(React)
+                        "noNestedComponentDefinitions": "error", // ネストされたコンポーネント定義を禁止(React)
+                        "noReactPropAssignments": "error", // React propsの再代入を禁止
+                        "noRenderReturnValue": "error", // Reactのrenderメソッドの戻り値の誤用を禁止
+                        "useExhaustiveDependencies": "error", // React Hook依存関係の網羅性チェック
+                        "useHookAtTopLevel": "error", // Hookはトップレベルでのみ
+                        "useJsxKeyInIterable": "error" // イテレータ内のJSX要素にkey属性を強制
+                    },
+                    "nursery": { // 実験的ルール
+                        "noJsxLiterals": "error", // JSX内でのリテラル値の使用を禁止
+                        "noReactForwardRef": "error" // ReactのforwardRefの使用を禁止
+                    },
+                    "security": { // セキュリティのルール
+                        "noDangerouslySetInnerHtml": "error" // 危険なJSXプロパティ(dangerouslySetInnerHTML)の使用を禁止
+                    },
+                    "style": { // スタイル関連のルール
+                        "recommended": true, // 推奨ルールを有効化
+                        "noImplicitBoolean": "error", // JSXの真偽値属性で暗黙のtrueを許可しない（明示的な指定を推奨）
+                        "useConsistentCurlyBraces": "error" // JSX属性や子要素内の中括弧使用を一貫させる
+                    },
+                    "suspicious": { // 疑わしいコード関連のルール
+                        "recommended": true, // 推奨ルールを有効化
+                        "noArrayIndexKey": "error", // 配列のインデックスをkeyに使用することを禁止(React)
+                        "noReactSpecificProps": "error" // React固有のpropsの誤用を禁止
+                    }
+                }
+            }
+        },
+        // ==============
+        // Vueの設定
+        // ==============
+        {
+            "includes": [
+                "**/*.vue"
+            ],
+            "linter": {
+                "rules": {
+                    "nursery": { // 実験的ルール
+                        "recommended": true, // 推奨ルールを有効化
+                        "noVueDataObjectDeclaration": "error", // Vueのdataオブジェクト宣言を禁止
+                        "noVueDuplicateKeys": "error", // Vueの重複キーを禁止
+                        "noVueReservedKeys": "error", // Vueの予約キーの使用を禁止
+                        "noVueReservedProps": "error" // Vueの予約propsの使用を禁止
+                    }
+                }
+            }
+        },
+        // ==============
+        // Typescriptの設定
+        // ==============
+        {
+            "includes": [
+                "**/*.ts",
+                "**/*.tsx"
+            ],
+            "linter": {
+                "rules": {
+                    "correctness": {
+                        // TypeScript環境ではJavaScriptのビルトインチェックを無効化(TypeScript自体がチェック)
+                        "noConstAssign": "off", // constの再代入チェックを無効
+                        "noGlobalObjectCalls": "off", // グローバルオブジェクト呼び出しチェックを無効
+                        "noInvalidBuiltinInstantiation": "off", // 無効なビルトインインスタンス化チェックを無効
+                        "noInvalidConstructorSuper": "off", // 無効なsuperコンストラクタチェックを無効
+                        "noSetterReturn": "off", // setterの返り値チェックを無効
+                        "noUndeclaredVariables": "off", // 未宣言変数チェックを無効
+                        "noUnreachable": "off", // 到達不可能コードチェックを無効
+                        "noUnreachableSuper": "off" // 到達不可能superチェックを無効
+                    },
+                    "style": {
+                        "noEnum": "error", // TypeScriptのenumの使用を禁止する（ユニオン型やconstオブジェクトを推奨）
+                        "noNamespace": "error", // namespace記法を禁止
+                        "useConsistentArrayType": {
+                            "level": "error",
+                            "options": {
+                                // "syntax": "generic" // Array<T>記法を強制(@types/react対応)
+                                "syntax": "shorthand" // T[] 記法を強制
+                            }
+                        },
+                        "useFilenamingConvention": "error" // ファイル名の命名規則を強制する（プロジェクト規約に従う）
+                    },
+                    "suspicious": {
+                        // TypeScript環境ではJavaScriptのチェックを無効化(TypeScript自体がチェック)
+                        "noClassAssign": "off", // クラスの再代入チェックを無効
+                        "noDuplicateClassMembers": "off", // 重複クラスメンバーチェックを無効
+                        "noDuplicateObjectKeys": "off", // 重複オブジェクトキーチェックを無効
+                        "noDuplicateParameters": "off", // 重複パラメータチェックを無効
+                        "noFunctionAssign": "off", // 関数の再代入チェックを無効
+                        "noImportAssign": "off", // インポートの再代入チェックを無効
+                        "noRedeclare": "off", // 再宣言チェックを無効
+                        "noUnsafeNegation": "off", // 安全でない否定チェックを無効
+                        "noVar": "error", // var宣言を禁止(ES6+ const/let推奨)
+                        "noWith": "off", // with文チェックを無効
+                        "useGetterReturn": "off" // getterの返り値チェックを無効
+                    }
+                }
+            }
+        }
+    ]
+}
