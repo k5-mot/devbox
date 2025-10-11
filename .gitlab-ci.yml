@@ -2,7 +2,7 @@ stages:
   - frontend
   - backend
 
-# Frontend: node + pnpm
+# Frontend: TypeScript/React
 frontend:
   image: docker.io/library/node:22
   stage: frontend
@@ -25,7 +25,7 @@ frontend:
       - app/dist
       - app/coverage
 
-# Backend: Python (uses uv to sync + run tasks as in GitHub Actions)
+# Backend: Python
 backend:
   image: ghcr.io/astral-sh/uv:debian
   stage: backend
