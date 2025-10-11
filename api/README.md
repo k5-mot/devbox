@@ -1,9 +1,23 @@
-# 🐍 Backend Guide
+# 🐍 Backend API
 
 このディレクトリは Python ベースのバックエンド API を格納しています。
-ここでは環境構築、依存関係のインストール、開発サーバの起動方法を説明します。
 
-## 🧩 Tech Stack
+## 📝 Requirements
+
+- Python 3.12 以上 (pyproject.toml の `requires-python` に準拠)
+- Dev Container 環境での実行を推奨
+- 仮想環境での実行を推奨（ローカル開発時）
+
+## 🗺️ Architecture Diagram
+
+```mermaid
+graph LR
+    Client["Client"] --> API["FastAPI Application"]
+    API --> Validation["Pydantic Validation"]
+    API --> Services["External Services"]
+```
+
+## 🧩 Stack
 
 | Category | Technology | Description |
 |---|---|---|
@@ -16,23 +30,76 @@
 | Linter | Ruff | コード整形・静的解析 |
 | Quality | pre-commit | Git フック管理 |
 
-## 📝 Requirements
+## 📁 Directory Structure
 
-- Python 3.12 以上を推奨 (pyproject.toml の `requires-python` に準拠)
-- 仮想環境の利用を推奨します
+```
+api/
+├── .serena/           # Serena MCP サーバ設定
+├── .venv/             # 仮想環境 (ローカル開発時)
+├── .gitignore         # Git 除外定義
+├── .python-version    # Python バージョン指定
+├── main.py            # アプリケーションエントリポイント
+├── pyproject.toml     # プロジェクト設定と依存関係
+├── uv.lock            # uv ロックファイル
+└── README.md          # このファイル
+```
 
-## 🚀 Quick Start
+## 🚀 Getting Started
+
+### Setup (初回のみ)
+
+Dev Container を使用する場合は、この手順をスキップしてください。
+ローカル環境で開発する場合のみ、以下の手順を実行してください。
+
+#### 仮想環境の作成と有効化
+
+```bash
+# api ディレクトリに移動
+cd api
+
+# 仮想環境を作成
+python -m venv .venv
+
+# 仮想環境を有効化
+source .venv/bin/activate  # Linux/macOS
+# または
+.venv\Scripts\activate     # Windows
+```
+
+#### 依存関係のインストール
+
+uv を使用する場合（推奨）:
+
+```bash
+# uv で依存関係をインストール
+uv sync
+
+# または開発依存を含める場合
+uv sync --all-extras
+```
+
+pip を使用する場合:
+
+```bash
+# pip で依存関係をインストール
+pip install -e .
+
+# または開発依存を含める場合
+pip install -e .[dev]
+```
+
+### Quick Start (通常時)
 
 Dev Container 内で以下のいずれかの方法でバックエンドを起動できます。
 
-### 方法1: VS Code タスクを使用（推奨）
+#### 方法1: VS Code タスクを使用（推奨）
 
 1. `Ctrl+Shift+P` でコマンドパレットを開く
 2. "Tasks: Run Task" を選択
 3. "Start Both Servers" を選択（フロントエンド・バックエンド両方起動）
 4. または "Start Backend" を選択（バックエンドのみ起動）
 
-### 方法2: 手動でコマンド実行
+#### 方法2: 手動でコマンド実行
 
 ```bash
 # Dev Container 内のターミナルで実行
@@ -42,64 +109,134 @@ uvicorn main:app --reload --port 8000
 
 API ドキュメントは http://localhost:8000/docs にアクセスしてください（FastAPI の自動生成ドキュメント）。
 
-## Setup
+### Step-by-Step Start (詳細手順)
 
-1. 仮想環境を作成して有効化します:
+#### 1. 依存関係のインストール確認
 
 ```bash
 cd api
-python -m venv .venv
-source .venv/bin/activate
-```
 
-2. 依存関係をインストールします（pyproject.toml を使用）:
+# uv の場合
+uv sync
 
-```bash
-pip install -e .
-# または開発依存を含める場合
+# pip の場合
 pip install -e .[dev]
 ```
 
-`pyproject.toml` に主要な依存が定義されています（例: FastAPI, uvicorn, pydantic, langchain など）。
-
-## Development (開発サーバ起動)
-
-一般的には `uvicorn` を使ってアプリを起動します。エントリポイントはプロジェクトによって異なるため、ここでは一般的な例を示します。実際のアプリケーションのエントリポイントが `main:app` の場合:
+#### 2. 開発サーバの起動
 
 ```bash
+# uvicorn で開発サーバを起動
 uvicorn main:app --reload --port 8000
 ```
 
-もしエントリポイントが別の名前やモジュールにある場合はそれに合わせてください。
+オプション:
+- `--reload`: ファイル変更時に自動リロード
+- `--port 8000`: ポート番号を指定（デフォルト: 8000）
+- `--host 0.0.0.0`: すべてのネットワークインターフェースで待ち受け
 
-または簡易実行スクリプトがある場合はそれを利用してください。ルートの `main.py` は開発用の簡易ランナーが含まれている可能性があります。
+#### 3. API の動作確認
 
-## Lint / Type Check / Test
+ブラウザまたは curl で以下にアクセス:
 
-開発依存グループに `pyright`, `ruff`, `pytest` などが設定されています。導入後は次のように利用できます:
+- **API ドキュメント**: http://localhost:8000/docs
+- **ReDoc ドキュメント**: http://localhost:8000/redoc
+- **OpenAPI スキーマ**: http://localhost:8000/openapi.json
+
+curl を使用した例:
 
 ```bash
-# ruff を使った lint
-ruff check .
+# ヘルスチェック（エンドポイントが実装されている場合）
+curl http://localhost:8000/health
 
-# pyright による型チェック
-pyright
-
-# pytest によるテスト実行
-pytest
+# または任意のエンドポイント
+curl http://localhost:8000/
 ```
 
-## Files (主要ファイルの説明)
+## 🛠️ Contributing
 
-- `pyproject.toml` - プロジェクト設定と依存関係
-- `main.py` - 簡易ランナーやテスト用のエントリ (現在はサンプルの print 関数が含まれている)
-- `README.md` - このファイル
+コード品質を維持するため、以下のツールを使用してコードチェックを行ってください。
 
-## Notes
+### Lint (コード静的解析)
 
-- 本 README の起動コマンドは一般的な例です。実際のエントリポイントや起動オプションはソースを参照して合わせてください。
-- 環境変数やシークレットは `.env` 等で管理し、リポジトリにハードコードしないでください。
+```bash
+cd api
 
----
+# Ruff で lint チェック
+ruff check .
 
-不明点や、実際のアプリケーションのエントリポイント（例: `app.main:app` など）が分かれば、それに合わせて起動例を修正して README を更新します。
+# 自動修正可能な問題を修正
+ruff check --fix .
+```
+
+### Format (コード整形)
+
+```bash
+cd api
+
+# Ruff でコード整形
+ruff format .
+
+# 整形のチェックのみ（変更しない）
+ruff format --check .
+```
+
+### Type Check (型チェック)
+
+```bash
+cd api
+
+# pyright で型チェック
+pyright
+
+# または mypy を使用する場合
+mypy .
+```
+
+### Test (テスト実行)
+
+```bash
+cd api
+
+# pytest でテスト実行
+pytest
+
+# カバレッジ付きでテスト実行
+pytest --cov=. --cov-report=html
+
+# 特定のテストファイルのみ実行
+pytest tests/test_main.py
+
+# verbose モードで実行
+pytest -v
+```
+
+### 一括チェック
+
+```bash
+cd api
+
+# すべてのチェックを一度に実行
+ruff check . && ruff format --check . && pyright && pytest
+```
+
+### pre-commit フック
+
+pre-commit を使用すると、コミット前に自動的にコード品質チェックを実行できます:
+
+```bash
+# pre-commit のインストール
+pip install pre-commit
+
+# Git フックをインストール
+pre-commit install
+
+# 手動で全ファイルに対して実行
+pre-commit run --all-files
+```
+
+## 📝 Notes
+
+- 環境変数やシークレットは `.env` ファイルで管理し、リポジトリにハードコードしないでください
+- API エンドポイントの詳細は FastAPI の自動生成ドキュメント (http://localhost:8000/docs) を参照してください
+- 本番環境では `--reload` オプションを外して実行してください
