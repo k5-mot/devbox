@@ -27,6 +27,9 @@
     "files.trimFinalNewlines": true,
     "files.trimTrailingWhitespace": true,
     "files.eol": "\n",
+    "files.associations": {
+        "devcontainer.json": "jsonc"
+    },
     "terminal.integrated.defaultProfile.linux": "zsh",
     "terminal.integrated.profiles.linux": {
         "zsh": {
@@ -67,13 +70,24 @@
     "[toml]": {
         "editor.defaultFormatter": "tamasfe.even-better-toml"
     },
+    "[toml][pyproject.toml]": {
+        "editor.formatOnSave": false,
+        "editor.defaultFormatter": null
+    },
     // ===============
     // 拡張機能設定
     // ===============
     "continue.telemetryEnabled": false,
     "chat.agent.enabled": true,
     // "chat.disableAIFeatures": true,
-    "chat.tools.autoApprove": true
+    "chat.tools.autoApprove": true,
+    "chat.mcp.autostart": "newAndOutdated",
+    "chat.tools.terminal.autoApprove": {
+        "uv run *": true,
+        "npm run *": true,
+        "pnpm run *": true,
+        "git (status *|log *)": true
+    }
     // "github.copilot.chat.agent.autoFix": true,
     // "github.copilot.chat.agent.runTasks": true,
     // "github.copilot.chat.agent.thinkingTool": true,

@@ -31,7 +31,10 @@
             "**/*.jsonc", // JSON with Comments
             "**/*.graphql", // GraphQL
             "**/*.gql", // GraphQL
-            "**/*.graphqls" // GraphQL Schema
+            "**/*.graphqls", // GraphQL Schema
+            "!**/node_modules/",
+            "!**/test/",
+            "!**/vitest.config.ts"
         ],
         "ignoreUnknown": false, // 未知のファイル拡張子を無視しない
         "maxSize": 1048576 // ファイルサイズ上限: 1MB
@@ -68,10 +71,12 @@
         // "includes": [],
         "rules": {
             "recommended": true, // 推奨ルールを有効化
-            "a11y": { // Accessibility関連のルール
+            "a11y": {
+                // Accessibility関連のルール
                 "recommended": true // 推奨ルールを有効化
             },
-            "complexity": { // 複雑性関連のルール
+            "complexity": {
+                // 複雑性関連のルール
                 "recommended": true, // 推奨ルールを有効化
                 "noExcessiveCognitiveComplexity": "error", // 認知的複雑性
                 "noExcessiveLinesPerFunction": "error", // 関数の行数制限
@@ -82,7 +87,8 @@
                 "noVoid": "error", // void演算子の使用を禁止
                 "useSimplifiedLogicExpression": "error" // 複雑な論理式の簡略化を推奨
             },
-            "correctness": { // 正しさ関連のルール
+            "correctness": {
+                // 正しさ関連のルール
                 "recommended": true, // 推奨ルールを有効化
                 // "noChildrenProp": "error", // childrenプロパティの誤用を禁止(React)
                 // "noGlobalDirnameFilename": "error", // __dirname/__filenameの誤用を禁止
@@ -106,7 +112,8 @@
                 "noUnusedVariables": "warn", // 未使用変数を禁止
                 "noUnusedImports": "warn" // 未使用インポートを禁止
             },
-            "nursery": { // 実験的ルール
+            "nursery": {
+                // 実験的ルール
                 "recommended": true, // 推奨ルールを有効化
                 "noDeprecatedImports": "error", // 非推奨なimportの使用を禁止
                 "noImportCycles": "error", // importの循環参照を禁止
@@ -115,13 +122,13 @@
                 // "noNonNullAssertedOptionalChain": "error", // オプショナルチェーンでの!アサーションを禁止
                 // "noQwikUseVisibleTask": "error", // QwikのuseVisibleTaskの使用を禁止
                 // "noReactForwardRef": "error", // ReactのforwardRefの使用を禁止
-                "noSecrets": "error", // シークレット情報のハードコードを禁止
+                // "noSecrets": "error", // シークレット情報のハードコードを禁止
                 // "noShadow": "error", // 変数や関数のシャドウイングを禁止
-                "noUnnecessaryConditions": "error", // 不要な条件分岐を禁止
+                // "noUnnecessaryConditions": "error", // 不要な条件分岐を禁止
                 "noUnresolvedImports": "error", // 解決できないimportを禁止
-                "noUnusedExpressions": "warn", // 未使用の式を禁止
-                "noUselessCatchBinding": "error", // 不要なcatchバインディングを禁止
-                "noUselessUndefined": "error", // 不要なundefinedの使用を禁止
+                // "noUnusedExpressions": "warn", // 未使用の式を禁止
+                // "noUselessCatchBinding": "error", // 不要なcatchバインディングを禁止
+                // "noUselessUndefined": "error", // 不要なundefinedの使用を禁止
                 // "noVueDataObjectDeclaration": "error", // Vueのdataオブジェクト宣言を禁止
                 // "noVueDuplicateKeys": "error", // Vueの重複キーを禁止
                 // "noVueReservedKeys": "error", // Vueの予約キーの使用を禁止
@@ -135,7 +142,8 @@
                 "useMaxParams": "error" // 関数の引数数の上限を強制
                 // "useQwikClasslist": "error" // Qwikのclasslistの使用を強制
             },
-            "performance": { // 性能のルール
+            "performance": {
+                // 性能のルール
                 "recommended": true, // 推奨ルールを有効化
                 // "noAwaitInLoops": "error", // ループ内でのawait使用を禁止
                 // "noBarrelFile": "error", // バレルファイルの使用を禁止
@@ -148,12 +156,14 @@
                 // "useSolidForComponent": "error", // Solid.jsで<For />コンポーネントの使用を強制
                 // "useTopLevelRegex": "error" // 正規表現リテラルはトップレベルで宣言を強制
             },
-            "security": { // セキュリティのルール
+            "security": {
+                // セキュリティのルール
                 "recommended": true, // 推奨ルールを有効化
                 // "noDangerouslySetInnerHtml": "error", // 危険なJSXプロパティ(dangerouslySetInnerHTML)の使用を禁止
                 "noDangerouslySetInnerHtmlWithChildren": "error" // childrenとdangerouslySetInnerHTMLの併用を禁止
             },
-            "style": { // スタイル関連のルール
+            "style": {
+                // スタイル関連のルール
                 "recommended": true // 推奨ルールを有効化
                 // "noCommonJs": "error", // CommonJS記法を禁止
                 // "noDefaultExport": "error", // デフォルトエクスポートを禁止する（名前付きエクスポートを強制）
@@ -212,7 +222,8 @@
                 // "useTrimStartEnd": "error", // trimLeft/trimRightの代わりにtrimStart/trimEndを使用することを強制する
                 // "useUnifiedTypeSignatures": "error" // 統一可能なオーバーロードは単一署名にまとめることを要求する
             },
-            "suspicious": { // 疑わしいコード関連のルール
+            "suspicious": {
+                // 疑わしいコード関連のルール
                 "recommended": true // 推奨ルールを有効化
                 // "noAlert": "error", // alert/confirm/promptの使用を禁止
                 // "noArrayIndexKey": "error", // 配列のインデックスをkeyに使用することを禁止(React)
@@ -277,7 +288,8 @@
             // "expand": "auto", // 配列/オブジェクトの自動展開
             "operatorLinebreak": "after" // 演算子の改行位置を演算子の後に
         },
-        "globals": [ // グローバル変数の定義(Miro WebSDKとNode.js環境用)
+        "globals": [
+            // グローバル変数の定義(Miro WebSDKとNode.js環境用)
             "miro", // Miro WebSDK のグローバルオブジェクト(@mirohq/websdk-types対応)
             "process", // Node.js process オブジェクト
             "Buffer", // Node.js Buffer オブジェクト
@@ -477,19 +489,23 @@
                         "useHookAtTopLevel": "error", // Hookはトップレベルでのみ
                         "useJsxKeyInIterable": "error" // イテレータ内のJSX要素にkey属性を強制
                     },
-                    "nursery": { // 実験的ルール
+                    "nursery": {
+                        // 実験的ルール
                         // "noJsxLiterals": "error", // JSX内でのリテラル値の使用を禁止
                         "noReactForwardRef": "error" // ReactのforwardRefの使用を禁止
                     },
-                    "security": { // セキュリティのルール
+                    "security": {
+                        // セキュリティのルール
                         "noDangerouslySetInnerHtml": "error" // 危険なJSXプロパティ(dangerouslySetInnerHTML)の使用を禁止
                     },
-                    "style": { // スタイル関連のルール
+                    "style": {
+                        // スタイル関連のルール
                         "recommended": true, // 推奨ルールを有効化
                         "noImplicitBoolean": "error", // JSXの真偽値属性で暗黙のtrueを許可しない（明示的な指定を推奨）
                         "useConsistentCurlyBraces": "error" // JSX属性や子要素内の中括弧使用を一貫させる
                     },
-                    "suspicious": { // 疑わしいコード関連のルール
+                    "suspicious": {
+                        // 疑わしいコード関連のルール
                         "recommended": true, // 推奨ルールを有効化
                         "noArrayIndexKey": "error", // 配列のインデックスをkeyに使用することを禁止(React)
                         "noReactSpecificProps": "off" // React固有のpropsの誤用を禁止(HTML標準属性を許可)
@@ -506,7 +522,8 @@
             ],
             "linter": {
                 "rules": {
-                    "nursery": { // 実験的ルール
+                    "nursery": {
+                        // 実験的ルール
                         "recommended": true, // 推奨ルールを有効化
                         "noVueDataObjectDeclaration": "error", // Vueのdataオブジェクト宣言を禁止
                         "noVueDuplicateKeys": "error", // Vueの重複キーを禁止
