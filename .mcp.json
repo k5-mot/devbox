@@ -1,0 +1,97 @@
+{
+    "mcpServers": {
+        "sequential-thinking": {
+            "type": "stdio",
+            "command": "npx",
+            "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+        },
+        "github": {
+            "type": "stdio",
+            "command": "npx",
+            "args": ["-y", "@modelcontextprotocol/server-github"]
+        },
+        "gitlab": {
+            "type": "stdio",
+            "command": "npx",
+            "args": ["-y", "@zereight/mcp-gitlab"],
+            "env": {
+                "GITLAB_PERSONAL_ACCESS_TOKEN": "your_gitlab_token",
+                "GITLAB_API_URL": "your_gitlab_api_url",
+                "GITLAB_READ_ONLY_MODE": "false"
+            }
+        },
+        "serena-app": {
+            "type": "stdio",
+            "command": "uvx",
+            "args": [
+                "--no-env-file",
+                "--from",
+                "git+https://github.com/oraios/serena",
+                "serena",
+                "start-mcp-server",
+                "--context",
+                "ide-assistant",
+                "--project",
+                "./app"
+            ],
+            "env": {
+                "BROWSER": "none"
+            }
+        },
+        "serena-api": {
+            "type": "stdio",
+            "command": "uvx",
+            "args": [
+                "--no-env-file",
+                "--from",
+                "git+https://github.com/oraios/serena",
+                "serena",
+                "start-mcp-server",
+                "--context",
+                "ide-assistant",
+                "--project",
+                "./api"
+            ],
+            "env": {
+                "BROWSER": "none"
+            }
+        },
+        "gitingest-mcp": {
+            "type": "stdio",
+            "command": "uvx",
+            "args": [
+                "--no-env-file",
+                "git+https://github.com/puravparab/gitingest-mcp",
+                "gitingest-mcp"
+            ]
+        },
+        "deepwiki": {
+            "type": "stdio",
+            "command": "npx",
+            "args": ["mcp-remote", "https://mcp.deepwiki.com/sse"]
+        },
+        "context7": {
+            "type": "http",
+            "url": "https://mcp.context7.com/mcp"
+        },
+        "awslabs.aws-documentation-mcp-server": {
+            "command": "uvx",
+            "args": [
+                "--no-env-file",
+                "awslabs.aws-documentation-mcp-server@latest"
+            ],
+            "env": {
+                "FASTMCP_LOG_LEVEL": "ERROR"
+            }
+        },
+        "microsoft.docs.mcp": {
+            "type": "http",
+            "url": "https://learn.microsoft.com/api/mcp"
+        },
+        "cloudflare-documentation-mcp-server": {
+            "type": "stdio",
+            "command": "npx",
+            "args": ["mcp-remote", "https://docs.mcp.cloudflare.com/sse"]
+        }
+    }
+}
