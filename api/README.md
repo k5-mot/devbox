@@ -1,9 +1,22 @@
-🐍 Backend Guide
+# 🐍 Backend Guide
 
 このディレクトリは Python ベースのバックエンド API を格納しています。
 ここでは環境構築、依存関係のインストール、開発サーバの起動方法を説明します。
 
-## Requirements
+## 🧩 Tech Stack
+
+| Category | Technology | Description |
+|---|---|---|
+| Language | Python 3.12 | プログラミング言語 |
+| Package | uv | パッケージマネージャ (推奨) |
+| Package | pip | パッケージマネージャ (代替) |
+| Framework | FastAPI | Web API フレームワーク |
+| Server | uvicorn | ASGI サーバ |
+| Validation | Pydantic | データバリデーション |
+| Linter | Ruff | コード整形・静的解析 |
+| Quality | pre-commit | Git フック管理 |
+
+## 📝 Requirements
 
 - Python 3.12 以上を推奨 (pyproject.toml の `requires-python` に準拠)
 - 仮想環境の利用を推奨します

@@ -75,6 +75,7 @@
             "url": "https://mcp.context7.com/mcp"
         },
         "awslabs.aws-documentation-mcp-server": {
+            "type": "stdio",
             "command": "uvx",
             "args": [
                 "--no-env-file",

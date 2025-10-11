@@ -56,38 +56,42 @@
 
 | Category | Technology | Description |
 |---|---|---|
-| Frontend | TypeScript | プログラミング言語 |
-| Frontend | Node.js v22 | ランタイム |
-| Frontend | pnpm | パッケージ管理 |
-| Frontend | Vite | フロントエンドビルドツール |
-| Frontend | React | コンポーネントベース UI ライブラリ |
-| Frontend | Biome | コード整形・静的解析 |
-| Backend | Python | プログラミング言語 |
-| Backend | uv/uvx | パッケージ・プロジェクト管理 |
-| Backend | ruff | コード整形・静的解析 |
-| Backend | FastAPI | Web API フレームワーク |
-| Backend | uvicorn | ASGI サーバ |
-| Dev | VS Code | エディタ |
-| Dev | Dev Containers | 開発コンテナ |
-| Dev | Docker | コンテナ実行基盤 |
-| Agents | Anthropic Claude Code | コーディングエージェント |
-| Agents | GitHub Copilot | コーディングアシスト |
+| Editor | VS Code | 開発環境 |
+| Container | Dev Containers | 開発コンテナ |
+| Container | Docker | コンテナ実行基盤 |
+| Container | Ubuntu 24.04 (Noble) | ベースイメージ |
+| Shell | Zsh | デフォルトシェル  |
+| Shell | Oh My Zsh | シェルカスタム |
+| VCS | Git | バージョン管理システム |
+| Cloud | AWS CLI | AWS コマンドラインツール |
+| Cloud | Azure CLI | Azure コマンドラインツール |
+| IaC | Terraform | インフラストラクチャ as コード |
+| Agents | Anthropic　Claude Code | AI コーディングエージェント |
+| Agents | OpenAI　Codex | AI コーディングアシスタント |
+| Agents | Cline | AI コーディングアシスタント |
+| Quality | pre-commit | Git フック管理 |
+| Quality | git-cz | コミットメッセージ支援 |
+| Utility | vim | テキストエディタ |
+| Utility | jq | JSON プロセッサ |
 
-### MCP servers
+> [!NOTE]
+> フロントエンドとバックエンドの詳細な技術スタックは、各サブディレクトリの [`app/README.md`](app/README.md) と [`api/README.md`](api/README.md) を参照してください。
+
+### MCP Servers
 
 | Technology | Type | Description |
-|---|---:|---|
-| sequential-thinking | LLM 機能拡張 | シーケンシャルな思考プロセスを提供します。複雑タスクを段階的に処理するワークフローや推論オーケストレーションをサポートします |
-| github | リポジトリ管理 | GitHub と連携し、リポジトリ情報の取得や Issue/PR 操作の補助を行います |
-| gitlab | リポジトリ管理 | GitLab API 経由でプロジェクト情報やマージリクエスト操作を支援します（環境変数でトークン設定） |
-| serena-app | コーディング支援 | Serena を用いた IDE 補助サーバ（app 用）。コード補助やワークスペース内ナビゲーションの支援を行います |
-| serena-api | コーディング支援 | Serena を用いた IDE 補助サーバ（api 用）。API 側の解析や補助を行います |
-| gitingest-mcp | インデックス / 検索 | リポジトリを取り込んでインデックス化し、コード検索や解析パイプラインに供します |
-| deepwiki | ドキュメント検索 | DeepWiki のリモート MCP エンドポイントに接続し、外部ドキュメントの検索/参照を行います |
-| context7 | ドキュメント検索 | Context7 の HTTP ベース MCP エンドポイント。ライブラリや仕様ドキュメントの参照に利用します |
-| awslabs.aws-documentation-mcp-server | ドキュメント検索 | AWS の公式ドキュメントを検索・参照するための MCP サーバです |
-| microsoft.docs.mcp | ドキュメント検索 | Microsoft Learn の MCP API。Microsoft の公式ドキュメント参照用です |
-| cloudflare-documentation-mcp-server | ドキュメント検索 | Cloudflare ドキュメント向けのリモート MCP エンドポイント |
+|---|---|---|
+| sequential-thinking | Reasoning | 段階的な思考プロセスを提供 |
+| github | VCS | GitHub リポジトリ操作 |
+| gitlab | VCS | GitLab リポジトリ操作 |
+| serena-app | Coding | シンボリック解析によるコード支援 (app) |
+| serena-api | Coding | シンボリック解析によるコード支援 (api) |
+| gitingest-mcp | Search | リポジトリインデックス化と検索 |
+| deepwiki | Docs | 外部ドキュメント検索 |
+| context7 | Docs | ライブラリドキュメント参照 |
+| awslabs.aws-documentation-mcp-server | Docs | AWS 公式ドキュメント |
+| microsoft.docs.mcp | Docs | Microsoft Learn ドキュメント |
+| cloudflare-documentation-mcp-server | Docs | Cloudflare ドキュメント |
 
 ## 🗺️ Architecture Diagram
 

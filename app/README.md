@@ -2,9 +2,23 @@
 
 このディレクトリはフロントエンド (Vite + React + TypeScript) のソースを格納しています。ここには開発・ビルド・lint に関する手順と主要ファイルの説明をまとめています。
 
-注意事項:
-- パッケージマネージャは `pnpm` を想定していますが、`npm` でも動作します。
-- Node.js のバージョンはプロジェクト要件に合わせてください。
+## 🧩 Tech Stack
+
+| Category | Technology | Description |
+|---|---|---|
+| Language | TypeScript | プログラミング言語 |
+| Runtime | Node.js 22.16.0 | JavaScript ランタイム |
+| Package | pnpm | パッケージマネージャ (推奨) |
+| Package | npm | パッケージマネージャ (代替) |
+| Package | yarn | パッケージマネージャ (代替) |
+| Build | Vite | フロントエンドビルドツール |
+| Framework | React | UI ライブラリ |
+| Linter | Biome | コード整形・静的解析 |
+
+## 📝 Notes
+
+- パッケージマネージャは `pnpm` を想定していますが、`npm` や `yarn` でも動作します。
+- Node.js のバージョンは 22.16.0 を使用しています。
 
 ## Install (依存関係インストール)
 

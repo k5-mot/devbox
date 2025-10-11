@@ -16,7 +16,7 @@
     ],
     "features": {
         "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
-            "packages": "curl,ca-certificates,gnupg2,vim,jq,poppler-utils",
+            "packages": "curl,ca-certificates,gnupg2,vim,jq",
             "upgradePackages": true
         },
         "ghcr.io/devcontainers/features/common-utils:2": {
