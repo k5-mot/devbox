@@ -1,5 +1,9 @@
 {
     // ===============
+    // 環境設定
+    // ===============
+    "python.defaultInterpreterPath": "api/.venv/bin/python",
+    // ===============
     // 基本設定
     // ===============
     "editor.insertSpaces": true,
@@ -63,12 +67,12 @@
     "[toml]": {
         "editor.defaultFormatter": "tamasfe.even-better-toml"
     },
-    "python.defaultInterpreterPath": "backend/.venv/bin/python",
     // ===============
     // 拡張機能設定
     // ===============
     "continue.telemetryEnabled": false,
     "chat.agent.enabled": true,
+    // "chat.disableAIFeatures": true,
     "chat.tools.autoApprove": true
     // "github.copilot.chat.agent.autoFix": true,
     // "github.copilot.chat.agent.runTasks": true,

@@ -1,134 +1,170 @@
 {
-  "servers": {
-    // ===============================
-    // 機能拡張
-    // ===============================
-    // Thinking mode
-    "sequential-thinking": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
-      ]
-    },
-    // ===============================
-    // 開発・コード管理
-    // ===============================
-    // Gitリポジトリ操作
-    // "git": {
-    //   "command": "uvx",
-    //   "args": [
-    //     "--no-env-file",
-    //     "mcp-server-git"
-    //   ]
-    // },
-    // GitHubとのシームレスな統合
-    "github": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-github"
-      ]
-    },
-    // GitHubリポジトリをLLM向けテキストに変換
-    "gitingest-mcp": {
-      "command": "uvx",
-      "args": [
-        "--no-env-file",
-        "git+https://github.com/puravparab/gitingest-mcp",
-        "gitingest-mcp"
-      ]
-    },
-    // GitHub向けDeep Research
-    "deepwiki": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://mcp.deepwiki.com/sse"
-      ]
-    },
-    // ===============================
-    // ユーティリティ
-    // ===============================
-    // 現在時刻とタイムゾーン変換
-    "time": {
-      "command": "uvx",
-      "args": [
-        "--no-env-file",
-        "mcp-server-time",
-        "--local-timezone=Asia/Tokyo"
-      ]
-    },
-    // チャート・グラフ生成機能
-    "mcp-server-chart": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@antvmcp-server-chart"
-      ]
-    },
-    // Webページ・API取得機能
-    // "fetch": {
-    //   "command": "uvx",
-    //   "args": [
-    //     "--no-env-file",
-    //     "mcp-server-fetch"
-    //   ]
-    // },
-    // ファイルシステム操作（/workspaces, /home/vscode）
-    // "filesystem": {
-    //   "command": "npx",
-    //   "args": [
-    //     "-y",
-    //     "@modelcontextprotocol/server-filesystem",
-    //     "/workspaces",
-    //     "/home/vscode"
-    //   ]
-    // }
-    // ブラウザ自動化・E2Eテスト
-    // "playwright": {
-    //   "command": "npx",
-    //   "args": [
-    //     "@playwright/mcp@latest"
-    //   ]
-    // },
-    // ===============================
-    // ドキュメント・技術情報検索
-    // ===============================
-    // 最新ドキュメントを検索
-    "context7": {
-      "type": "http",
-      "url": "https://mcp.context7.com/mcp"
-    },
-    // AWS公式ドキュメント検索
-    "awslabs.aws-documentation-mcp-server": {
-      "type": "stdio",
-      "command": "uvx",
-      "args": [
-        "--no-env-file",
-        "awslabs.aws-documentation-mcp-server@latest"
-      ],
-      "env": {
-        "FASTMCP_LOG_LEVEL": "ERROR"
-      }
-    },
-    // Microsoft公式ドキュメント検索
-    "microsoft.docs.mcp": {
-      "url": "https://learn.microsoft.com/api/mcp"
-    },
-    // Cloudflare公式ドキュメント検索
-    "cloudflare-documentation-mcp-server": {
-      "url": "https://docs.mcp.cloudflare.com/sse"
-    },
-    // // PandaCSSドキュメント
-    // "PandaCSS Docs": {
-    //   "type": "sse",
-    //   "url": "https://gitmcp.io/chakra-ui/panda"
-    // },
-    // // Serendie Design Systemドキュメント
-    // "Serendie Design System Docs": {
-    //   "type": "sse",
-    //   "url": "https://gitmcp.io/serendie/serendie"
-    // }
-  }
+    "servers": {
+        "sequential-thinking": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-sequential-thinking"
+            ]
+        },
+        // "git": {
+        //     "type": "stdio",
+        //     "command": "uvx",
+        //     "args": [
+        //         "--no-env-file",
+        //         "mcp-server-git"
+        //     ]
+        // },
+        // "github": {
+        //     "type": "stdio",
+        //     "command": "npx",
+        //     "args": [
+        //         "-y",
+        //         "@modelcontextprotocol/server-github"
+        //     ]
+        // },
+        // "gitlab": {
+        //     "type": "stdio",
+        //     "command": "npx",
+        //     "args": [
+        //         "-y",
+        //         "@zereight/mcp-gitlab"
+        //     ],
+        //     "env": {
+        //         "GITLAB_PERSONAL_ACCESS_TOKEN": "your_gitlab_token",
+        //         "GITLAB_API_URL": "your_gitlab_api_url",
+        //         "GITLAB_READ_ONLY_MODE": "false"
+        //     }
+        // },
+        "serena-app": {
+            "type": "stdio",
+            "command": "uvx",
+            "args": [
+                "--no-env-file",
+                "--from",
+                "git+https://github.com/oraios/serena",
+                "serena",
+                "start-mcp-server",
+                "--context",
+                "ide-assistant",
+                "--project",
+                "./app"
+            ],
+            "env": {
+                "BROWSER": "none"
+            }
+        },
+        "serena-api": {
+            "type": "stdio",
+            "command": "uvx",
+            "args": [
+                "--no-env-file",
+                "--from",
+                "git+https://github.com/oraios/serena",
+                "serena",
+                "start-mcp-server",
+                "--context",
+                "ide-assistant",
+                "--project",
+                "./api"
+            ],
+            "env": {
+                "BROWSER": "none"
+            }
+        },
+        "gitingest-mcp": {
+            // GitHubリポジトリをLLM向けテキストに変換
+            "type": "stdio",
+            "command": "uvx",
+            "args": [
+                "--no-env-file",
+                "git+https://github.com/puravparab/gitingest-mcp",
+                "gitingest-mcp"
+            ]
+        },
+        "deepwiki": {
+            // GitHub向けDeep Research
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "mcp-remote",
+                "https://mcp.deepwiki.com/sse"
+            ]
+        },
+        // "time": {
+        //     // 現在時刻とタイムゾーン変換
+        //     "type": "stdio",
+        //     "command": "uvx",
+        //     "args": [
+        //         "--no-env-file",
+        //         "mcp-server-time",
+        //         "--local-timezone=Asia/Tokyo"
+        //     ]
+        // },
+        // "mcp-server-chart": {
+        //     // チャート・グラフ生成機能
+        //     "type": "stdio",
+        //     "command": "npx",
+        //     "args": [
+        //         "-y",
+        //         "@antv/mcp-server-chart"
+        //     ]
+        // },
+        // "fetch": {
+        //     // Webページ・API取得機能
+        //     "type": "stdio",
+        //     "command": "uvx",
+        //     "args": [
+        //         "--no-env-file",
+        //         "mcp-server-fetch"
+        //     ]
+        // },
+        // "filesystem": {
+        //     // ファイルシステム操作
+        //     "type": "stdio",
+        //     "command": "npx",
+        //     "args": [
+        //         "-y",
+        //         "@modelcontextprotocol/server-filesystem",
+        //         "/workspaces",
+        //         "/home/vscode"
+        //     ]
+        // },
+        // "playwright": {
+        //     // ブラウザ自動化・E2Eテスト
+        //     "type": "stdio",
+        //     "command": "npx",
+        //     "args": [
+        //         "@playwright/mcp@latest"
+        //     ]
+        // },
+        "context7": {
+            // 最新ドキュメントを検索
+            "type": "http",
+            "url": "https://mcp.context7.com/mcp"
+        },
+        "awslabs.aws-documentation-mcp-server": {
+            // AWS公式ドキュメント検索
+            "type": "stdio",
+            "command": "uvx",
+            "args": [
+                "--no-env-file",
+                "awslabs.aws-documentation-mcp-server@latest"
+            ],
+            "env": {
+                "FASTMCP_LOG_LEVEL": "ERROR"
+            }
+        },
+        "microsoft.docs.mcp": {
+            // Microsoft公式ドキュメント検索
+            "type": "http",
+            "url": "https://learn.microsoft.com/api/mcp"
+        }
+        // "cloudflare-documentation-mcp-server": {
+        //     // Cloudflare公式ドキュメント検索
+        //     "type": "sse",
+        //     "url": "https://docs.mcp.cloudflare.com/sse"
+        // }
+    }
 }
