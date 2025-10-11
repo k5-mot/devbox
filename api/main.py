@@ -1,5 +1,7 @@
-def main():
-    print("Hello from api!")
+#! /usr/bin/env python3
+def main() -> None:
+    """."""
+    print("Hello from api!")  # noqa: T201
 
 
 if __name__ == "__main__":
