@@ -21,7 +21,28 @@
 - Python 3.12 以上を推奨 (pyproject.toml の `requires-python` に準拠)
 - 仮想環境の利用を推奨します
 
-## Setup (初期セットアップ)
+## 🚀 Quick Start
+
+Dev Container 内で以下のいずれかの方法でバックエンドを起動できます。
+
+### 方法1: VS Code タスクを使用（推奨）
+
+1. `Ctrl+Shift+P` でコマンドパレットを開く
+2. "Tasks: Run Task" を選択
+3. "Start Both Servers" を選択（フロントエンド・バックエンド両方起動）
+4. または "Start Backend" を選択（バックエンドのみ起動）
+
+### 方法2: 手動でコマンド実行
+
+```bash
+# Dev Container 内のターミナルで実行
+cd api
+uvicorn main:app --reload --port 8000
+```
+
+API ドキュメントは http://localhost:8000/docs にアクセスしてください（FastAPI の自動生成ドキュメント）。
+
+## Setup
 
 1. 仮想環境を作成して有効化します:
 

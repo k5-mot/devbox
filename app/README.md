@@ -20,6 +20,29 @@
 - パッケージマネージャは `pnpm` を想定していますが、`npm` や `yarn` でも動作します。
 - Node.js のバージョンは 22.16.0 を使用しています。
 
+## 🚀 Quick Start
+
+Dev Container 内で以下のいずれかの方法でフロントエンドを起動できます。
+
+### 方法1: VS Code タスクを使用（推奨）
+
+1. `Ctrl+Shift+P` でコマンドパレットを開く
+2. "Tasks: Run Task" を選択
+3. "Start Both Servers" を選択（フロントエンド・バックエンド両方起動）
+4. または "Start Frontend" を選択（フロントエンドのみ起動）
+
+### 方法2: 手動でコマンド実行
+
+```bash
+# Dev Container 内のターミナルで実行
+cd app
+pnpm run dev
+# または
+npm run dev
+```
+
+ブラウザで http://localhost:5173 にアクセスしてください。
+
 ## Install (依存関係インストール)
 
 pnpm を使う場合:

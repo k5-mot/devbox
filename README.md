@@ -68,6 +68,7 @@
 | IaC | Terraform | インフラストラクチャ as コード |
 | Agents | Anthropic　Claude Code | AI コーディングエージェント |
 | Agents | OpenAI　Codex | AI コーディングアシスタント |
+| Agents | GitHub Copilot | AI コーディングアシスタント |
 | Agents | Cline | AI コーディングアシスタント |
 | Quality | pre-commit | Git フック管理 |
 | Quality | git-cz | コミットメッセージ支援 |
@@ -321,10 +322,9 @@ VS Code が開いたら：
 
 #### 4. アプリケーションを起動
 
-コンテナのビルドと起動が完了したら、以下のいずれかの方法でアプリケーションを起動してください：
-
-- **VS Code タスクを使用**: `Ctrl+Shift+P` → "Tasks: Run Task" → "Start Both Servers"
-- **手動で起動**: 各サブディレクトリの [`README.md`](app/README.md) を参照
+アプリケーションの起動方法は、各サブディレクトリの README を参照してください：
+- フロントエンド: [`app/README.md`](app/README.md)
+- バックエンド: [`api/README.md`](api/README.md)
 
 ## 🛠️ Conventions & Notes
 
