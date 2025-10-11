@@ -1,17 +1,35 @@
-# CI backend jobs (extracted from .gitlab-ci.yml)
-backend:
+# CI backend jobs (format -> lint -> type-check -> test -> build)
+.api-base: &api-base
   image: ghcr.io/astral-sh/uv:debian
-  stage: backend
   variables:
     PIP_NO_CACHE_DIR: "false"
   before_script:
     - cd api
     - uv sync --dev
+
+api-format:
+  <<: *api-base
+  stage: format
   script:
     - uv run --no-env-file -- ruff format .
+
+api-lint:
+  <<: *api-base
+  stage: lint
+  script:
     - uv run --no-env-file -- ruff check .
+
+api-type-check:
+  <<: *api-base
+  stage: type-check
+  script:
     - uv run --no-env-file -- pyright --project . --warnings || true
-    - mkdir -pv report
+
+api-test:
+  <<: *api-base
+  stage: test
+  script:
+    - mkdir -pv coverage
     - uv run --no-env-file -- pytest -q --junitxml=coverage/junit.xml --cov=. --cov-report=xml:coverage/coverage.xml --cov-report=html:coverage/coverage_html
   artifacts:
     when: always
@@ -22,3 +40,9 @@ backend:
     expire_in: 7 days
     reports:
       junit: api/coverage/junit.xml
+
+api-build:
+  <<: *api-base
+  stage: build
+  script:
+    - echo "No build step for backend (placeholder)"

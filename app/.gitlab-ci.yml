@@ -1,7 +1,6 @@
-# CI frontend jobs (extracted from .gitlab-ci.yml)
-frontend:
+# CI frontend jobs (format -> lint -> type-check -> test -> build)
+.app-base: &app-base
   image: docker.io/library/node:22
-  stage: frontend
   variables:
     CI: "true"
   before_script:
@@ -9,15 +8,43 @@ frontend:
     - corepack prepare pnpm@10 --activate
     - cd app
     - pnpm install
+
+app-format:
+  <<: *app-base
+  stage: format
   script:
     - pnpm run format
+
+app-lint:
+  <<: *app-base
+  stage: lint
+  script:
     - pnpm run lint
+
+app-type-check:
+  <<: *app-base
+  stage: type-check
+  script:
     - pnpm run type
+
+app-test:
+  <<: *app-base
+  stage: test
+  script:
     - pnpm run test:ci
+  artifacts:
+    when: always
+    paths:
+      - app/coverage
+    expire_in: 7 days
+
+app-build:
+  <<: *app-base
+  stage: build
+  script:
     - pnpm run build
   artifacts:
     when: always
     paths:
       - app/dist
-      - app/coverage
     expire_in: 7 days
