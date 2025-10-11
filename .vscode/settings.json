@@ -77,18 +77,17 @@
     // ===============
     // 拡張機能設定
     // ===============
-    "continue.telemetryEnabled": false,
     "chat.agent.enabled": true,
     // "chat.disableAIFeatures": true,
-    "chat.tools.autoApprove": true,
-    "chat.mcp.autostart": "newAndOutdated",
     "chat.tools.terminal.autoApprove": {
-        "uv run *": true,
-        "npm run *": true,
-        "pnpm run *": true,
-        "git (status *|log *)": true
+        "git (status( --porcelain)?|log|show) .*": true,
+        "npm run (dev|build|test|preview|lint|type-check|check|test:ci|test:coverage|format:check)( .*|$)": true,
+        "pnpm run (dev|build|test|preview|lint|type-check|check|test:ci|test:coverage|format:check)( .*|$)": true,
+        "uv run --no-env-file -- (ruff|pyright|pytest) .*": true,
+        "curl -XGET .*": true,
+        "ls( .*|$)": true,
+        "pwd": true,
+        "cat (README.md|CHANGELOG.md|CONTRIBUTING.md|.gitignore)": true,
+        "cat **/.env*": false
     }
-    // "github.copilot.chat.agent.autoFix": true,
-    // "github.copilot.chat.agent.runTasks": true,
-    // "github.copilot.chat.agent.thinkingTool": true,
 }
