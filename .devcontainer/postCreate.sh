@@ -69,6 +69,11 @@ function setup_serena_api() {
   popd
 }
 
+function setup_precommit() {
+  printf "\e[36mSetup pre-commit...\e[0m\n"
+  pre-commit install
+}
+
 SCRIPT_START=$(date +%s%3N)
 
 setup_api &
@@ -77,6 +82,7 @@ setup_claude &
 setup_codex &
 setup_serena_app &
 setup_serena_api &
+setup_precommit &
 wait
 
 SCRIPT_END=$(date +%s%3N)
