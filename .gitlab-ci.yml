@@ -24,6 +24,7 @@ frontend:
     paths:
       - app/dist
       - app/coverage
+    expire_in: 7 days
 
 # Backend: Python
 backend:
@@ -38,12 +39,11 @@ backend:
     - uv run --no-env-file -- ruff format .
     - uv run --no-env-file -- ruff check .
     - uv run --no-env-file -- pyright --project . --warnings || true
-    - mkdir -p report
+    - mkdir -pv report
     - uv run --no-env-file -- pytest -q --junitxml=coverage/junit.xml --cov=. --cov-report=xml:coverage/coverage.xml --cov-report=html:coverage/coverage_html
   artifacts:
     when: always
     paths:
-      - api/.pytest_cache
       - api/coverage/junit.xml
       - api/coverage/coverage.xml
       - api/coverage/coverage_html
