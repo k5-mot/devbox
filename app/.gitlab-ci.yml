@@ -1,0 +1,23 @@
+# CI frontend jobs (extracted from .gitlab-ci.yml)
+frontend:
+  image: docker.io/library/node:22
+  stage: frontend
+  variables:
+    CI: "true"
+  before_script:
+    - corepack enable
+    - corepack prepare pnpm@10 --activate
+    - cd app
+    - pnpm install
+  script:
+    - pnpm run format
+    - pnpm run lint
+    - pnpm run type
+    - pnpm run test:ci
+    - pnpm run build
+  artifacts:
+    when: always
+    paths:
+      - app/dist
+      - app/coverage
+    expire_in: 7 days
