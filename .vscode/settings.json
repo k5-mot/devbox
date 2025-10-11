@@ -74,6 +74,9 @@
         "editor.formatOnSave": false,
         "editor.defaultFormatter": null
     },
+    "[yaml]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
     // ===============
     // 拡張機能設定
     // ===============

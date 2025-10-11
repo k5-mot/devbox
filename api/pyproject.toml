@@ -23,6 +23,7 @@ dependencies = [
 dev = [
   "pyright>=1.1.400",
   "pytest>=8.3.5",
+  "pytest-cov>=4.0.0",
   "python-dotenv>=1.1.0",
   "ruff>=0.14.0",
 ]
@@ -81,7 +82,7 @@ select = [
   "T10", # flake8-debugger
   # "DJ",   # flake8-django
   "EM",   # flake8-errmsg
-  "EXE",  # flake8-executable
+  # "EXE",  # flake8-executable
   "FIX",  # flake8-fixme
   "FA",   # flake8-future-annotations
   "INT",  # flake8-gettext
@@ -310,18 +311,15 @@ unfixable = [
 "__init__.py" = [
   "F401", # unused-import
 ]
-"!main.py" = [
-  "EXE002", # shebang-missing-executable-file
-]
 "tests/*" = [
   "S101",   # assert
   "FBT001", # boolean-type-hint-positional-argument
 ]
 
-[tool.ruff.mccabe]
+[tool.ruff.lint.mccabe]
 max-complexity = 10 # maximum complexity
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google" # docstring style
 
 [tool.ruff.format]

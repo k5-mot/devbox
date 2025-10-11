@@ -46,6 +46,18 @@ graph LR
 > [!NOTE]
 > フロントエンドとバックエンドの詳細な技術スタックは、各サブディレクトリの [`app/README.md`](app/README.md) と [`api/README.md`](api/README.md) を参照してください。
 
+### pre-commit
+
+- `.pre-commit-config.yaml`に設定を書いて、以下のコマンドを実行することでセットアップできる
+
+```bash
+# Gitにセットアップ.
+pre-commit install
+
+# 手動で実行.
+pre-commit run --all-files
+```
+
 ### MCP Servers
 
 | Technology | Type | Description |

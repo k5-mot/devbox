@@ -27,7 +27,7 @@ repos:
 
       - id: py-pytest
         name: PY pytest
-        entry: bash -c "cd api && uv run --no-env-file -- pytest -q"
+        entry: bash -c "cd api && mkdir -p report && uv run --no-env-file -- pytest -q --junitxml=coverage/junit.xml --cov=. --cov-report=xml:coverage/coverage.xml --cov-report=html:coverage/coverage_html"
         language: system
         files: "^api/"
         pass_filenames: false

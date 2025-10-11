@@ -113,6 +113,8 @@
                 // ==============
                 // MISC
                 // ==============
+                "github.vscode-github-actions", // GitHub Actions support
+                "gitlab.gitlab-workflow", // GitLab CI/CD support
                 // "ms-azuretools.vscode-docker", // Docker Support
                 "tamasfe.even-better-toml", // TOML support
                 "redhat.vscode-yaml", // YAML support
