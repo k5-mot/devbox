@@ -49,17 +49,17 @@
     // ==============
     // IDE支援機能の設定
     // ==============
-    // "assist": {
-    //     "enabled": true,
-    //     "actions": {
-    //         "source": {
-    //             "organizeImports": "on", // インポートの自動整理を有効
-    //         "useSortedAttributes": "on",// HTML属性のソートを有効
-    //         "useSortedKeys": "on",// オブジェクトキーのソートを有効
-    //             "useSortedProperties": "on"// CSSプロパティのソートを有効
-    //         }
-    //     }
-    // },
+    "assist": {
+        "enabled": true,
+        "actions": {
+            "source": {
+                "organizeImports": "on" // インポートの自動整理を有効
+                // "useSortedAttributes": "on",// HTML属性のソートを有効
+                // "useSortedKeys": "on",// オブジェクトキーのソートを有効
+                // "useSortedProperties": "on"// CSSプロパティのソートを有効
+            }
+        }
+    },
     // ==============
     // リンター設定
     // ==============
@@ -116,7 +116,7 @@
                 // "noQwikUseVisibleTask": "error", // QwikのuseVisibleTaskの使用を禁止
                 // "noReactForwardRef": "error", // ReactのforwardRefの使用を禁止
                 "noSecrets": "error", // シークレット情報のハードコードを禁止
-                "noShadow": "error", // 変数や関数のシャドウイングを禁止
+                // "noShadow": "error", // 変数や関数のシャドウイングを禁止
                 "noUnnecessaryConditions": "error", // 不要な条件分岐を禁止
                 "noUnresolvedImports": "error", // 解決できないimportを禁止
                 "noUnusedExpressions": "warn", // 未使用の式を禁止
@@ -137,7 +137,7 @@
             },
             "performance": { // 性能のルール
                 "recommended": true, // 推奨ルールを有効化
-                "noAwaitInLoops": "error", // ループ内でのawait使用を禁止
+                // "noAwaitInLoops": "error", // ループ内でのawait使用を禁止
                 // "noBarrelFile": "error", // バレルファイルの使用を禁止
                 "noDelete": "error", // delete演算子の使用を禁止
                 // "noImgElement": "error", // Next.jsプロジェクトで<img>要素の使用を禁止
@@ -409,64 +409,6 @@
     // ==============
     "overrides": [
         // ==============
-        // Reactの設定
-        // ==============
-        {
-            "includes": [
-                "**/*.jsx",
-                "**/*.tsx"
-            ],
-            "linter": {
-                "rules": {
-                    "correctness": {
-                        "noChildrenProp": "error", // childrenプロパティの誤用を禁止(React)
-                        "noNestedComponentDefinitions": "error", // ネストされたコンポーネント定義を禁止(React)
-                        "noReactPropAssignments": "error", // React propsの再代入を禁止
-                        "noRenderReturnValue": "error", // Reactのrenderメソッドの戻り値の誤用を禁止
-                        "useExhaustiveDependencies": "error", // React Hook依存関係の網羅性チェック
-                        "useHookAtTopLevel": "error", // Hookはトップレベルでのみ
-                        "useJsxKeyInIterable": "error" // イテレータ内のJSX要素にkey属性を強制
-                    },
-                    "nursery": { // 実験的ルール
-                        "noJsxLiterals": "error", // JSX内でのリテラル値の使用を禁止
-                        "noReactForwardRef": "error" // ReactのforwardRefの使用を禁止
-                    },
-                    "security": { // セキュリティのルール
-                        "noDangerouslySetInnerHtml": "error" // 危険なJSXプロパティ(dangerouslySetInnerHTML)の使用を禁止
-                    },
-                    "style": { // スタイル関連のルール
-                        "recommended": true, // 推奨ルールを有効化
-                        "noImplicitBoolean": "error", // JSXの真偽値属性で暗黙のtrueを許可しない（明示的な指定を推奨）
-                        "useConsistentCurlyBraces": "error" // JSX属性や子要素内の中括弧使用を一貫させる
-                    },
-                    "suspicious": { // 疑わしいコード関連のルール
-                        "recommended": true, // 推奨ルールを有効化
-                        "noArrayIndexKey": "error", // 配列のインデックスをkeyに使用することを禁止(React)
-                        "noReactSpecificProps": "error" // React固有のpropsの誤用を禁止
-                    }
-                }
-            }
-        },
-        // ==============
-        // Vueの設定
-        // ==============
-        {
-            "includes": [
-                "**/*.vue"
-            ],
-            "linter": {
-                "rules": {
-                    "nursery": { // 実験的ルール
-                        "recommended": true, // 推奨ルールを有効化
-                        "noVueDataObjectDeclaration": "error", // Vueのdataオブジェクト宣言を禁止
-                        "noVueDuplicateKeys": "error", // Vueの重複キーを禁止
-                        "noVueReservedKeys": "error", // Vueの予約キーの使用を禁止
-                        "noVueReservedProps": "error" // Vueの予約propsの使用を禁止
-                    }
-                }
-            }
-        },
-        // ==============
         // Typescriptの設定
         // ==============
         {
@@ -512,6 +454,64 @@
                         "noVar": "error", // var宣言を禁止(ES6+ const/let推奨)
                         "noWith": "off", // with文チェックを無効
                         "useGetterReturn": "off" // getterの返り値チェックを無効
+                    }
+                }
+            }
+        },
+        // ==============
+        // Reactの設定
+        // ==============
+        {
+            "includes": [
+                "**/*.jsx",
+                "**/*.tsx"
+            ],
+            "linter": {
+                "rules": {
+                    "correctness": {
+                        // "noChildrenProp": "error", // childrenプロパティの誤用を禁止(React)
+                        // "noNestedComponentDefinitions": "error", // ネストされたコンポーネント定義を禁止(React)
+                        "noReactPropAssignments": "error", // React propsの再代入を禁止
+                        "noRenderReturnValue": "error", // Reactのrenderメソッドの戻り値の誤用を禁止
+                        "useExhaustiveDependencies": "error", // React Hook依存関係の網羅性チェック
+                        "useHookAtTopLevel": "error", // Hookはトップレベルでのみ
+                        "useJsxKeyInIterable": "error" // イテレータ内のJSX要素にkey属性を強制
+                    },
+                    "nursery": { // 実験的ルール
+                        // "noJsxLiterals": "error", // JSX内でのリテラル値の使用を禁止
+                        "noReactForwardRef": "error" // ReactのforwardRefの使用を禁止
+                    },
+                    "security": { // セキュリティのルール
+                        "noDangerouslySetInnerHtml": "error" // 危険なJSXプロパティ(dangerouslySetInnerHTML)の使用を禁止
+                    },
+                    "style": { // スタイル関連のルール
+                        "recommended": true, // 推奨ルールを有効化
+                        "noImplicitBoolean": "error", // JSXの真偽値属性で暗黙のtrueを許可しない（明示的な指定を推奨）
+                        "useConsistentCurlyBraces": "error" // JSX属性や子要素内の中括弧使用を一貫させる
+                    },
+                    "suspicious": { // 疑わしいコード関連のルール
+                        "recommended": true, // 推奨ルールを有効化
+                        "noArrayIndexKey": "error", // 配列のインデックスをkeyに使用することを禁止(React)
+                        "noReactSpecificProps": "off" // React固有のpropsの誤用を禁止(HTML標準属性を許可)
+                    }
+                }
+            }
+        },
+        // ==============
+        // Vueの設定
+        // ==============
+        {
+            "includes": [
+                "**/*.vue"
+            ],
+            "linter": {
+                "rules": {
+                    "nursery": { // 実験的ルール
+                        "recommended": true, // 推奨ルールを有効化
+                        "noVueDataObjectDeclaration": "error", // Vueのdataオブジェクト宣言を禁止
+                        "noVueDuplicateKeys": "error", // Vueの重複キーを禁止
+                        "noVueReservedKeys": "error", // Vueの予約キーの使用を禁止
+                        "noVueReservedProps": "error" // Vueの予約propsの使用を禁止
                     }
                 }
             }
