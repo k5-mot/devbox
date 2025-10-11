@@ -1,9 +1,31 @@
 {
     "permissions": {
         "allow": [
-            "Bash(curl *)"
+            "Bash(curl:*)",
+            "Bash(uv:*)",
+            "Bash(uvx:*)",
+            "Bash(uv add:*)",
+            "Bash(uv sync:*)",
+            "Bash(uv run:*)",
+            "Bash(npm:*)",
+            "Bash(npx:*)",
+            "Bash(npm run:*)",
+            "Bash(npm install)",
+            "Bash(npm install:*)",
+            "Read(~/.zshrc)",
+            "Read(~/.zshenv)",
+            "WebFetch(domain:*)"
         ],
-        "deny": [],
+        "deny": [
+            "Read(**/.env)",
+            "Read(**/.env.*)",
+            "Read(**/secrets/**)"
+        ],
         "ask": []
+    },
+    "env": {},
+    "statusLine": {
+        "type": "command",
+        "command": "~/.claude/statusline.py"
     }
 }
