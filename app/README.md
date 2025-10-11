@@ -52,7 +52,7 @@ app/
 ├── tsconfig.app.json     # TypeScript 設定（アプリケーション用）
 ├── tsconfig.node.json    # TypeScript 設定（Node.js 用）
 ├── vite.config.ts        # Vite 設定
-└── README.md             # このファイル
+└── README.md             # README
 ```
 
 ## 🚀 Getting Started

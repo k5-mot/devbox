@@ -7,48 +7,16 @@
 - フロントエンド (Vite + React + TypeScript) とバックエンド (Python API) を想定したワークスペースの雛形
 - Dev Container と VS Code タスクを使った再現性の高い開発フローの提供
 
-## 📁 Directory Structure
+## 🗺️ Architecture Diagram
 
-- 本プロジェクトのディレクトリ構成は以下の通りです。
-- 各ディレクトリ以下の詳細な説明は、各ディレクトリ以下の`README.md`を参照してください。
-
-```bash
-.
-├── .claude/                      # Claude Code 関連の設定
-│   ├── .gitignore                  # Claude Code 向けのGit除外定義
-│   ├── settings.json               # Claude Code の設定
-│   ├── settings.local.json         # Claude Code のローカル設定
-│   └── statusline.py               # ステータスライン表示のスクリプト
-├── .devcontainer/                # Dev Container 関連の設定
-│   ├── devcontainer.json           # Dev Container の主要設定
-│   ├── devcontainer.env            # Dev Container 内で使う環境変数
-│   ├── postCreate.sh               # コンテナ作成後に実行されるスクリプト
-│   ├── postStart.sh                # コンテナ起動後に実行されるスクリプト
-│   └── features/                   # 自作の Dev Container Feature
-├── .github/                      # GitHub 関連の設定
-│   ├── pull_request_template.md    # GitHub Pull Request のテンプレート
-│   ├── ISSUE_TEMPLATE              # GitHub Issue のテンプレート
-│   │   ├── feature_request.md        # GitHub Issue の機能要望テンプレート
-│   │   └── bug_report.md             # GitHub Issue のバグ報告テンプレート
-│   ├── instructions/               # GitHub Copilot のシステムプロンプト
-│   └── workflows/                  # GitHub Actions
-├── .vscode/                      # VSCode 関連の設定
-│   ├── extensions.json             # 推奨拡張機能
-│   ├── launch.json                 # デバッグ構成
-│   ├── mcp.json                    # GitHub Copilot の MCP 設定
-│   ├── settings.json               # VSCode の設定
-│   └── tasks.json                  # ビルド構成
-├── .gitignore                    # Git 除外定義
-├── .mcp.json                     # Claude Code の MCP servers の設定
-├── api/                          # バックエンド例
-├── app/                          # フロントエンド例
-├── biome.jsonc                   # Biome (コード整形・静的解析)の設定
-├── changelog.config.js           # Git コミットテンプレート
-├── CLAUDE.md                     # Claude Code のシステムプロンプト
-├── LICENSE                       # ライセンス
-└── README.md                     # README
+```mermaid
+graph LR
+    Dev["Developer"] --> DevContainer["Dev Container / VS Code"]
+    DevContainer --> Front["Frontend (app/)"]
+    DevContainer --> Back["Backend (api/)"]
+    Front --> Browser["Browser / Client"]
+    Back --> Services["External Services (DB, APIs)"]
 ```
-
 
 ## 🧩 Stack
 
@@ -94,15 +62,46 @@
 | microsoft.docs.mcp | Docs | Microsoft Learn ドキュメント |
 | cloudflare-documentation-mcp-server | Docs | Cloudflare ドキュメント |
 
-## 🗺️ Architecture Diagram
+## 📁 Directory Structure
 
-```mermaid
-graph LR
-    Dev["Developer"] --> DevContainer["Dev Container / VS Code"]
-    DevContainer --> Front["Frontend (app/)"]
-    DevContainer --> Back["Backend (api/)"]
-    Front --> Browser["Browser / Client"]
-    Back --> Services["External Services (DB, APIs)"]
+- 本プロジェクトのディレクトリ構成は以下の通りです。
+- 各ディレクトリ以下の詳細な説明は、各ディレクトリ以下の`README.md`を参照してください。
+
+```bash
+.
+├── .claude/                      # Claude Code 関連の設定
+│   ├── .gitignore                  # Claude Code 向けのGit除外定義
+│   ├── settings.json               # Claude Code の設定
+│   ├── settings.local.json         # Claude Code のローカル設定
+│   └── statusline.py               # ステータスライン表示のスクリプト
+├── .devcontainer/                # Dev Container 関連の設定
+│   ├── devcontainer.json           # Dev Container の主要設定
+│   ├── devcontainer.env            # Dev Container 内で使う環境変数
+│   ├── postCreate.sh               # コンテナ作成後に実行されるスクリプト
+│   ├── postStart.sh                # コンテナ起動後に実行されるスクリプト
+│   └── features/                   # 自作の Dev Container Feature
+├── .github/                      # GitHub 関連の設定
+│   ├── pull_request_template.md    # GitHub Pull Request のテンプレート
+│   ├── ISSUE_TEMPLATE              # GitHub Issue のテンプレート
+│   │   ├── feature_request.md        # GitHub Issue の機能要望テンプレート
+│   │   └── bug_report.md             # GitHub Issue のバグ報告テンプレート
+│   ├── instructions/               # GitHub Copilot のシステムプロンプト
+│   └── workflows/                  # GitHub Actions
+├── .vscode/                      # VSCode 関連の設定
+│   ├── extensions.json             # 推奨拡張機能
+│   ├── launch.json                 # デバッグ構成
+│   ├── mcp.json                    # GitHub Copilot の MCP 設定
+│   ├── settings.json               # VSCode の設定
+│   └── tasks.json                  # ビルド構成
+├── .gitignore                    # Git 除外定義
+├── .mcp.json                     # Claude Code の MCP servers の設定
+├── api/                          # バックエンド例
+├── app/                          # フロントエンド例
+├── biome.jsonc                   # Biome (コード整形・静的解析)の設定
+├── changelog.config.js           # Git コミットテンプレート
+├── CLAUDE.md                     # Claude Code のシステムプロンプト
+├── LICENSE                       # ライセンス
+└── README.md                     # README
 ```
 
 ## 🚀 Getting Started
