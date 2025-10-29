@@ -15,7 +15,8 @@
         "test": "vitest run --reporter=dot",
         "test:ui": "vitest --ui",
         "test:coverage": "vitest --coverage",
-        "test:ci": "vitest run --coverage --reporter=dot"
+        "test:ci": "vitest run --coverage --reporter=junit --outputFile=junit-report.xml",
+        "docs": "typedoc --plugin typedoc-plugin-markdown --entryPointStrategy expand src"
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",
@@ -38,6 +39,8 @@
         "globals": "^16.4.0",
         "happy-dom": "^20.0.0",
         "npm-check-updates": "^19.0.0",
+        "typedoc": "^0.28.14",
+        "typedoc-plugin-markdown": "^4.9.0",
         "typescript": "~5.9.3",
         "vite": "^7.1.7",
         "vitest": "^3.2.4"

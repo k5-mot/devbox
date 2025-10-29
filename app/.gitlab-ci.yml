@@ -1,5 +1,5 @@
 # CI frontend jobs (format -> lint -> type-check -> test -> build)
-.app-base: &app-base
+.app-base:
   image: docker.io/library/node:22
   variables:
     CI: "true"
@@ -9,37 +9,8 @@
     - cd app
     - pnpm install
 
-app-format:
-  <<: *app-base
-  stage: format
-  script:
-    - pnpm run format
-
-app-lint:
-  <<: *app-base
-  stage: lint
-  script:
-    - pnpm run lint
-
-app-type-check:
-  <<: *app-base
-  stage: type-check
-  script:
-    - pnpm run type
-
-app-test:
-  <<: *app-base
-  stage: test
-  script:
-    - pnpm run test:ci
-  artifacts:
-    when: always
-    paths:
-      - app/coverage
-    expire_in: 7 days
-
 app-build:
-  <<: *app-base
+  extends: [".app-base"]
   stage: build
   script:
     - pnpm run build
@@ -47,4 +18,46 @@ app-build:
     when: always
     paths:
       - app/dist
+    expire_in: 7 days
+
+app-docs-build:
+  extends: [".app-base"]
+  stage: build
+  script:
+    - pnpm run docs
+  artifacts:
+    when: always
+    paths:
+      - app/docs
+    expire_in: 7 days
+
+app-format:
+  extends: [".app-base"]
+  stage: test
+  script:
+    - pnpm run format
+
+app-lint:
+  extends: [".app-base"]
+  stage: test
+  script:
+    - pnpm run lint
+
+app-type-check:
+  extends: [".app-base"]
+  stage: test
+  script:
+    - pnpm run type
+
+app-test:
+  extends: [".app-base"]
+  stage: test
+  script:
+    - pnpm run test:ci
+  artifacts:
+    when: always
+    reports:
+      junit: app/junit-report.xml
+    paths:
+      - app/coverage
     expire_in: 7 days

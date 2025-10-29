@@ -1,9 +1,7 @@
 stages:
-  - format
-  - lint
-  - type-check
-  - test
   - build
+  - test
+  - deploy
 
 include:
   - local: "app/.gitlab-ci.yml"
