@@ -14,7 +14,8 @@
             "Bash(npm install:*)",
             "Read(~/.zshrc)",
             "Read(~/.zshenv)",
-            "WebFetch(domain:*)"
+            "WebFetch(domain:*)",
+            "WebSearch(*)"
         ],
         "deny": [
             "Read(**/.env)",

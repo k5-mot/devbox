@@ -70,10 +70,16 @@
     "[toml]": {
         "editor.defaultFormatter": "tamasfe.even-better-toml"
     },
-    "[toml][pyproject.toml]": {
-        "editor.formatOnSave": false,
-        "editor.defaultFormatter": null
-    },
+    // // pyproject.tomlは特殊なTOMLなので、Taplo（even-better-toml）のスキーマ検証を調整
+    // "evenBetterToml.schema.enabled": true,
+    // "evenBetterToml.schema.associations": {
+    //     // pyproject.tomlにはPEP 621スキーマを使用（空文字列で無効化も可）
+    //     "**/pyproject.toml": "https://json.schemastore.org/pyproject.json"
+    // },
+    // // Taploのフォーマット設定（pyproject.toml用）
+    // "evenBetterToml.formatter.alignEntries": false,
+    // "evenBetterToml.formatter.arrayTrailingComma": true,
+    // "evenBetterToml.formatter.columnWidth": 88,
     "[yaml]": {
         "editor.defaultFormatter": "redhat.vscode-yaml"
     },

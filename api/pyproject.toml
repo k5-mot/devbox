@@ -23,9 +23,20 @@ dev = [
   "pyright>=1.1.400",
   "pytest>=8.3.5",
   "pytest-cov>=4.0.0",
+  "pytest-mock>=3.15.1",
   "python-dotenv>=1.1.0",
   "ruff>=0.14.0",
 ]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.ruff]
 exclude = [
@@ -333,6 +344,3 @@ preview = true
 [tool.pyright]
 typeCheckingMode = "basic"
 # typeCheckingMode = "strict"
-
-[project.scripts]
-test = "pytest"

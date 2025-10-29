@@ -1,0 +1,34 @@
+# Taplo TOML Formatter Configuration
+# https://taplo.tamasfe.dev/configuration/file.html
+
+# デフォルトのフォーマット設定
+[formatting]
+align_entries = false
+align_comments = true
+array_trailing_comma = true
+array_auto_expand = true
+array_auto_collapse = true
+compact_arrays = true
+compact_inline_tables = false
+compact_entries = false
+column_width = 88
+indent_tables = false
+indent_entries = false
+inline_table_expand = true
+trailing_newline = true
+allowed_blank_lines = 1
+crlf = false
+
+# pyproject.tomlファイル専用の設定
+[[rule]]
+include = ["**/pyproject.toml"]
+keys = ["project", "build-system", "tool"]
+
+[rule.formatting]
+# pyproject.tomlは構造が複雑なので、より柔軟なフォーマットを適用
+align_entries = false
+array_trailing_comma = true
+array_auto_expand = true
+compact_arrays = false
+column_width = 88
+reorder_keys = false
