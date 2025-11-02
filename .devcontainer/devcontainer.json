@@ -57,9 +57,9 @@
         // 依存関係のパッケージをキャッシュしておくことで、再インストールを高速化.
         "source=${localWorkspaceFolderBasename}-app-pkgs,target=${containerWorkspaceFolder}/app/node_modules,type=volume",
         "source=${localWorkspaceFolderBasename}-api-pkgs,target=${containerWorkspaceFolder}/api/.venv,type=volume",
-        // Claude CodeやCodexの設定やキャッシュを保存.
-        "source=${localWorkspaceFolderBasename}-claude,target=/home/vscode/.claude,type=volume",
-        "source=${localWorkspaceFolderBasename}-codex,target=/home/vscode/.codex,type=volume",
+        // Claude CodeやCodexの設定やキャッシュをWindows/WSL2と共有して複数のdevboxで使いまわす.
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.codex,target=/home/vscode/.codex,type=bind,consistency=cached",
         // Serena MCPサーバのインデックスを保存.
         "source=${localWorkspaceFolderBasename}-app-serena,target=${containerWorkspaceFolder}/app/.serena,type=volume",
         "source=${localWorkspaceFolderBasename}-api-serena,target=${containerWorkspaceFolder}/api/.serena,type=volume"

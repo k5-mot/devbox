@@ -48,6 +48,9 @@
     "biome.enabled": true,
     "biome.requireConfiguration": true,
     "biome.lsp.trace.server": "verbose",
+    "gitlab.duoAgentPlatform.enabled": false,
+    "gitlab.duoChat.enabled": false,
+    "gitlab.duoCodeSuggestions.enabled": false,
     "[javascript][javascriptreact][typescript][typescriptreact]": {
         // "editor.defaultFormatter": "esbenp.prettier-vscode"
         "editor.defaultFormatter": "biomejs.biome",
