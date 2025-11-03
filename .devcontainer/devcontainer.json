@@ -52,17 +52,16 @@
     },
     "mounts": [
         // クラウドプロバイダーの認証情報をWindows/WSL2と共有.
-        // "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached",
-        // "source=${localEnv:HOME}${localEnv:USERPROFILE}/.azure,target=/home/vscode/.azure,type=bind,consistency=cached"
-        // 依存関係のパッケージをキャッシュしておくことで、再インストールを高速化.
-        "source=${localWorkspaceFolderBasename}-app-pkgs,target=${containerWorkspaceFolder}/app/node_modules,type=volume",
-        "source=${localWorkspaceFolderBasename}-api-pkgs,target=${containerWorkspaceFolder}/api/.venv,type=volume",
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached",
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.azure,target=/home/vscode/.azure,type=bind,consistency=cached",
         // Claude CodeやCodexの設定やキャッシュをWindows/WSL2と共有して複数のdevboxで使いまわす.
         "source=${localEnv:HOME}${localEnv:USERPROFILE}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
         "source=${localEnv:HOME}${localEnv:USERPROFILE}/.codex,target=/home/vscode/.codex,type=bind,consistency=cached",
+        // 依存関係のパッケージをキャッシュしておくことで、再インストールを高速化.
+        "source=${localWorkspaceFolderBasename}-app-pkgs,target=${containerWorkspaceFolder}/app/node_modules,type=volume",
+        "source=${localWorkspaceFolderBasename}-api-pkgs,target=${containerWorkspaceFolder}/api/.venv,type=volume",
         // Serena MCPサーバのインデックスを保存.
-        "source=${localWorkspaceFolderBasename}-app-serena,target=${containerWorkspaceFolder}/app/.serena,type=volume",
-        "source=${localWorkspaceFolderBasename}-api-serena,target=${containerWorkspaceFolder}/api/.serena,type=volume"
+        "source=${localWorkspaceFolderBasename}-serena,target=${containerWorkspaceFolder}/.serena,type=volume"
     ],
     "remoteEnv": {
         "WORKSPACE_DIR": "${localWorkspaceFolderBasename}",

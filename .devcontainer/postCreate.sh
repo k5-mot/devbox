@@ -25,48 +25,12 @@ function setup_app() {
   pushd app
   pnpm install
   popd
-
-  chown_dir /usr/local/share/nvm/
 }
 
-function setup_claude() {
-  printf "\e[36mSetup Claude Code...\e[0m\n"
-  chown_dir ${HOME}/.claude/
-  if [ -d ".claude" ];then
-      cp -rfv .claude/* ${HOME}/.claude/
-  fi
-}
-
-function setup_codex() {
-  printf "\e[36mSetup Codex...\e[0m\n"
-  chown_dir ${HOME}/.codex/
-  if [ -d ".codex" ];then
-      cp -rfv .codex/* ${HOME}/.codex/
-  fi
-}
-
-function setup_codex() {
-  printf "\e[36mSetup Codex...\e[0m\n"
-  chown_dir ${HOME}/.codex/
-  if [ -d ".codex" ];then
-      cp -rfv .codex/* ${HOME}/.codex/
-  fi
-}
-
-function setup_serena_app() {
-  printf "\e[36mSetup Serena MCP server for APP...\e[0m\n"
-  chown_dir app/.serena
-  pushd app
+function setup_serena() {
+  printf "\e[36mSetup Serena MCP server...\e[0m\n"
+  chown_dir .serena
   uvx --no-env-file --from git+https://github.com/oraios/serena serena project index
-  popd
-}
-
-function setup_serena_api() {
-  printf "\e[36mSetup Serena MCP server for API...\e[0m\n"
-  chown_dir api/.serena
-  pushd api
-  uvx --no-env-file --from git+https://github.com/oraios/serena serena project index
-  popd
 }
 
 function setup_precommit() {
@@ -78,10 +42,7 @@ SCRIPT_START=$(date +%s%3N)
 
 setup_api &
 setup_app &
-setup_claude &
-setup_codex &
-setup_serena_app &
-setup_serena_api &
+setup_serena &
 setup_precommit &
 wait
 

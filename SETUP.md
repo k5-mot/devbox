@@ -59,41 +59,54 @@
 
 ---
 
-## 1. Windows環境の準備
+## 1. Windows環境のセットアップ
 
-### 1.1. PowerShellについて
+### 1.1. PowerShell 7+のインストール
 
-このドキュメントでは、**PowerShell 7+（最新版）** を使用します。
+本ドキュメントでは **PowerShell 7+** を使用するため、最初にインストールします。
 
 - **Windows PowerShell 5.1**: Windows 11にプリインストールされている古いバージョン
-- **PowerShell 7+**: 最新のクロスプラットフォーム版（これをインストールします）
+- **PowerShell 7+**: 本手順でインストールする最新版
 
-以降の手順では、特に断りのない限り **PowerShell 7+** を使用します。
+```powershell
+winget install Microsoft.PowerShell  # PowerShell 7+ (最新版)
+```
 
 ### 1.2. 必要なツールのインストール
 
-**Windows PowerShell 5.1（プリインストール版）** を管理者権限で開き、以下のコマンドでツールを一括インストールします：
+#### 1.2.1 winget経由でインストール
+
+**PowerShell 7+** を**管理者権限**で開き、以下のコマンドでツールを一括インストールします。
 
 ```powershell
-# Windows Terminal、PowerShell 7+、OhMyPosh、VSCode、Git、AWS CLI、Azure CLIをインストール
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+
 winget install Microsoft.WindowsTerminal
-winget install Microsoft.PowerShell  # PowerShell 7+ (最新版)
 winget install JanDeDobbeleer.OhMyPosh
 winget install Microsoft.VisualStudioCode
 winget install Git.Git
 winget install Amazon.AWSCLI
 winget install Microsoft.AzureCLI
+winget install Anthropic.ClaudeCode
+winget install OpenAI.Codex
+winget install astral-sh.uv
+winget install OpenJS.NodeJS.LTS
 ```
 
-インストール後、**PowerShell 7+** を起動します（Windows Terminalから「PowerShell」を選択）。
+#### 1.2.2 PowerShellモジュールのインストール
 
-### 1.3. [OPTION] プロキシ設定（企業ネットワーク等で必要な場合）
+```powershell
+Install-Module -Name PSReadLine          -Scope CurrentUser -Force
+Install-Module -Name posh-git            -Scope CurrentUser -Force
+Install-Module -Name Terminal-Icons      -Scope CurrentUser -Force
+Install-Module -Name CompletionPredictor -Scope CurrentUser -Force
+```
 
-プロキシ環境下でツールをインストール・使用する場合、最初にプロキシ設定を行います。
+### 1.3 PowerShellプロファイルの設定
 
 #### 1.3.1. PowerShellプロファイルの作成
 
-PowerShell 7+で以下を実行：
+**PowerShell 7+** を**管理者権限**で開き、以下のコマンドを実行します。
 
 ```powershell
 # プロファイルファイルが存在しない場合は作成
@@ -105,64 +118,85 @@ if (!(Test-Path -Path $PROFILE)) {
 notepad $PROFILE
 ```
 
-#### 1.3.2. プロキシ設定を追加
+##### 1.3.2. PowerShellプロファイルに設定を追加
 
-開いたファイル（通常は `$Env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1`）に以下を追加：
-
-```powershell
-# プロキシ設定
-$env:HTTP_PROXY = "http://proxy.example.com:8080"
-$env:HTTPS_PROXY = "http://proxy.example.com:8080"
-$env:NO_PROXY = "localhost,127.0.0.1,127.0.0.0/8,::1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
-```
-
-保存後、PowerShell 7+を再起動するか、以下で設定を反映：
+以下の内容をプロファイルファイルに追加します。
 
 ```powershell
-. $PROFILE
+### Oh-My-Posh
+if (Get-Command -Name "oh-my-posh" -ErrorAction SilentlyContinue) {
+    oh-my-posh init pwsh --config "spaceship" | Invoke-Expression
+}
+
+### PowerShell Modules
+$psmodules = @(
+    "posh-git"
+    "Terminal-Icons"
+    "PSReadLine"
+    "CompletionPredictor"
+)
+foreach ($psmodule in $psmodules) {
+    if (Get-InstalledModule -Name $psmodule -ErrorAction SilentlyContinue) {
+        Import-Module $psmodule
+    }
+}
+
+### Completion
+Set-PSReadlineOption -HistoryNoDuplicates
+Set-PSReadLineOption -BellStyle Visual
+Set-PSReadLineOption -PredictionViewStyle ListView
+Set-PSReadLineKeyHandler -Key "Tab" -Function NextSuggestion
+Set-PSReadLineKeyHandler -Key "Shift+Tab" -Function PreviousSuggestion
+Set-PSReadLineKeyHandler -Key "Ctrl+r" -Function SwitchPredictionView
+
+### [OPTION] プロキシ設定 (企業ネットワーク等で必要な場合)
+# $env:HTTP_PROXY = "http://proxy.example.com:8080"
+# $env:HTTPS_PROXY = "http://proxy.example.com:8080"
+# $env:NO_PROXY = "localhost,127.0.0.1,127.0.0.0/8,::1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
 ```
 
-**NO_PROXYの設定値について：**
+保存後、**PowerShell 7+**を再起動する。
 
-- `localhost`: ローカルホスト名
-- `127.0.0.1`: IPv4ループバックアドレス（CIDR非対応ツール用）
-- `127.0.0.0/8`: IPv4ループバック範囲全体（127.0.0.0〜127.255.255.255、CIDR対応ツール用）
-- `::1`: IPv6ループバックアドレス
-- `10.0.0.0/8`: プライベートネットワーク（クラスA）
-- `172.16.0.0/12`: プライベートネットワーク（クラスB）
-- `192.168.0.0/16`: プライベートネットワーク（クラスC）
+> [!note]
+> NO_PROXYの設定値は、CIDR表記に対応していないツール(wget,...)と対応しているツール(curl,Python,...)の両方で正しく動作するように以下のように設定します。
+> - `localhost`: ローカルホスト名
+> - `127.0.0.1`: IPv4ループバックアドレス (CIDR非対応ツール用)
+> - `127.0.0.0/8`: IPv4ループバック範囲全体 (CIDR対応ツール用)
+> - `::1`: IPv6ループバックアドレス
+> - `10.0.0.0/8`: プライベートネットワーク (Class A)
+> - `172.16.0.0/12`: プライベートネットワーク (Class B)
+> - `192.168.0.0/16`: プライベートネットワーク (Class C)
 
-これらの設定により、ローカルおよびプライベートネットワークへの接続はプロキシを経由しません。
-`127.0.0.1`と`127.0.0.0/8`の両方を指定することで、CIDR表記に対応していないツール（wget等）と
-対応しているツール（curl、Python、Go等）の両方で正しく動作します。
+> [!tip]
+> `oh-my-posh init pwsh --config "<color-theme>" | Invoke-Expression`
+> oh-my-poshのカラーテーマは変更可能です。
+> [Themes | Oh My Posh](https://ohmyposh.dev/docs/themes)
 
-**注意**: `proxy.example.com:8080` は実際のプロキシサーバーとポートに置き換えてください。
-
-### 1.4. フォント設定
+### 1.4. Nerd Fontsのインストール
 
 プログラミングに最適化されたNerd Fontsをインストールします。
 
 #### 1.4.1. Nerd Fontsのインストール
 
-PowerShell 7+で以下を実行：
+**PowerShell 7+** を開き、以下のコマンドを実行します。
 
 ```powershell
+# Meslo Nerd Fontをインストール
+oh-my-posh font install meslo
+
 # CascadiaCode Nerd Fontをインストール
 oh-my-posh font install CascadiaCode
-
-# Meslo Nerd Fontをインストール
-oh-my-posh font install Meslo
 ```
 
 #### 1.4.2. Windows Terminalでフォントを設定
 
 1. Windows Terminalを開く
-2. 設定（`Ctrl+,`）を開く
-3. 左側メニューから「既定値」を選択
-4. 「外観」セクションで「フォントフェイス」を `CaskaydiaCove Nerd Font` に変更
-5. 保存
+2. 設定(`Ctrl+,`)を開く
+3. 左側メニューから「既定値」を選択する
+4. 「外観」セクションで「フォントフェイス」を `CaskaydiaCove Nerd Font` に変更する
+5. 「保存」する
 
-または、設定ファイル（`settings.json`）を直接編集：
+または、設定ファイル(`settings.json`)を直接編集：
 
 ```json
 {
@@ -176,59 +210,72 @@ oh-my-posh font install Meslo
 }
 ```
 
-#### 1.4.3. VSCodeでフォントを設定
+### 1.5. Gitの設定
 
-1. VSCodeを開く
-2. 設定（`Ctrl+,`）を開く
-3. `Editor: Font Family` を検索
-4. 以下を先頭に追加：
-
-```text
-'CaskaydiaCove Nerd Font', Consolas, 'Courier New', monospace
-```
-
-または、設定ファイル（`settings.json`）を直接編集：
-
-```json
-{
-    "editor.fontFamily": "'CaskaydiaCove Nerd Font', Consolas, 'Courier New', monospace",
-    "editor.fontLigatures": true,
-    "dev.containers.executeInWSL": true
-}
-```
-
-**注意**: `dev.containers.executeInWSL`を`true`に設定することで、Dev ContainersがWSL内で実行されます。
-これにより、Windowsホストよりも高速な動作とLinux環境との互換性が向上します。
-
-### 1.5. ターミナル環境のカスタマイズ（Oh My Posh）
-
-**参考資料**: [Tutorial: Set up a custom prompt for PowerShell or WSL with Oh My Posh](https://learn.microsoft.com/ja-jp/windows/terminal/tutorials/custom-prompt-setup)
-
-PowerShell 7+で以下を実行：
-
-```powershell
-# OhMyPoshテーマの適用
-oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\spaceship.omp.json" | Invoke-Expression
-```
-
-プロファイルに永続化する場合：
-
-```powershell
-# プロファイルに追加
-Add-Content $PROFILE "oh-my-posh init pwsh --config `"`$env:POSH_THEMES_PATH\spaceship.omp.json`" | Invoke-Expression"
-```
-
-### 1.6. Gitの設定
-
-PowerShell 7+またはBashで以下を実行：
+**PowerShell 7+** を開き、以下のコマンドを実行します。
 
 ```bash
 git config --global user.name "Your Name"
 git config --global user.email "your.email@example.com"
-git config --global core.editor "code --wait"
 ```
 
-### 1.7. VSCode拡張機能のインストール
+### 1.6 AWS CLIとAzure CLIの設定
+
+#### 1.6.1. ディレクトリのセットアップ
+
+```powershell
+New-Item "$env:USERPROFILE\.aws"    -ItemType Directory -ErrorAction SilentlyContinue
+New-Item "$env:USERPROFILE\.azure"  -ItemType Directory -ErrorAction SilentlyContinue
+New-Item "$env:USERPROFILE\.claude" -ItemType Directory -ErrorAction SilentlyContinue
+New-Item "$env:USERPROFILE\.codex"  -ItemType Directory -ErrorAction SilentlyContinue
+```
+
+#### 1.6.2. AWS CLIの設定
+
+```powershell
+aws configure
+```
+
+```powershell
+AWS Access Key ID [None]: YOUR_ACCESS_KEY_ID
+AWS Secret Access Key [None]: YOUR_SECRET_ACCESS_KEY
+Default region name [None]: ap-northeast-1
+Default output format [None]: json
+```
+
+#### 1.6.3. Azure CLIの設定
+
+```powershell
+az login
+```
+
+### 1.6.4. Anthropic Claude Codeの設定
+
+```bash
+claude
+```
+
+または、設定ファイル(`$env:USERPROFILE/.claude/settings.json`)を直接編集する。
+
+```json
+# TBM
+```
+
+### 1.6.5. OpenAI Codex CLIの設定
+
+```bash
+codex
+```
+
+または、設定ファイル(`$env:USERPROFILE/.codex/config.toml`)を直接編集する。
+
+```toml
+# TBM
+```
+
+### 1.7. VSCodeをセットアップ
+
+#### 1.7.1. 拡張機能のインストール
 
 VSCodeを開き、以下の拡張機能をインストールします：
 
@@ -236,18 +283,54 @@ VSCodeを開き、以下の拡張機能をインストールします：
 
 または、コマンドラインから：
 
-```bash
+```powershell
 code --install-extension ms-vscode-remote.remote-containers
 ```
+
+#### 1.7.2. VSCodeを設定
+
+1. VSCodeを開く
+2. 設定 (`Ctrl+,`)を開く
+3. `Editor: Font Family` を検索
+4. 以下を先頭に追加：
+
+```text
+'CaskaydiaCove Nerd Font', 'MesloLGM Nerd Font', Consolas, 'Courier New', monospace
+```
+
+または、設定ファイル (`settings.json`)を直接編集：
+
+```json
+{
+    "editor.fontFamily": "'CaskaydiaCove Nerd Font', 'MesloLGM Nerd Font', Consolas, 'Courier New', monospace",
+    "editor.fontLigatures": true,
+    "dev.containers.executeInWSL": true,
+    "chatgpt.preferWsl": true
+}
+```
+
+> [!note]
+> "dev.containers.executeInWSL": true
+> 上記設定をすることで、Dev ContainersがWSL内で実行されます。
+> 上記設定をしないと、Docker Desktopで実行されます。
+
+> [!note]
+> "chatgpt.preferWsl": true
+> 上記設定をすることで、ChatGPTがWSL内で実行されます。
+> - [Running Codex on Windows](https://developers.openai.com/codex/windows/)
+
 
 ## 2. WSL2のセットアップ
 
 ### 2.1. WSL2のインストール
 
-管理者権限のPowerShellで以下のコマンドを実行します：
+**PowerShell 7+** を**管理者権限**で開き、以下のコマンドを実行します。
 
 ```powershell
 wsl --install
+ダウンロードしています: Ubuntu
+インストールしています: Ubuntu
+ディストリビューションが正常にインストールされました。'wsl.exe -d Ubuntu' を使用して起動できます
 ```
 
 インストール後、システムを再起動します。
@@ -256,95 +339,36 @@ wsl --install
 
 WSLを起動し、ユーザー名とパスワードを設定します。
 
-### 2.3. パッケージの更新
-
 ```bash
-sudo apt-get update
-sudo apt-get upgrade -y
+Ubuntu を起動しています...
+Provisioning the new WSL instance Ubuntu
+This might take a while...
+Create a default Unix user account: username
+New password:
+Retype new password:
+passwd: password updated successfully
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+username@hostname:/mnt/c/Users/username$
 ```
 
-### 2.4. Sudoのパスワード不要化
+### 2.3. [OPTION] WSLのプロキシ設定（企業ネットワーク等で必要な場合）
 
-```bash
-sudo visudo
-```
+プロキシ環境下でWSLを使用する場合、`~/.bashrc` に以下を追加します。
 
-以下の行を追加します：
+> [!note]
+> 設定内容自体は、[1.3. [OPTION] プロキシ設定](#13-option-プロキシ設定企業ネットワーク等で必要な場合)と同様です。
 
-```text
-your_username ALL=(ALL) NOPASSWD:ALL
-```
+#### 2.3.1. `~/.bashrc`にプロキシ設定を追加
 
-### 2.5. Dockerのインストール
-
-**参考資料**: [Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
-
-```bash
-# 古いバージョンの削除
-sudo apt-get remove docker docker-engine docker.io containerd runc
-
-# 必要なパッケージのインストール
-sudo apt-get update
-sudo apt-get install -y \
-    ca-certificates \
-    curl \
-    gnupg \
-    lsb-release
-
-# DockerのGPGキーを追加
-sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-
-# Dockerリポジトリの設定
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
-https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | \
-sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-# Dockerのインストール
-sudo apt-get update
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-# Dockerサービスの起動
-sudo service docker start
-
-# ユーザーをdockerグループに追加
-sudo usermod -aG docker $USER
-```
-
-設定を反映するため、WSLを再起動します：
-
-```bash
-exit
-```
-
-PowerShellで：
-
-```powershell
-wsl --shutdown
-wsl
-```
-
-### 2.6. Dockerの動作確認
-
-```bash
-docker --version
-docker run hello-world
-```
-
-### 2.7. [OPTION] WSLのプロキシ設定（企業ネットワーク等で必要な場合）
-
-プロキシ環境下でWSLを使用する場合、`~/.bashrc` に以下を追加します：
-
-#### 2.7.1. .bashrcを編集
+**WSL** を開き、以下のコマンドを実行します。
 
 ```bash
 nano ~/.bashrc
 ```
 
-#### 2.7.2. プロキシ設定を追加
-
-ファイルの最後に以下を追加：
+ファイルの最後に以下を追加する。
 
 ```bash
 # プロキシ設定
@@ -356,40 +380,175 @@ export https_proxy="$HTTPS_PROXY"
 export no_proxy="$NO_PROXY"
 ```
 
-#### 2.7.3. 設定を反映
+プロキシ設定を反映するため、以下のコマンドを実行します。
 
 ```bash
 source ~/.bashrc
 ```
 
-**NO_PROXYの設定値について：**
+#### 2.3.2. aptのプロキシ設定
 
-- `localhost`: ローカルホスト名
-- `127.0.0.1`: IPv4ループバックアドレス（CIDR非対応ツール用）
-- `127.0.0.0/8`: IPv4ループバック範囲全体（127.0.0.0〜127.255.255.255、CIDR対応ツール用）
-- `::1`: IPv6ループバックアドレス
-- `10.0.0.0/8`: プライベートネットワーク（クラスA）
-- `172.16.0.0/12`: プライベートネットワーク（クラスB）
-- `192.168.0.0/16`: プライベートネットワーク（クラスC）
+**WSL** を開き、以下のコマンドを実行する。
 
-これらの設定により、ローカルおよびプライベートネットワークへの接続はプロキシを経由しません。
-`127.0.0.1`と`127.0.0.0/8`の両方を指定することで、CIDR表記に対応していないツール（wget等）と
-対応しているツール（curl、Python、Go等）の両方で正しく動作します。
+```bash
+sudo nano /etc/apt/apt.conf
+```
 
-**注意**: `proxy.example.com:8080` は実際のプロキシサーバーとポートに置き換えてください。
+以下の内容を末尾に追加する。
 
-### 2.8. [OPTION] Dockerのプロキシ設定（企業ネットワーク等で必要な場合）
+```text
+Acquire::http::Proxy "http://proxy.example.com:8080";
+Acquire::https::Proxy "http://proxy.example.com:8080";
+```
 
-#### 2.8.1. Docker Daemonのプロキシ設定
 
-WSLで以下のディレクトリとファイルを作成：
+### 2.4. Sudoのパスワード不要化
+
+**WSL** を開き、以下のコマンドを実行します。
+
+```bash
+sudo visudo
+```
+
+以下の行を追加します。
+- `<your_username>` はWSLのユーザー名に置き換えてください。
+
+```text
+<your_username> ALL=(ALL) NOPASSWD:ALL
+```
+
+### 2.5. パッケージの更新と必要なパッケージのインストール
+
+**WSL** を開き、以下のコマンドを実行します。
+
+```bash
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl gnupg
+sudo apt-get install -y --no-install-recommends unzip git wget zsh
+sudo apt-get upgrade -y
+sudo apt-get autoremove -y
+sudo apt-get clean
+```
+
+## 2.6. miseとAWS CLIとAzure CLIのセットアップ
+
+### 2.6.1. miseと各種ツールのインストール
+
+**WSL** を開き、以下のコマンドを実行します。
+
+```bash
+curl https://mise.run/bash | sh
+mise use --global node@24
+mise use --global python@3.12
+mise use --global aws-cli@latest
+mise use --global azure@latest
+mise use --global jq@latest
+mise use --global vim@latest
+mise use --global neovim@latest
+mise use --global tmux@latest
+```
+
+### 2.6.2. AWS CLIの設定
+
+**WSL** を開き、以下のコマンドを実行し、Windows側の認証情報をシンボリックリンクで共有する。
+- `<username>` はWindowsのユーザー名に置き換えてください。
+
+```bash
+[ -L "$HOME/.aws" ] && rm -rfv "$HOME/.aws"
+ln -sv "/mnt/c/Users/<username>/.aws" "$HOME/.aws"
+```
+
+### 2.6.3. Azure CLIの設定
+
+```bash
+[ -L "$HOME/.azure" ] && rm -rfv "$HOME/.azure"
+ln -sv "/mnt/c/Users/<username>/.azure" "$HOME/.azure"
+```
+
+### 2.6.4. Anthropic Claude Codeの設定
+
+```bash
+npm install -g @anthropic-ai/claude-code
+[ -L "$HOME/.claude" ] && rm -rfv "$HOME/.claude"
+ln -sv "/mnt/c/Users/<username>/.claude" "$HOME/.claude"
+
+```
+
+### 2.6.5. OpenAI Codex CLIの設定
+
+```bash
+npm install -g @openai/codex
+[ -L "$HOME/.codex" ] && rm -rfv "$HOME/.codex"
+ln -sv "/mnt/c/Users/<username>/.codex" "$HOME/.codex"
+```
+
+## 3. Dockerのセットアップ
+
+### 3.1. Dockerのインストール
+
+> [!NOTE]
+> 詳細な手順は、[Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)を参照。
+
+**WSL** を開き、以下のコマンドを実行し、Dockerをaptソースに追加する。
+
+```bash
+# 競合するすべてのパッケージをアンインストールする
+for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+
+# 必要なパッケージをインストールする
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl
+
+# Dockerの公式GPGキーを追加する
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Dockerリポジトリをaptソースに追加する
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+
+Dockerをインストールする。
+
+```bash
+# Dockerパッケージをインストールする
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+Dockerを動作確認する。
+
+```bash
+# Dockerサービスを起動し、ステータスを確認する
+sudo systemctl start docker
+sudo systemctl status docker
+
+# Dockerの動作確認
+docker --version
+sudo docker run hello-world
+
+# ユーザーをdockerグループに追加
+sudo usermod -aG docker $USER
+```
+
+### 3.2. [OPTION] Dockerのプロキシ設定（企業ネットワーク等で必要な場合）
+
+#### 3.2.1. Docker Daemonのプロキシ設定
+
+**WSL** を開き、以下のコマンドを実行し、以下のディレクトリとファイルを作成する。
 
 ```bash
 sudo mkdir -p /etc/systemd/system/docker.service.d
 sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf
 ```
 
-以下の内容を追加：
+以下の内容を追加する。
+
+> [!note]
+> 設定内容自体は、[1.3. [OPTION] プロキシ設定](#13-option-プロキシ設定企業ネットワーク等で必要な場合)と同様です。
 
 ```ini
 [Service]
@@ -398,23 +557,27 @@ Environment="HTTPS_PROXY=http://proxy.example.com:8080"
 Environment="NO_PROXY=localhost,127.0.0.1,127.0.0.0/8,::1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
 ```
 
-Dockerサービスを再起動：
+Dockerサービスを再起動する。
 
 ```bash
 sudo systemctl daemon-reload
 sudo service docker restart
 ```
 
-#### 2.8.2. Docker Clientのプロキシ設定（docker buildコマンド用）
+> [!tip]
+> Docker Daemonのプロキシ設定は、主に`docker pull`や`docker run`コマンドなどで使用される。
+> - [Daemon proxy configuration](https://docs.docker.com/engine/daemon/proxy/)
 
-`docker build`時にプロキシを使用する場合、`~/.docker/config.json`を設定します：
+#### 3.2.2. Docker Clientのプロキシ設定
+
+**WSL** を開き、以下のコマンドを実行し、以下のディレクトリとファイルを作成する。
 
 ```bash
 mkdir -p ~/.docker
 nano ~/.docker/config.json
 ```
 
-以下の内容を追加：
+以下の内容を追加する。
 
 ```json
 {
@@ -428,358 +591,30 @@ nano ~/.docker/config.json
 }
 ```
 
-この設定により、`docker build`実行時に自動的にプロキシ設定がビルドコンテキストに渡され、
-Dev Containerのビルド時にもプロキシが適用されます。
+> [!tip]
+> Docker Clientのプロキシ設定は、主に`docker build`コマンドなどで使用される。
+> - [Use a proxy server with the Docker CLI](https://docs.docker.com/engine/cli/proxy/)
 
-## 3. このテンプレートの使用
+## 4. devcontainersのセットアップ
 
-### 3.1. リポジトリのクローン
+### 4.1. リポジトリのクローン
 
-```bash
-git clone https://github.com/your-username/devbox.git
+**PowerShell 7+** を開き、以下のコマンドを実行します。
+
+```powershell
+New-Item "$env:USERPROFILE\repos" -ItemType Directory -ErrorAction SilentlyContinue
+cd "$env:USERPROFILE\repos"
+git clone https://github.com/k5-mot/devbox.git
 cd devbox
 ```
 
-または、GitHubでこのリポジトリを「Use this template」ボタンでテンプレートとして使用します。
-
-### 3.2. Dev Containerで開く
+### 4.2. Dev Containerで開く
 
 1. VSCodeでクローンしたディレクトリを開く
-2. コマンドパレット（`Ctrl+Shift+P`）を開く
+2. コマンドパレット(`Ctrl+Shift+P`)を開く
 3. `Dev Containers: Reopen in Container`を選択
-4. コンテナのビルドと起動を待つ（初回は時間がかかります）
-
-### 3.3. 環境変数の設定（必要に応じて）
-
-`.devcontainer/devcontainer.env`ファイルを編集して、プロジェクト固有の環境変数を設定します。
-
-## 4. 認証設定（初回セットアップ時に実施）
-
-各種ツールの認証を行います。認証情報はホストと共有されるため、
-一度設定すれば複数のdevboxプロジェクトで使い回せます。
-
-**重要**: Claude CodeとCodex CLIは、Dev Containerを起動する**前に**ホストで認証することを推奨します。
-
-### 4.1. AWS CLIの認証
-
-AWS CLIを使用する場合は、以下の手順で認証します。
-
-**重要**: bind mountが有効な場合、マウント元ディレクトリが存在しないとDev Containerの起動に失敗します。
-認証前に必ずディレクトリを作成してください。
-
-#### 4.1.1. 認証ディレクトリの作成
-
-**Windowsの場合：**
-
-```powershell
-# .awsディレクトリを作成（存在しない場合）
-if (!(Test-Path "$env:USERPROFILE\.aws")) {
-    New-Item -ItemType Directory -Path "$env:USERPROFILE\.aws"
-}
-```
-
-**WSLの場合：**
-
-```bash
-# .awsディレクトリを作成（存在しない場合）
-mkdir -p ~/.aws
-```
-
-#### 4.1.2. ホスト（WindowsまたはWSL）で認証
-
-**Windowsの場合：**
-
-```powershell
-aws configure
-```
-
-**WSLの場合：**
-
-```bash
-aws configure
-```
-
-以下の情報を入力します：
-
-```text
-AWS Access Key ID [None]: YOUR_ACCESS_KEY_ID
-AWS Secret Access Key [None]: YOUR_SECRET_ACCESS_KEY
-Default region name [None]: ap-northeast-1
-Default output format [None]: json
-```
-
-認証情報は以下のディレクトリに保存されます：
-
-- Windows: `%USERPROFILE%\.aws\`
-- WSL: `~/.aws/`
-
-#### 4.1.3. Dev Containerで認証情報を有効化
-
-ホストの認証情報をDev Containerと共有したい場合、
-[.devcontainer/devcontainer.json](.devcontainer/devcontainer.json)のコメントアウトされた行を有効化します：
-
-```json
-"mounts": [
-    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached",
-    ...
-]
-```
-
-コンテナを再ビルド後、Dev Container内で以下のコマンドで確認：
+4. コンテナのビルドと起動を待つ(初回は時間がかかります)
 
 ```bash
 aws sts get-caller-identity
 ```
-
-#### 4.1.4. AWS Access Keyの取得方法
-
-1. [AWS Management Console](https://console.aws.amazon.com/)にログイン
-2. IAM → ユーザー → セキュリティ認証情報
-3. アクセスキーを作成
-
-### 4.2. Azure CLIの認証
-
-Azure CLIを使用する場合は、以下の手順で認証します。
-
-**重要**: bind mountが有効な場合、マウント元ディレクトリが存在しないとDev Containerの起動に失敗します。
-認証前に必ずディレクトリを作成してください。
-
-#### 4.2.1. 認証ディレクトリの作成
-
-**Windowsの場合：**
-
-```powershell
-# .azureディレクトリを作成（存在しない場合）
-if (!(Test-Path "$env:USERPROFILE\.azure")) {
-    New-Item -ItemType Directory -Path "$env:USERPROFILE\.azure"
-}
-```
-
-**WSLの場合：**
-
-```bash
-# .azureディレクトリを作成（存在しない場合）
-mkdir -p ~/.azure
-```
-
-#### 4.2.2. ホスト（WindowsまたはWSL）で認証
-
-**Windowsの場合：**
-
-```powershell
-az login
-```
-
-**WSLの場合：**
-
-```bash
-az login
-```
-
-ブラウザが開き、Microsoftアカウントでのログインが求められます。
-認証情報は以下のディレクトリに保存されます：
-
-- Windows: `%USERPROFILE%\.azure\`
-- WSL: `~/.azure/`
-
-認証完了後、以下のコマンドで確認：
-
-```bash
-az account show
-```
-
-#### 4.2.3. Dev Containerで認証情報を有効化
-
-ホストの認証情報をDev Containerと共有したい場合、
-[.devcontainer/devcontainer.json](.devcontainer/devcontainer.json)のコメントアウトされた行を有効化します：
-
-```json
-"mounts": [
-    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.azure,target=/home/vscode/.azure,type=bind,consistency=cached"
-]
-```
-
-コンテナを再ビルド後、Dev Container内で以下のコマンドで確認：
-
-```bash
-az account show
-```
-
-### 4.3. Claude Codeの認証
-
-Claude Codeは**Windowsでのインストールを推奨**します（2025年にネイティブ対応）。
-
-#### 4.3.1. Windowsで Claude Codeをインストール
-
-**PowerShell 7+** を管理者権限で開き、以下を実行：
-
-```powershell
-winget install Anthropic.ClaudeCode
-```
-
-インストール後、PowerShellまたはコマンドプロンプトで `claude-code` コマンドが使用可能になります。
-
-#### 4.3.2. Windowsで認証
-
-Claude Codeは2つの認証方法をサポートしています：
-
-**方法A: Claude.ai サブスクリプション（推奨）**
-
-Claude Pro、Max、Team、またはEnterpriseサブスクリプションをお持ちの場合：
-
-```powershell
-# Claude Codeを起動して認証
-claude-code auth login
-```
-
-ブラウザが開き、Claude.aiへのOAuth認証が求められます。
-認証後、設定が `%USERPROFILE%\.claude\` ディレクトリに保存されます。
-
-認証の確認：
-
-```powershell
-claude-code auth status
-```
-
-**方法B: Anthropic API Key**
-
-API Keyを使用する場合（API使用料金が発生）：
-
-1. [Anthropic Console](https://console.anthropic.com/)でAPI Keyを取得
-2. PowerShellプロファイル（`$PROFILE`）に環境変数を設定（セクション1.3参照）：
-
-```powershell
-$env:ANTHROPIC_API_KEY = "sk-ant-api03-..."
-```
-
-#### 4.3.3. WSLへシンボリックリンクを作成
-
-WSLからもWindows の認証情報を使用したい場合、シンボリックリンクを作成します：
-
-```bash
-# WSL内で実行
-# ユーザー名を実際のWindowsユーザー名に置き換える
-ln -s /mnt/c/Users/YOUR_USERNAME/.claude ~/.claude
-```
-
-#### 4.3.4. Dev Container内で認証を確認
-
-Dev Container起動後、ターミナルで以下を実行：
-
-```bash
-claude-code auth status
-```
-
-認証情報はbind mountで自動的に共有されます。
-
-**注意事項：**
-
-- 環境変数 `ANTHROPIC_API_KEY` が設定されている場合、サブスクリプションより優先されます
-- API Key使用時はAPI使用料金が発生します
-
-### 4.4. Codex CLIの認証
-
-Codex CLIは**WSLでのインストールを推奨**します（Windows版は実験的）。
-
-#### 4.4.1. WSLで Codex CLIをインストール
-
-WSLで以下を実行：
-
-```bash
-npm install -g @openai/codex
-```
-
-インストール後、`codex` コマンドが使用可能になります。
-
-#### 4.4.2. WSLで認証
-
-Codex CLIは2つの認証方法をサポートしています：
-
-**方法A: ChatGPT アカウント（推奨）**
-
-ChatGPT Plus、Pro、Business、Edu、またはEnterpriseプランをお持ちの場合：
-
-```bash
-codex login
-```
-
-ブラウザが開き、ChatGPTアカウントでのOAuth認証が求められます。
-認証情報は `~/.codex/` ディレクトリに保存されます。
-
-認証の確認：
-
-```bash
-codex auth status
-```
-
-**方法B: OpenAI API Key**
-
-API Keyを使用する場合：
-
-**ステップ1: API Keyの取得**
-
-[OpenAI Platform](https://platform.openai.com/)でAPI Keyを取得します。
-
-**ステップ2: 環境変数の設定**
-
-`~/.bashrc` に環境変数を設定（セクション2.7参照）：
-
-```bash
-export OPENAI_API_KEY="sk-proj-..."
-```
-
-**ステップ3: API Keyでログイン**
-
-```bash
-printenv OPENAI_API_KEY | codex login --with-api-key
-```
-
-#### 4.4.3. Windowsへシンボリックリンクを作成
-
-WindowsからもWSLの認証情報を使用したい場合、シンボリックリンクを作成します：
-
-**PowerShell 7+** を管理者権限で開き、以下を実行：
-
-```powershell
-# ユーザー名を実際のWSLユーザー名に置き換える
-cmd /c mklink /D "$env:USERPROFILE\.codex" "\\wsl$\Ubuntu\home\YOUR_WSL_USERNAME\.codex"
-```
-
-**注意**: WSLディストリビューションが`Ubuntu`でない場合は、適切な名前に置き換えてください
-（例: `\\wsl$\Ubuntu-22.04\...`）。
-
-#### 4.4.4. Dev Container内で認証を確認
-
-Dev Container起動後、ターミナルで以下を実行：
-
-```bash
-codex auth status
-```
-
-認証情報はbind mountで自動的に共有されます。
-
-### 4.5. 認証情報の共有について
-
-このdevboxテンプレートでは、各種ツールの認証情報をWindowsホスト（またはWSL）と
-bind mountで共有しています。
-
-**メリット：**
-
-- 一度認証すれば、複数のdevboxプロジェクトで同じ認証情報を使い回せます
-- プロジェクトを削除しても認証情報は保持されます
-- 認証設定がホストに保存されるため、バックアップや移行が容易です
-
-**認証情報の保存場所：**
-
-| ツール | Windows | WSL |
-|--------|---------|-----|
-| AWS CLI | `%USERPROFILE%\.aws\` | `~/.aws/` |
-| Azure CLI | `%USERPROFILE%\.azure\` | `~/.azure/` |
-| Claude Code | `%USERPROFILE%\.claude\` | `~/.claude/` |
-| Codex | `%USERPROFILE%\.codex\` | `~/.codex/` |
-
-**bind mount設定：**
-
-Claude CodeとCodexは標準でbind mountが有効になっています。
-AWS CLIとAzure CLIは必要に応じて[.devcontainer/devcontainer.json](.devcontainer/devcontainer.json)で
-有効化できます。
