@@ -1,0 +1,53 @@
+name: CI - Frontend
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  frontend:
+    name: Frontend checks
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [vite-serendie-template, next-daisyui-template]
+        node-version: [22]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+          cache-dependency-path: ${{ matrix.project }}/pnpm-lock.yaml
+      - name: Install dependencies
+        working-directory: ./${{ matrix.project }}
+        run: pnpm install
+      - name: Format (biome)
+        working-directory: ./${{ matrix.project }}
+        run: pnpm run format
+      - name: Lint (biome)
+        working-directory: ./${{ matrix.project }}
+        run: pnpm run lint
+      - name: Type check
+        working-directory: ./${{ matrix.project }}
+        run: pnpm run type
+      - name: Run frontend tests
+        working-directory: ./${{ matrix.project }}
+        run: pnpm run test:ci
+      - name: Upload frontend test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-test-results-${{ matrix.project }}
+          path: |
+            ${{ matrix.project }}/coverage
+      - name: Build
+        working-directory: ./${{ matrix.project }}
+        run: pnpm run build
