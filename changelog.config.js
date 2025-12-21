@@ -2,7 +2,7 @@ module.exports = {
   // 絵文字の表示
   disableEmoji: false,
   // コミットメッセージの形式
-  format: "{emoji} {scope}:{subject} ",
+  format: "{type}{scope}: {emoji} {subject}",
   // コミットメッセージの最大文字数
   maxMessageLength: 64,
   // コミットメッセージの最小文字数

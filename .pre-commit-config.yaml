@@ -1,0 +1,71 @@
+repos:
+  # -------------------------
+  # Python: Ruff
+  # -------------------------
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.0
+    hooks:
+      # Format
+      - id: ruff-format
+        name: PY ruff_format
+        files: "^api/.*\\.py$"
+      # Lint
+      - id: ruff
+        name: PY ruff_lint
+        args: ["--fix"]
+        files: "^api/.*\\.py$"
+
+  - repo: local
+    hooks:
+      - id: py-pyright
+        name: PY pyright_type_check
+        entry: bash -c "cd api && uv run --no-env-file -- pyright --project . --warnings"
+        language: system
+        types: [python]
+        pass_filenames: false
+        files: "^api/"
+
+      - id: py-pytest
+        name: PY pytest
+        entry: bash -c "cd api && mkdir -p report && uv run --no-env-file -- pytest -q --junitxml=coverage/junit.xml --cov=. --cov-report=xml:coverage/coverage.xml --cov-report=html:coverage/coverage_html"
+        language: system
+        files: "^api/"
+        pass_filenames: false
+
+  # -------------------------
+  # TypeScript/React: Biome
+  # -------------------------
+  - repo: local
+    hooks:
+      - id: ts-biome-format
+        name: TS biome_format
+        entry: bash -c "cd app && pnpm run format"
+        language: system
+        files: "^app/.*\\.(ts|tsx|js|jsx|json)$"
+
+      - id: ts-biome-lint
+        name: TS biome_lint
+        entry: bash -c "cd app && pnpm run lint"
+        language: system
+        files: "^app/.*\\.(ts|tsx|js|jsx|json)$"
+
+      - id: ts-tsc-type-check
+        name: TS tsc_type_check
+        entry: bash -c "cd app && pnpm run type"
+        language: system
+        files: "^app/.*\\.(ts|tsx|js|jsx)$"
+        pass_filenames: false
+
+      - id: ts-vitest
+        name: TS vitest
+        entry: bash -c "cd app && pnpm run test:ci"
+        language: system
+        files: "^app/"
+        pass_filenames: false
+
+      - id: ts-vite-build
+        name: TS vite_build
+        entry: bash -c "cd app && pnpm run build"
+        language: system
+        files: "^app/"
+        pass_filenames: false

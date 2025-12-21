@@ -1,0 +1,47 @@
+.python-base:
+  image: ghcr.io/astral-sh/uv:debian
+  variables:
+    PIP_NO_CACHE_DIR: "false"
+  before_script:
+    - cd python-template
+    - uv sync --dev
+
+python-format:
+  extends: .python-base
+  stage: format
+  script:
+    - uv run --no-env-file -- ruff format .
+
+python-lint:
+  extends: .python-base
+  stage: lint
+  script:
+    - uv run --no-env-file -- ruff check .
+
+python-type:
+  extends: .python-base
+  stage: type
+  script:
+    - uv run --no-env-file -- pyright --project . --warnings || true
+
+python-test:
+  extends: .python-base
+  stage: test
+  script:
+    - mkdir -pv coverage
+    - uv run --no-env-file -- pytest -q --junitxml=coverage/junit.xml --cov=. --cov-report=xml:coverage/coverage.xml --cov-report=html:coverage/coverage_html
+  artifacts:
+    when: always
+    paths:
+      - python/coverage/junit.xml
+      - python/coverage/coverage.xml
+      - python/coverage/coverage_html
+    expire_in: 7 days
+    reports:
+      junit: python/coverage/junit.xml
+
+python-build:
+  extends: .python-base
+  stage: build
+  script:
+    - echo "No build step for backend (placeholder)"

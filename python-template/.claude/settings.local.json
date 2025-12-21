@@ -1,0 +1,15 @@
+{
+  "enabledMcpjsonServers": [
+    "sequential-thinking",
+    "github",
+    "gitlab",
+    "serena",
+    "gitingest",
+    "deepwiki",
+    "context7",
+    "aws-docs",
+    "microsoft-docs",
+    "cloudflare-docs",
+    "mcpdoc"
+  ]
+}
