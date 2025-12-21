@@ -1,0 +1,59 @@
+.next-daisyui-base:
+  image: node:22-alpine
+  variables:
+    PNPM_HOME: "$CI_PROJECT_DIR/.pnpm"
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - .pnpm-store
+  before_script:
+    - corepack enable
+    - corepack prepare pnpm@latest --activate
+    - cd next-daisyui-template
+    - pnpm config set store-dir $CI_PROJECT_DIR/.pnpm-store
+    - pnpm install --frozen-lockfile
+
+next-daisyui-format:
+  extends: .next-daisyui-base
+  stage: format
+  script:
+    - pnpm run format
+
+next-daisyui-lint:
+  extends: .next-daisyui-base
+  stage: lint
+  script:
+    - pnpm run ci
+
+next-daisyui-type:
+  extends: .next-daisyui-base
+  stage: type
+  script:
+    - pnpm run type
+
+next-daisyui-test:
+  extends: .next-daisyui-base
+  stage: test
+  script:
+    - pnpm run test:ci
+  artifacts:
+    when: always
+    paths:
+      - next-daisyui-template/junit-report.xml
+      - next-daisyui-template/coverage
+    expire_in: 7 days
+    reports:
+      junit: next-daisyui-template/junit-report.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: next-daisyui-template/coverage/cobertura-coverage.xml
+
+next-daisyui-build:
+  extends: .next-daisyui-base
+  stage: build
+  script:
+    - pnpm run build
+  artifacts:
+    paths:
+      - next-daisyui-template/.next
+    expire_in: 7 days
