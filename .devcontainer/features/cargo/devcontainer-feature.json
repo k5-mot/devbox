@@ -1,0 +1,16 @@
+{
+    "id": "cargo-packages",
+    "version": "1.0.0",
+    "name": "cargo",
+    "description": "Installs the provided version of Rust, as well as Cargo and other common Rust utilities.",
+    "options": {
+        "toolsToInstall": {
+            "type": "string",
+            "default": "cargo",
+            "description": "Comma-separated list of tools to install when 'installTools' is true. Defaults to Cargo."
+        }
+    },
+    "installsAfter": [
+        "ghcr.io/devcontainers/features/rust"
+    ]
+}

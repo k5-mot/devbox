@@ -1,0 +1,14 @@
+{
+    "id": "aws-sam-cli",
+    "version": "1.0.0",
+    "name": "AWS SAM CLI",
+    "description": "Installs the provided version of AWS SAM CLI.",
+    "options": {
+        "version": {
+            "type": "string",
+            "default": "latest",
+            "description": "The version of AWS SAM CLI to install."
+        }
+    },
+    "installsAfter": []
+}

@@ -1,0 +1,14 @@
+{
+    "id": "helix",
+    "version": "1.0.0",
+    "name": "helix",
+    "description": "Installs the provided version of Helix Text Editor.",
+    "options": {
+        "version": {
+            "type": "string",
+            "default": "helix",
+            "description": "The version of Helix Text Editor to install."
+        }
+    },
+    "installsAfter": []
+}

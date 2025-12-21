@@ -1,5 +1,5 @@
 {
-    "servers": {
+    "mcpServers": {
         "sequential-thinking": {
             "type": "stdio",
             "command": "npx",
@@ -8,27 +8,27 @@
                 "@modelcontextprotocol/server-sequential-thinking"
             ]
         },
-        // "github": {
-        //     "type": "stdio",
-        //     "command": "npx",
-        //     "args": [
-        //         "-y",
-        //         "@modelcontextprotocol/server-github"
-        //     ]
-        // },
-        // "gitlab": {
-        //     "type": "stdio",
-        //     "command": "npx",
-        //     "args": [
-        //         "-y",
-        //         "@zereight/mcp-gitlab"
-        //     ],
-        //     "env": {
-        //         "GITLAB_PERSONAL_ACCESS_TOKEN": "your_gitlab_token",
-        //         "GITLAB_API_URL": "your_gitlab_api_url",
-        //         "GITLAB_READ_ONLY_MODE": "false"
-        //     }
-        // },
+        "github": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-github"
+            ]
+        },
+        "gitlab": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "-y",
+                "@zereight/mcp-gitlab"
+            ],
+            "env": {
+                "GITLAB_PERSONAL_ACCESS_TOKEN": "your_gitlab_token",
+                "GITLAB_API_URL": "your_gitlab_api_url",
+                "GITLAB_READ_ONLY_MODE": "false"
+            }
+        },
         "serena": {
             "type": "stdio",
             "command": "uvx",
