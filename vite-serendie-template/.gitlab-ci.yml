@@ -1,0 +1,59 @@
+.vite-serendie-base:
+  image: node:22-alpine
+  variables:
+    PNPM_HOME: "$CI_PROJECT_DIR/.pnpm"
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - .pnpm-store
+  before_script:
+    - corepack enable
+    - corepack prepare pnpm@latest --activate
+    - cd vite-serendie-template
+    - pnpm config set store-dir $CI_PROJECT_DIR/.pnpm-store
+    - pnpm install --frozen-lockfile
+
+vite-serendie-format:
+  extends: .vite-serendie-base
+  stage: format
+  script:
+    - pnpm run format
+
+vite-serendie-lint:
+  extends: .vite-serendie-base
+  stage: lint
+  script:
+    - pnpm run ci
+
+vite-serendie-type:
+  extends: .vite-serendie-base
+  stage: type
+  script:
+    - pnpm run type
+
+vite-serendie-test:
+  extends: .vite-serendie-base
+  stage: test
+  script:
+    - pnpm run test:ci
+  artifacts:
+    when: always
+    paths:
+      - vite-serendie-template/junit-report.xml
+      - vite-serendie-template/coverage
+    expire_in: 7 days
+    reports:
+      junit: vite-serendie-template/junit-report.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: vite-serendie-template/coverage/cobertura-coverage.xml
+
+vite-serendie-build:
+  extends: .vite-serendie-base
+  stage: build
+  script:
+    - pnpm run build
+  artifacts:
+    paths:
+      - vite-serendie-template/dist
+    expire_in: 7 days
