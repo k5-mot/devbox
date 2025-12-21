@@ -1,6 +1,3 @@
----
-applyTo: "**/*"
----
 # LLM-Driven Development Guidelines
 
 Use Serena MCP server memory for all project context.
@@ -17,6 +14,7 @@ Use Serena MCP server memory for all project context.
 | `backend-dev-guide` | Backend development workflow |
 | `deployment` | Deployment procedures |
 | `cicd-rules` | CI/CD pipeline rules |
+| `dev-environment` | Development environment setup |
 
 ## IDR/ADR Format
 
