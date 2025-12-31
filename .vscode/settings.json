@@ -1,17 +1,24 @@
 {
     // ===============
-    // 環境設定
-    // ===============
-    // "python.defaultInterpreterPath": "api/.venv/bin/python",
-    // ===============
     // 基本設定
     // ===============
-    "editor.insertSpaces": true,
-    "editor.tabSize": 2,
+    // ファイルのインデントではなく、VSCodeのタブ設定を採用する
     "editor.detectIndentation": false,
+    // TABの代わりにSPACEを挿入
+    "editor.insertSpaces": true,
+    // TABのサイズ
+    "editor.tabSize": 4,
+    // 制御文字を表示
     "editor.renderControlCharacters": true,
+    // SPACEの表示
     "editor.renderWhitespace": "all",
+    // 貼付時自動フォーマット
+    "editor.formatOnPaste": true,
+    // 保存時自動フォーマット
     "editor.formatOnSave": true,
+    // 入力時自動フォーマット
+    "editor.formatOnType": true,
+    // 保存時自動アクション
     "editor.codeActionsOnSave": {
         // JavaScript Actions
         "source.organizeImports.biome": "explicit",
@@ -23,24 +30,46 @@
         // All Actions
         "source.fixAll.biome": "explicit"
     },
+    // 保存時に末尾を空行にする
     "files.insertFinalNewline": true,
+    // 保存時に最終行以降を削除
     "files.trimFinalNewlines": true,
+    // 保存時に行末のSPACEを削除
     "files.trimTrailingWhitespace": true,
+    // 文字コード推測
+    "files.autoGuessEncoding": true,
+    // 改行コードをLFに統一
     "files.eol": "\n",
+    // devcontainer.jsonをjsoncとして扱う
     "files.associations": {
         "devcontainer.json": "jsonc"
     },
-    "terminal.integrated.defaultProfile.linux": "zsh",
-    "terminal.integrated.profiles.linux": {
-        "zsh": {
-            "path": "/usr/bin/zsh"
-        }
+    // 除外ファイル
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/*.o": true,
+        "**/*.obj": true,
+        "**/*.ilk": true,
+        "**/*.pdb": true,
+        "**/*.tlog": true,
+        "**/*.idb": true,
+        "**/*.dll": true
     },
+    // 旧Gitの警告を無視
+    "git.ignoreLegacyWarning": true,
+    // Git自動フェッチ
     "git.autofetch": true,
+    // 親フォルダのリポジトリも開く
     "git.openRepositoryInParentFolders": "always",
+    // Telemetry無効化
     "telemetry.feedback.enabled": false,
     "telemetry.telemetryLevel": "off",
-    "extensions.ignoreRecommendations": false,
+    // 拡張機能の推奨を無視
+    "extensions.ignoreRecommendations": true,
     // ===============
     // 言語別設定
     // ===============
@@ -48,9 +77,6 @@
     "biome.enabled": true,
     "biome.requireConfiguration": true,
     "biome.lsp.trace.server": "verbose",
-    "gitlab.duoAgentPlatform.enabled": false,
-    "gitlab.duoChat.enabled": false,
-    "gitlab.duoCodeSuggestions.enabled": false,
     "[javascript][javascriptreact][typescript][typescriptreact]": {
         // "editor.defaultFormatter": "esbenp.prettier-vscode"
         "editor.defaultFormatter": "biomejs.biome",
@@ -79,6 +105,23 @@
     // ===============
     // 拡張機能設定
     // ===============
+    // AWS
+    "aws.telemetry": false,
+    "redhat.telemetry.enabled": false,
+    // YAML
+    "aws.cloudformation.telemetry.enabled": false,
+    // GitLab
+    "gitlab.duoAgentPlatform.enabled": false,
+    "gitlab.duoChat.enabled": false,
+    "gitlab.duoCodeSuggestions.enabled": false,
+    // GitHub
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": true,
+        "scminput": false
+    },
+    "github.copilot.nextEditSuggestions.enabled": true,
     "chat.agent.enabled": true,
     // "chat.disableAIFeatures": true,
     "chat.tools.terminal.autoApprove": {
