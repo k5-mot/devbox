@@ -15,6 +15,7 @@ Use Serena MCP server memory for all project context.
 | `deployment` | Deployment procedures |
 | `cicd-rules` | CI/CD pipeline rules |
 | `dev-environment` | Development environment setup |
+| `setup-guide` | Setup instructions for new developers |
 
 ## IDR/ADR Format
 
