@@ -14,128 +14,128 @@
 
 以下は、日常的に実行する開発フローの通し手順です。各ステップに CLI コマンドの例を示します。
 
-### 2-1. GitHub Issue の起票 (必要に応じて)
+### 2-1. GitHub Issue の起票
 - GitHub CLI:
 
-  ```bash
-  gh issue create \
-    --title "Short title" \
-    --body "Describe the problem or feature" \
-    --label "type:feature"
-  ```
+```bash
+gh issue create \
+--title "Short title" \
+--body "Describe the problem or feature" \
+--label "type:feature"
+```
 
 ### 2-2. ブランチの作成
 
 - 最新の main を取得:
 
-  ```bash
-  git checkout main
-  git pull --rebase origin main
-  ```
+```bash
+git checkout main
+git pull --rebase origin main
+```
 
 - ブランチ作成 (Issue と紐付ける場合):
 
-  ```bash
-  git checkout -b feature/123-add-login
-  ```
+```bash
+git checkout -b feature/123-add-login
+```
 
 ### 2-3. 実装とコミット
 - ステージング:
 
-  ```bash
-  git add <files>
-  ```
+```bash
+git add <files>
+```
 
 - コミット:
 
-  ```bash
-  git commit -m "feat(auth): add login endpoint"
-  ```
+```bash
+git commit -m "feat(auth): add login endpoint"
+```
 
 - 履歴整理 (任意):
 
-  ```bash
-  git rebase -i HEAD~<n>
-  ```
+```bash
+git rebase -i HEAD~<n>
+```
 
 ### 2-4. リモートへ push と PR の作成
 - push:
 
-  ```bash
-  git push -u origin feature/123-add-login
-  ```
+```bash
+git push -u origin feature/123-add-login
+```
 
 - PR 作成 (CLI):
 
-  ```bash
-  gh pr create \
-    --title "feat: add login" \
-    --body "What / Why / How to test / Closes #123" \
-    --base main \
-    --head feature/123-add-login
-  ```
+```bash
+gh pr create \
+--title "feat: add login" \
+--body "What / Why / How to test / Closes #123" \
+--base main \
+--head feature/123-add-login
+```
 
 ### 2-5. レビューと CI の確認
 - レビュー承認 (レビュワー側):
 
-  ```bash
-  gh pr review <PR_NUMBER> --approve --body "LGTM"
-  ```
+```bash
+gh pr review <PR_NUMBER> --approve --body "LGTM"
+```
 
 - CI 結果確認:
 
-  ```bash
-  gh pr checks <PR_NUMBER>
-  ```
+```bash
+gh pr checks <PR_NUMBER>
+```
 
-  または GitHub UI の Checks タブを参照
+または GitHub UI の Checks タブを参照
 
-### 2-6. マージ前の最終調整 (rebase)
+### 2-6. マージ前の最終調整
 - rebase して main と同期:
 
-  ```bash
-  git checkout feature/123-add-login
-  git pull --rebase origin main
-  ```
+```bash
+git checkout feature/123-add-login
+git pull --rebase origin main
+```
 
 - 競合を解消し、動作確認を行う
 - rebase 後にリモートに反映する場合 (必要時):
 
-  ```bash
-  git push --force-with-lease
-  ```
+```bash
+git push --force-with-lease
+```
 
-- (注意) `--force-with-lease` 使用時は PR に注記し、レビュー承認を得てください
+- (注意) 履歴書き換え時は `git push --force-with-lease` または `git push --force-if-includes` を使用してください（詳細は 7. 履歴書き換えと push の扱い を参照）
 
 ### 2-7. マージとブランチ削除
 - マージ (CLI 例):
 
-  ```bash
-  gh pr merge <PR_NUMBER> --squash
-  # または
-  gh pr merge <PR_NUMBER> --merge
-  ```
+```bash
+gh pr merge <PR_NUMBER> --squash
+# または
+gh pr merge <PR_NUMBER> --merge
+```
 
 - ブランチ削除:
 
-  ```bash
-  git push origin --delete feature/123-add-login
-  ```
+```bash
+git push origin --delete feature/123-add-login
+```
 
 ### 2-8. リリースとタグ付け
 - main を取得:
 
-  ```bash
-  git checkout main
-  git pull origin main
-  ```
+```bash
+git checkout main
+git pull origin main
+```
 
 - タグ付け:
 
-  ```bash
-  git tag -a v1.2.3 -m "release v1.2.3"
-  git push origin v1.2.3
-  ```
+```bash
+git tag -a v1.2.3 -m "release v1.2.3"
+git push origin v1.2.3
+```
 
 ---
 
@@ -165,7 +165,7 @@
 
 ---
 
-## 6. コミットメッセージ：Conventional Commits（詳細）
+## 6. コミットメッセージ：Conventional Commits
 - 形式(必須):
   - `<type>(<scope>): <subject>`
 - 拡張フォーマット（推奨）:
@@ -212,8 +212,21 @@
 
 ---
 
-## 7. 履歴書き換えと push の扱い（`--force-with-lease`）
-- 原則: `git push --force` は禁止。個人ブランチで履歴整理（rebase/squash）する場合は `git push --force-with-lease` を使用し、**PR に注記してレビュー承認を得る**こと。
+## 7. 履歴書き換えと push の扱い
+
+> **⚠️ 注意:** 本リポジトリでは履歴書き換えを行う場合、下記のいずれかのオプションを必ず使用することを必須とします。
+>
+> - `git push --force-with-lease`
+> - `git push --force-if-includes`
+>
+> **理由:**
+>
+> - `--force-with-lease` は、リモートが自分の期待と違う（他の変更が既にプッシュされている）場合に push を拒否して、他者の作業を誤って上書きする事故を防ぎます。
+> - `--force-if-includes` は、push しようとしているコミットがすでにリモートに含まれているかを確認し、不必要な上書きを防ぐ補助的な安全弁となります。
+>
+> いずれの場合も、履歴書き換えは PR 上で注記し、必ずレビュー承認を得てから反映してください。
+
+- 原則: `git push --force` は禁止。個人ブランチで履歴整理（rebase/squash）する場合は上記のオプションのいずれかを使用し、PR に注記してレビュー承認を得てください。
 - 公開ブランチ上での force push は行わないこと。
 
 ---
@@ -246,11 +259,15 @@
 
 ---
 
-## Decision Records (DR)
-- **DR**: アジリティを確保するため、GitHub Flow のようなミニマルなブランチ戦略を採用する.
-- **DR**: 履歴の可読性を高めるため、rebase / fast-forward を推奨する.
-- **DR**: 変更の追跡と自動化を容易にするため、Conventional Commits を採用する.
-- **DR**: リリース互換性を明確にするため、SemVer を採用する.
+> **決定記録 (Decision Records)**
+>
+> - **採用: GitHub Flow を採用** — 理由: ミニマルでアジリティを保ち、PR ベースのレビューが運用上簡潔になるため。
+>
+> - **採用: rebase / fast-forward を推奨** — 理由: 履歴の可読性が向上し、問題追跡が容易になるため。
+>
+> - **採用: Conventional Commits を採用** — 理由: 変更の自動分類やリリース自動化が容易になり、CI/自動化ツールとの親和性が高まるため。
+>
+> - **採用: SemVer を採用** — 理由: 互換性の期待を明確にし、リリース管理を体系化するため。
 
 ---
 
