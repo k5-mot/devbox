@@ -12,7 +12,8 @@
 
 ## 2. 基本方針
 - ブランチ戦略: GitHub Flow を採用。`main` は常にデプロイ可能な状態に保つ。
-- ブランチ命名規則: `feature/<短い説明>`, `fix/<短い説明>`, `chore/<短い説明>`, `hotfix/<短い説明>`。
+- ブランチ命名規則: GitHub Flow に従い、**短くわかりやすいトピックブランチ名**を推奨（例: `increase-test-timeout`, `add-code-of-conduct`）。
+  - チームで統一したい場合は `feature/<短い説明>` のようなプレフィックスを採用してもよいが必須ではありません。
 - コミット規約: **Conventional Commits** を推奨（例: `feat(auth): add login`）。
 
 ---
@@ -93,7 +94,8 @@
 - PR 本文にスプリント番号や関連タスクを明記し、スプリントレビューでのチェックリスト（QA、ドキュメント更新等）を用意すること。
 
 ## 13. GitHub Flow の限定運用
-- 本プロジェクトは GitHub Flow を採用し、運用ブランチは **`main` と `feature/*` のみ**を使用します（`develop` や `release` は使いません）。
+- 本プロジェクトは GitHub Flow を採用し、運用ブランチは **`main` とトピックブランチ（短くわかりやすい名前）** を使用します（`develop` や `release` は使いません）。
+- 例: `increase-test-timeout`, `feature/login-123`（プレフィックスを採用する場合の例）。
 - 参考: https://docs.github.com/ja/get-started/using-github/github-flow
 
 ## 14. Force push の扱い（`--force-with-lease`）
