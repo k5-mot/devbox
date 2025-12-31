@@ -24,7 +24,9 @@
     --label "type:feature"
   ```
 
-### 2-- 最新の main を取得:
+### 2-2. ブランチの作成
+
+- 最新の main を取得:
 
   ```bash
   git checkout main
@@ -37,7 +39,7 @@
   git checkout -b feature/123-add-login
   ```
 
-### 2-### 2-3. 実装とコミット
+### 2-3. 実装とコミット
 - ステージング:
 
   ```bash
@@ -56,7 +58,7 @@
   git rebase -i HEAD~<n>
   ```
 
-### 2-### 2-4. リモートへ push と PR の作成
+### 2-4. リモートへ push と PR の作成
 - push:
 
   ```bash
@@ -73,7 +75,7 @@
     --head feature/123-add-login
   ```
 
-### 2-### 2-5. レビューと CI の確認
+### 2-5. レビューと CI の確認
 - レビュー承認 (レビュワー側):
 
   ```bash
@@ -88,7 +90,7 @@
 
   または GitHub UI の Checks タブを参照
 
-### 2-### 2-6. マージ前の最終調整 (rebase)
+### 2-6. マージ前の最終調整 (rebase)
 - rebase して main と同期:
 
   ```bash
@@ -105,7 +107,7 @@
 
 - (注意) `--force-with-lease` 使用時は PR に注記し、レビュー承認を得てください
 
-### 2-### 2-7. マージとブランチ削除
+### 2-7. マージとブランチ削除
 - マージ (CLI 例):
 
   ```bash
@@ -120,7 +122,7 @@
   git push origin --delete feature/123-add-login
   ```
 
-### 2-### 2-8. リリースとタグ付け
+### 2-8. リリースとタグ付け
 - main を取得:
 
   ```bash
