@@ -10,6 +10,28 @@
 
 ---
 
+## 開発フロー（全体の流れ）
+以下は日常的に実行する開発の「全体フロー（上から下へ）」です。各ステップの詳細は本文の該当節を参照してください。
+
+1. Issue の作成（必要な場合）
+   - 新機能・バグ・改善提案などは Issue を作成して議論を開始します。軽微な修正は直接 PR でも可。
+2. ブランチの作成
+   - `main` を最新化してからトピックブランチを作成（例: `git checkout main && git pull --rebase origin main && git checkout -b feature/123-add-login`）。Issue に紐づける場合は番号を含める（`feature/123-...`）ことを推奨します。
+3. 実装とコミット
+   - 小さな単位でコミットし、コミットメッセージは Conventional Commits を使う（例: `feat(auth): add login endpoint`）。ローカルで履歴整理（rebase/squash）するのは可。
+4. リモートへ Push と PR の作成
+   - 作業を push して PR を作成。PR 本文に「何を／なぜ／影響範囲／テスト手順／関連 Issue（Closes #123）」を明記します。
+5. レビューと CI
+   - コミッター以外の承認者によるレビューを受け、必要な変更を行う。CI がある場合は全チェック成功を確認します。
+6. マージ前の最終準備
+   - マージ前に `git pull --rebase origin main` を行い、fast-forward が可能な状態にする。ローカルで動作確認を実施。
+7. マージとクローズ
+   - Fast-Forward（または Squash）でマージし、PR に `Closes #<issue>` を含めていれば自動で Issue が閉じられます。マージ後は作業ブランチを削除します。
+8. リリースとタグ付け
+   - 必要に応じて `main` に対して SemVer でタグを付け、リリースノートを作成します。
+
+---
+
 ## 2. 基本方針
 - ブランチ戦略: GitHub Flow を採用。`main` は常にデプロイ可能な状態に保つ。
 - ブランチ命名規則: GitHub Flow に従い、**短くわかりやすいトピックブランチ名**を推奨（例: `increase-test-timeout`, `add-code-of-conduct`）。
