@@ -80,7 +80,6 @@ winget install Microsoft.PowerShell  # PowerShell 7+ (最新版)
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
 
 winget install `
-  Microsoft.PowerShell `
   Git.Git `
   TortoiseGit.TortoiseGit `
   Microsoft.VisualStudioCode `
@@ -384,7 +383,7 @@ sudo visudo
 - `<your_username>` はWSLのユーザー名に置き換えてください。
 
 ```text
-<your_username> ALL=(ALL) NOPASSWD:ALL
+<your_username> ALL=(ALL:ALL) NOPASSWD:ALL
 ```
 
 ### 2.5. パッケージの更新と必要なパッケージのインストール
@@ -394,7 +393,7 @@ sudo visudo
 ```bash
 sudo apt-get update
 sudo apt-get install -y ca-certificates curl gnupg
-sudo apt-get install -y --no-install-recommends unzip git wget zsh
+sudo apt-get install -y --no-install-recommends unzip git wget python3-venv
 sudo apt-get upgrade -y
 sudo apt-get autoremove -y
 sudo apt-get clean
@@ -408,14 +407,10 @@ sudo apt-get clean
 
 ```bash
 curl https://mise.run/bash | sh
-mise use --global node@24
-mise use --global python@3.12
-mise use --global aws-cli@latest
-mise use --global azure@latest
-mise use --global jq@latest
-mise use --global vim@latest
-mise use --global neovim@latest
-mise use --global tmux@latest
+echo "eval \"\$(/home/merry/.local/bin/mise activate bash)\"" >> ~/.bashrc
+source ~/.bashrc
+mise use --global node@24 python@3.14 aws-cli@latest azure@latest
+npm install -g npm @anthropic-ai/claude-code @openai/codex
 ```
 
 ### 2.6.2. AWS CLIの設定
@@ -424,15 +419,16 @@ mise use --global tmux@latest
 - `<username>` はWindowsのユーザー名に置き換えてください。
 
 ```bash
+export WIN_USERNAME="$(powershell.exe -Command 'echo $env:UserName' | tr -d '\r')"
 [ -L "$HOME/.aws" ] && rm -rfv "$HOME/.aws"
-ln -sv "/mnt/c/Users/<username>/.aws" "$HOME/.aws"
+ln -sv "/mnt/c/Users/$WIN_USERNAME/.aws" "$HOME/.aws"
 ```
 
 ### 2.6.3. Azure CLIの設定
 
 ```bash
 [ -L "$HOME/.azure" ] && rm -rfv "$HOME/.azure"
-ln -sv "/mnt/c/Users/<username>/.azure" "$HOME/.azure"
+ln -sv "/mnt/c/Users/$WIN_USERNAME/.azure" "$HOME/.azure"
 ```
 
 ### 2.6.4. Anthropic Claude Codeの設定
@@ -440,7 +436,7 @@ ln -sv "/mnt/c/Users/<username>/.azure" "$HOME/.azure"
 ```bash
 npm install -g @anthropic-ai/claude-code
 [ -L "$HOME/.claude" ] && rm -rfv "$HOME/.claude"
-ln -sv "/mnt/c/Users/<username>/.claude" "$HOME/.claude"
+ln -sv "/mnt/c/Users/$WIN_USERNAME/.claude" "$HOME/.claude"
 
 ```
 
@@ -449,7 +445,7 @@ ln -sv "/mnt/c/Users/<username>/.claude" "$HOME/.claude"
 ```bash
 npm install -g @openai/codex
 [ -L "$HOME/.codex" ] && rm -rfv "$HOME/.codex"
-ln -sv "/mnt/c/Users/<username>/.codex" "$HOME/.codex"
+ln -sv "/mnt/c/Users/$WIN_USERNAME/.codex" "$HOME/.codex"
 ```
 
 ## 3. Dockerのセットアップ
@@ -487,6 +483,8 @@ Dockerをインストールする。
 # Dockerパッケージをインストールする
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo usermod -aG docker $USER
+
 ```
 
 Dockerを動作確認する。
