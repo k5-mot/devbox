@@ -1,140 +1,128 @@
 # Git 運用リファレンス
 
-このファイルはリポジトリにおける Git / PR の運用規則を整理したものです。
+このファイルはこのリポジトリで採用する Git / PR 運用ルールを明文化したものです。
 
 ---
 
 ## 1. 目的と適用範囲
-- 目的: ブランチ運用・PR 手順・コミット規約などを統一し、レビューとマージの品質を担保する。 
-- 適用範囲: このリポジトリ内のすべての開発作業（個別例外は PR に明記して議論する）。
+- 目的: ブランチ運用、Issue/PR の流れ、コミット規約、リリース手順を統一し、品質と可観測性を高める。
+- 適用範囲: このリポジトリ内のすべての開発作業（例外は PR にて合意）。
 
 ---
 
-## 開発フロー（全体の流れ）
-以下は日常的に実行する開発の「全体フロー（上から下へ）」です。各ステップの詳細は本文の該当節を参照してください。
+## 2. 開発フロー（全体の流れ）
+以下は日常的に実行する「Issue→ブランチ→コミット→PR→レビュー→rebase→マージ→リリース」までの通し手順です。
 
-1. Issue の作成（必要な場合）
-   - 新機能・バグ・改善提案などは Issue を作成して議論を開始します。軽微な修正は直接 PR でも可。
+1. Issue の起票（必要に応じて）
+   - 新機能、バグ、改善提案、設計方針などは Issue を立てて議論します。小さな修正は PR で直接対応可能。
 2. ブランチの作成
-   - `main` を最新化してからトピックブランチを作成（例: `git checkout main && git pull --rebase origin main && git checkout -b feature/123-add-login`）。Issue に紐づける場合は番号を含める（`feature/123-...`）ことを推奨します。
+   - `main` を最新化してからトピックブランチを作成します（例: `git checkout main && git pull --rebase origin main && git checkout -b feature/123-add-login`）。Issue に紐づける場合は番号を含めることを推奨します。
 3. 実装とコミット
-   - 小さな単位でコミットし、コミットメッセージは Conventional Commits を使う（例: `feat(auth): add login endpoint`）。ローカルで履歴整理（rebase/squash）するのは可。
-4. リモートへ Push と PR の作成
-   - 作業を push して PR を作成。PR 本文に「何を／なぜ／影響範囲／テスト手順／関連 Issue（Closes #123）」を明記します。
+   - 小さな単位でコミットし、コミットメッセージは Conventional Commits を適用します。
+4. リモートへ push と PR の作成
+   - 作業を push して PR を作成。PR 本文に `何を / なぜ / 影響範囲 / テスト手順 / 関連 Issue` を明記します。
 5. レビューと CI
-   - コミッター以外の承認者によるレビューを受け、必要な変更を行う。CI がある場合は全チェック成功を確認します。
-6. マージ前の最終準備
-   - マージ前に `git pull --rebase origin main` を行い、fast-forward が可能な状態にする。ローカルで動作確認を実施。
-7. マージとクローズ
-   - Fast-Forward（または Squash）でマージし、PR に `Closes #<issue>` を含めていれば自動で Issue が閉じられます。マージ後は作業ブランチを削除します。
+   - コミッター以外の承認者によるレビューを受け、必要な変更を行います。CI がある場合は全チェック通過を確認します。
+6. マージ前の最終調整
+   - マージ前に `git pull --rebase origin main` を行い、fast-forward が可能な状態にします（競合があれば解消し、動作確認）。
+7. マージとブランチ削除
+   - Fast-Forward（または Squash）でマージし、PR に `Closes #<issue>` を含めていれば Issue は自動で閉じられます。マージ後は作業ブランチを削除します。
 8. リリースとタグ付け
-   - 必要に応じて `main` に対して SemVer でタグを付け、リリースノートを作成します。
+   - 必要に応じて SemVer に従ってタグ付けし、リリースノートを作成します。
 
 ---
 
-## 2. 基本方針
-- ブランチ戦略: GitHub Flow を採用。`main` は常にデプロイ可能な状態に保つ。
-- ブランチ命名規則: GitHub Flow に従い、**短くわかりやすいトピックブランチ名**を推奨（例: `increase-test-timeout`, `add-code-of-conduct`）。
-  - チームで統一したい場合は `feature/<短い説明>` のようなプレフィックスを採用してもよいが必須ではありません。
-- コミット規約: **Conventional Commits** を推奨（例: `feat(auth): add login`）。
+## 3. ブランチ戦略と命名
+- 採用: GitHub Flow をベースに、**`main` と短いトピックブランチ名**（短く分かりやすい）を使用します。`develop` や `release` ブランチは使用しません。
+- 命名例:
+  - トピックブランチ: `increase-test-timeout`, `add-code-of-conduct`
+  - Issue 紐付け: `feature/123-add-login`（Issue 番号を含めたい場合）
+- チーム方針で `feature/` プレフィックスを必須にしても良いが、短く分かりやすい命名を優先してください。
 
 ---
 
-## 3. 開発フロー（推奨手順）
-1. `main` を最新にする:
-   - `git checkout main` して `git pull --rebase origin main` を実行。
-2. 新しいブランチを作成:
-   - `git checkout -b feature/<短い説明>`
-3. 実装は小さなコミットで行い、ローカルで適宜 `git rebase -i` や整理を行う。
-4. 作業中に `main` の更新があれば、ローカルブランチで `git pull --rebase origin main` して競合を解消する（merge より rebase を推奨）。
-5. PR を作成し、レビューと CI 結果（存在する場合）を待つ。
-6. マージの前に必ず最新の `main` に対して rebase を行い、**fast-forward が可能な状態**にすること（`git pull --rebase origin main`、競合解消、動作確認）。
-7. マージは基本的に Fast-Forward（または Squash）を推奨。履歴の整合性が必要な場合にのみ Merge commit を用いる。
-
-> 注意: `git pull --rebase` と fast-forward を徹底することで、不要なマージコミットや複雑な履歴を避けられます。
+## 4. Issue の運用
+- Issue を作成する条件: 新機能、バグ、改善提案、設計上の判断を要する事項。軽微な修正は PR で対応可能。
+- テンプレートとラベル: `.github/ISSUE_TEMPLATE` とラベル（例: `type:bug`, `type:feature`, `priority:high`, `status:triage`, `sprint:<n>`）を活用する。
+- ライフサイクル: `triage` → `assign` → `in progress` → `review` → `done`。
+- PR との連携: PR に `Closes #<issue>` を含めると自動で Issue を閉じる。コミットや PR に Issue 番号を明示してください。
 
 ---
 
-## 4. Pull Request（PR）ルール
-- PR を作成する際の必須情報:
-  - 変更の要約（何をしたか）
-  - 変更理由（なぜ必要か）
-  - 影響範囲（どこに影響するか）
-  - テスト手順／確認方法
-  - 関連 Issue やチケット番号
-- レビュー要件: コミッター本人以外の承認者が最低1名必要（プロジェクトルールで更に厳格化することがあれば PR に明記）。
-- CI が存在する場合は、必要なチェックが全て成功したことを確認すること（失敗している場合は修正を求める）。
+## 5. Pull Request（PR）ルール
+- 必須情報: 変更の要約 / 変更理由 / 影響範囲 / テスト手順 / 関連 Issue
+- レビュー: コミッター以外の承認者が最低 1 名必要（プロジェクトで更に厳格化してよい）。
+- CI: CI がある場合は必須チェック通過がマージ条件となります。
 
 ---
 
-## 5. コミットメッセージのガイドライン
-- 形式: `type(scope?): subject`（Conventional Commits）
-- 例: `feat(api): add health check endpoint`
-- 小さな WIP コミットは許容するが、PR 作成前に整理（squash/rebase）すること。
+## 6. コミットメッセージ：Conventional Commits（詳細）
+- 形式(必須):
+  - `<type>(<scope>): <subject>`
+- 拡張フォーマット（推奨）:
+  - ```
+    <type>(<scope>): <subject>
+
+    <body>
+
+    <footer>
+    ```
+- type の代表例: `feat`, `fix`, `chore`, `docs`, `style`, `refactor`, `perf`, `test`, `ci`, `build`
+- subject のルール:
+  - 命令形で一行に簡潔にまとめる（目安: 50 文字以内）
+  - 先頭は小文字、末尾にピリオドを付けない
+- body:
+  - 詳細な説明、背景、影響範囲、回避策などを記述（必要時）
+- footer:
+  - 破壊的変更: `BREAKING CHANGE: <description>` を記載
+  - Issue 参照: `Closes #123` / `Refs #123`
+- 例:
+  - `feat(auth): add JWT support`
+  - `fix(api): handle null response in /user`
+  - `docs: update CONTRIBUTING with branch rules`
 
 ---
 
-## 6. 履歴書き換えと force push の扱い
-- 原則: 履歴の書き換え（`git push --force` など）は**禁止**。どうしても必要な場合は PR として事前に合意を取り、影響範囲を明確にすること。
-- 個人ブランチ内での rebase/squash は許容される（ローカルで履歴を整理し、最終的に fast-forward マージすること）。
+## 7. 履歴書き換えと push の扱い（`--force-with-lease`）
+- 原則: `git push --force` は禁止。個人ブランチで履歴整理（rebase/squash）する場合は `git push --force-with-lease` を使用し、**PR に注記してレビュー承認を得る**こと。
+- 公開ブランチ上での force push は行わないこと。
 
 ---
 
-## 7. 緊急対応（hotfix）
-- 緊急修正は `hotfix/<短い説明>` ブランチで行い、迅速にレビュー・テストして main に取り込む。
-- 取り込んだら、必要に応じてリリースノートや CHANGELOG を更新する。
+## 8. 緊急対応（hotfix）の扱い（GitHub Flow と整合）
+- 補足: GitHub Flow は hotfix を明文化していませんが、緊急修正が必要な場合は次の運用を推奨します。
+  1. `hotfix/<short-desc>` のトピックブランチを作成する（必要なら Issue を作成）。
+  2. 最小限の修正を行い、直ちに PR を作成してレビュー・CI を行う。
+  3. 承認後 `main` にマージし、必要ならタグ付けしてリリースする。関連ブランチへ修正をバックポートすること。
+- hotfix も通常の PR フロー（レビュー・CI）を基本にしつつ、迅速に対応すること。
 
 ---
 
-## 8. エージェント（Copilot / Claude）向けの使い方
-- エージェントがルールに基づくチェックを行う際は、このファイルの該当節を参照して、助言とチェックリストを提示してください。
-- エージェントは自動的に PR を block したり merge を実行しないでください（あくまで助言が原則）。
+## 9. タグ付け（リリース）と SemVer
+- タグは SemVer に従う（例: `v1.2.3`）。
+- プリリリースは `-rc.1` などを使用。
+- タグは `main` に対して付与し、可能なら GPG 署名を推奨。
 
 ---
 
-## 9. 更新手順
-- このドキュメントを更新するときは、変更理由と影響範囲を PR に明記してレビューを受けてください。
+## 10. スクラムを踏まえた追加ルール
+- スプリント内で完結する単位でブランチを管理し、原則スプリント終了までにマージまたはクローズする。
+- ブランチ命名例（スクラム）: `feature/SPRINT<番号>-<ISSUE番号>-<短い説明>`（任意）。
+- PR にスプリント番号やレビューチェックリストを含める。
 
 ---
 
-更新: このファイルを更新するときは、変更理由と影響範囲を PR に明記してレビューを受けてください。
+## 11. エージェント（Copilot / Claude）向けの使い方
+- エージェントは本ドキュメントに従い、助言とチェックリストを提示してください。自動でマージやブロックは行わないこと。
 
 ---
 
-## GitHub Issues の運用
-- Issue を作成する条件: 新機能、バグ、改善提案、設計上の重要な決定などの議論が必要な場合は Issue を作成します。簡単な修正やタイポは PR で直接対応して構いませんが、事前に議論が必要な場合は Issue を起こしてください。
-- テンプレートとラベル: `.github/ISSUE_TEMPLATE` を活用し、`type:bug`, `type:feature`, `priority:high`, `status:triage`, `sprint:<number>` 等のラベル運用を推奨します。
-- ブランチと Issue の紐付け: Issue と関連付ける場合はブランチ名に Issue 番号を含めることを推奨します（例: `feature/123-add-login`）。これにより PR やコミットの追跡が容易になります。
-- PR との連携: PR 本文に `Closes #<issue>` を入れるとマージ時に自動で Issue を閉じられます。PR の本文やタイトルに Issue 番号を明示してください。
-- Issue ライフサイクル: `triage` → `assign` → `in progress` → `review` → `done` を推奨します。Issue を閉じる際は、参照する PR/コミットを必ず明記してください。
-- 参照の慣習: コミットメッセージや PR 本文に Issue 番号を含める（`Refs #123` / `Closes #123`）ことで履歴の可観測性が高まります。
+## 12. 更新手順
+- ドキュメントを更新する場合は、PR に変更理由と影響範囲を明記してレビューを受けてください。
 
 ---
 
-## 10. 採用理由
-- **Rebase / Fast-Forward を推奨する理由**: 履歴が直線的になり、不要なマージコミットが減るため、履歴の可読性とバグの追跡が容易になります。スクラムの短いリリースサイクルにも適しています。 
-- **SemVer（タグ）を採用する理由**: バージョニングの互換性を明確にし、リリースや依存管理を一貫して行えるためです。
-
-## 11. タグ付け（リリース）ルール
-- タグは **SemVer** に従う（例: `v1.2.3`）。
-- プリリリースは `-rc.1` や `-beta.1` の形式を付与する。
-- タグ付けは `main` に対して行い、可能であれば GPG 署名を行うことを推奨します。
-
-## 12. スクラム向け追加ルール
-- ブランチはスプリント内で完結することを目標とし、原則スプリント終了までにマージまたはクローズすること。長期化が見込まれる場合はスコープを分割するか、事前にスクラムマスターと相談すること。
-- ブランチ命名例: `feature/SPRINT<番号>-<ISSUE番号>-<短い説明>` または `feature/<ISSUE番号>-<短説明>` を推奨。
-- PR 本文にスプリント番号や関連タスクを明記し、スプリントレビューでのチェックリスト（QA、ドキュメント更新等）を用意すること。
-
-## 13. GitHub Flow の限定運用
-- 本プロジェクトは GitHub Flow を採用し、運用ブランチは **`main` とトピックブランチ（短くわかりやすい名前）** を使用します（`develop` や `release` は使いません）。
-- 例: `increase-test-timeout`, `feature/login-123`（プレフィックスを採用する場合の例）。
-- 参考: https://docs.github.com/ja/get-started/using-github/github-flow
-
-## 14. Force push の扱い（`--force-with-lease`）
-- `git push --force-with-lease` の使用は原則禁止です。例外的に個人ブランチ内で履歴を整理（rebase/squash）する場合のみ許可されますが、その際は**事前に PR に注記**し、レビューで承認を得ることを必須とします。
-- 絶対に `git push --force` を使わず、`--force-with-lease` を使用してください（衝突の安全性を高めるため）。
-
-## 15. 参考資料
+## 13. 参考資料
 - GitHub Flow: https://docs.github.com/ja/get-started/using-github/github-flow
 - Agent skills: https://docs.github.com/ja/copilot/concepts/agents/about-agent-skills
 - Semantic Versioning: https://semver.org/
