@@ -4,39 +4,50 @@
 
 ---
 
-## 1. 目的と適用範囲
+## 1. 目的
 - 目的: ブランチ運用、Issue/PR の流れ、コミット規約、リリース手順を統一し、品質と可観測性を高める。
 - 適用範囲: このリポジトリ内のすべての開発作業（例外は PR にて合意）。
 
 ---
 
-## 2. 開発フロー（全体の流れ）
-以下は日常的に実行する「Issue→ブランチ→コミット→PR→レビュー→rebase→マージ→リリース」までの通し手順です。
+## 2. 開発フロー
 
-1. Issue の起票（必要に応じて）
-   - 新機能、バグ、改善提案、設計方針などは Issue を立てて議論します。小さな修正は PR で直接対応可能。
+以下は、日常的に実行する開発フローの通し手順です。各ステップに CLI コマンドの例を示します。
+
+1. Issue の起票 (必要に応じて)
+   - GitHub CLI: `gh issue create --title "Short title" --body "Describe the problem or feature" --label "type:feature"`
 2. ブランチの作成
-   - `main` を最新化してからトピックブランチを作成します（例: `git checkout main && git pull --rebase origin main && git checkout -b feature/123-add-login`）。Issue に紐づける場合は番号を含めることを推奨します。
+   - 最新の main を取得: `git checkout main && git pull --rebase origin main`
+   - ブランチ作成: `git checkout -b feature/123-add-login` (Issue と紐付ける場合)
 3. 実装とコミット
-   - 小さな単位でコミットし、コミットメッセージは Conventional Commits を適用します。
+   - ステージング: `git add <files>`
+   - コミット: `git commit -m "feat(auth): add login endpoint"`
+   - 履歴整理 (任意): `git rebase -i HEAD~<n>`
 4. リモートへ push と PR の作成
-   - 作業を push して PR を作成。PR 本文に `何を / なぜ / 影響範囲 / テスト手順 / 関連 Issue` を明記します。
-5. レビューと CI
-   - コミッター以外の承認者によるレビューを受け、必要な変更を行います。CI がある場合は全チェック通過を確認します。
-6. マージ前の最終調整
-   - マージ前に `git pull --rebase origin main` を行い、fast-forward が可能な状態にします（競合があれば解消し、動作確認）。
+   - push: `git push -u origin feature/123-add-login`
+   - PR 作成 (CLI): `gh pr create --title "feat: add login" --body "What / Why / How to test / Closes #123" --base main --head feature/123-add-login`
+5. レビューと CI の確認
+   - レビュー承認: `gh pr review <PR_NUMBER> --approve --body "LGTM"`
+   - CI 結果確認: GitHub UI の Checks タブや `gh pr checks <PR_NUMBER>` を参照
+6. マージ前の最終調整 (rebase)
+   - `git checkout feature/123-add-login && git pull --rebase origin main`
+   - 競合解消と動作確認を行う
+   - rebase 後の push は必要に応じて `git push --force-with-lease` (使用時は PR に注記し、レビュー承認を得る)
 7. マージとブランチ削除
-   - Fast-Forward（または Squash）でマージし、PR に `Closes #<issue>` を含めていれば Issue は自動で閉じられます。マージ後は作業ブランチを削除します。
+   - CLI マージ例: `gh pr merge <PR_NUMBER> --squash` または `gh pr merge <PR_NUMBER> --merge` (運用方針に応じて選択)
+   - ブランチ削除: `gh pr close <PR_NUMBER>` または GitHub が自動で削除
 8. リリースとタグ付け
-   - 必要に応じて SemVer に従ってタグ付けし、リリースノートを作成します。
+   - main を取得: `git checkout main && git pull origin main`
+   - タグ付け: `git tag -a v1.2.3 -m "release v1.2.3"`
+   - タグを push: `git push origin v1.2.3`
 
 ---
 
 ## 3. ブランチ戦略と命名
-- 採用: GitHub Flow をベースに、**`main` と短いトピックブランチ名**（短く分かりやすい）を使用します。`develop` や `release` ブランチは使用しません。
+- 採用: GitHub Flow をベースに、**`main` と短いトピックブランチ名** (短く分かりやすい) を使用します。`develop` や `release` ブランチは使用しません。
 - 命名例:
   - トピックブランチ: `increase-test-timeout`, `add-code-of-conduct`
-  - Issue 紐付け: `feature/123-add-login`（Issue 番号を含めたい場合）
+  - Issue 紐付け: `feature/123-add-login` (Issue 番号を含めたい場合)
 - チーム方針で `feature/` プレフィックスを必須にしても良いが、短く分かりやすい命名を優先してください。
 
 ---
@@ -49,10 +60,12 @@
 
 ---
 
-## 5. Pull Request（PR）ルール
+## 5. Pull Request (PR) ルール
 - 必須情報: 変更の要約 / 変更理由 / 影響範囲 / テスト手順 / 関連 Issue
-- レビュー: コミッター以外の承認者が最低 1 名必要（プロジェクトで更に厳格化してよい）。
+- レビュー: コミッター以外の承認者が最低 1 名必要 (プロジェクトで更に厳格化してよい)。
 - CI: CI がある場合は必須チェック通過がマージ条件となります。
+
+(参照) 詳しい CLI の流れは 2. 開発フロー にあるコマンド例を参照してください。
 
 ---
 
@@ -67,12 +80,32 @@
 
     <footer>
     ```
-- type の代表例: `feat`, `fix`, `chore`, `docs`, `style`, `refactor`, `perf`, `test`, `ci`, `build`
+- type の代表例と意味:
+  - `feat`: 新機能の追加
+  - `fix`: バグ修正
+  - `docs`: ドキュメントのみの変更
+  - `style`: フォーマット等の構文的変更（機能に影響しない）
+  - `refactor`: バグ修正でも機能追加でもないリファクタリング
+  - `perf`: パフォーマンス改善
+  - `test`: テストの追加・修正
+  - `ci`: CI 設定やワークフローの変更
+  - `build`: ビルドシステムや依存に関する変更
+  - `chore`: その他の雑務的変更（例: 依存更新、スクリプト）
+- scope の選択肢と意味 (例):
+  - `auth`: 認証関連の変更
+  - `api`: API レイヤーの変更
+  - `ui`: UI/フロントエンドの変更
+  - `docs`: ドキュメント関連
+  - `deps`: 依存関係の変更
+  - `ci`: CI/パイプライン関連
+  - `build`: ビルド関連
+  - `tests`: テストに関する変更
+  - scope は任意だが、小さく具体的な値を選ぶこと (例: `auth`, `payments`, `checkout`)
 - subject のルール:
   - 命令形で一行に簡潔にまとめる（目安: 50 文字以内）
   - 先頭は小文字、末尾にピリオドを付けない
 - body:
-  - 詳細な説明、背景、影響範囲、回避策などを記述（必要時）
+  - 詳細な説明、背景、影響範囲、回避策などを記述 (必要時)
 - footer:
   - 破壊的変更: `BREAKING CHANGE: <description>` を記載
   - Issue 参照: `Closes #123` / `Refs #123`
@@ -98,27 +131,35 @@
 
 ---
 
-## 9. タグ付け（リリース）と SemVer
-- タグは SemVer に従う（例: `v1.2.3`）。
-- プリリリースは `-rc.1` などを使用。
-- タグは `main` に対して付与し、可能なら GPG 署名を推奨。
+## 9. タグ付け (リリース) と SemVer
+- タグは SemVer に従う (例: `v1.2.3`).
+- プリリリースは `-rc.1` などを使用します.
+- タグは `main` に対して付与し、可能なら GPG 署名を推奨します.
 
 ---
 
 ## 10. スクラムを踏まえた追加ルール
-- スプリント内で完結する単位でブランチを管理し、原則スプリント終了までにマージまたはクローズする。
-- ブランチ命名例（スクラム）: `feature/SPRINT<番号>-<ISSUE番号>-<短い説明>`（任意）。
-- PR にスプリント番号やレビューチェックリストを含める。
+- スプリント内で完結する単位でブランチを管理し、原則スプリント終了までにマージまたはクローズします.
+- ブランチ命名例 (スクラム): `feature/SPRINT<番号>-<ISSUE番号>-<短い説明>` (任意).
+- PR にスプリント番号やレビューチェックリストを含めてください.
 
 ---
 
-## 11. エージェント（Copilot / Claude）向けの使い方
-- エージェントは本ドキュメントに従い、助言とチェックリストを提示してください。自動でマージやブロックは行わないこと。
+## 11. エージェント (Copilot / Claude) 向けの使い方
+- エージェントは本ドキュメントに従い、助言とチェックリストを提示してください。自動でマージやブロックは行わないこと.
 
 ---
 
 ## 12. 更新手順
-- ドキュメントを更新する場合は、PR に変更理由と影響範囲を明記してレビューを受けてください。
+- ドキュメントを更新する場合は、PR に変更理由と影響範囲を明記してレビューを受けてください.
+
+---
+
+## Decision Records (DR)
+- **DR**: アジリティを確保するため、GitHub Flow のようなミニマルなブランチ戦略を採用する.
+- **DR**: 履歴の可読性を高めるため、rebase / fast-forward を推奨する.
+- **DR**: 変更の追跡と自動化を容易にするため、Conventional Commits を採用する.
+- **DR**: リリース互換性を明確にするため、SemVer を採用する.
 
 ---
 
