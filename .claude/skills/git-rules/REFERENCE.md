@@ -14,121 +14,126 @@
 
 以下は、日常的に実行する開発フローの通し手順です。各ステップに CLI コマンドの例を示します。
 
-1. Issue の起票 (必要に応じて)
-   - GitHub CLI:
+### 2-1. GitHub Issue の起票 (必要に応じて)
+- GitHub CLI:
 
-     ```bash
-     gh issue create \
-       --title "Short title" \
-       --body "Describe the problem or feature" \
-       --label "type:feature"
-     ```
-2. ブランチの作成
-   - 最新の main を取得:
+  ```bash
+  gh issue create \
+    --title "Short title" \
+    --body "Describe the problem or feature" \
+    --label "type:feature"
+  ```
 
-     ```bash
-     git checkout main
-     git pull --rebase origin main
-     ```
+### 2-- 最新の main を取得:
 
-   - ブランチ作成 (Issue と紐付ける場合):
+  ```bash
+  git checkout main
+  git pull --rebase origin main
+  ```
 
-     ```bash
-     git checkout -b feature/123-add-login
-     ```
-3. 実装とコミット
-   - ステージング:
+- ブランチ作成 (Issue と紐付ける場合):
 
-     ```bash
-     git add <files>
-     ```
+  ```bash
+  git checkout -b feature/123-add-login
+  ```
 
-   - コミット:
+### 2-### 2-3. 実装とコミット
+- ステージング:
 
-     ```bash
-     git commit -m "feat(auth): add login endpoint"
-     ```
+  ```bash
+  git add <files>
+  ```
 
-   - 履歴整理 (任意):
+- コミット:
 
-     ```bash
-     git rebase -i HEAD~<n>
-     ```
-4. リモートへ push と PR の作成
-   - push:
+  ```bash
+  git commit -m "feat(auth): add login endpoint"
+  ```
 
-     ```bash
-     git push -u origin feature/123-add-login
-     ```
+- 履歴整理 (任意):
 
-   - PR 作成 (CLI):
+  ```bash
+  git rebase -i HEAD~<n>
+  ```
 
-     ```bash
-     gh pr create \
-       --title "feat: add login" \
-       --body "What / Why / How to test / Closes #123" \
-       --base main \
-       --head feature/123-add-login
-     ```
-5. レビューと CI の確認
-   - レビュー承認 (レビュワー側):
+### 2-### 2-4. リモートへ push と PR の作成
+- push:
 
-     ```bash
-     gh pr review <PR_NUMBER> --approve --body "LGTM"
-     ```
+  ```bash
+  git push -u origin feature/123-add-login
+  ```
 
-   - CI 結果確認:
+- PR 作成 (CLI):
 
-     ```bash
-     gh pr checks <PR_NUMBER>
-     ```
+  ```bash
+  gh pr create \
+    --title "feat: add login" \
+    --body "What / Why / How to test / Closes #123" \
+    --base main \
+    --head feature/123-add-login
+  ```
 
-     または GitHub UI の Checks タブを参照
-6. マージ前の最終調整 (rebase)
-   - rebase して main と同期:
+### 2-### 2-5. レビューと CI の確認
+- レビュー承認 (レビュワー側):
 
-     ```bash
-     git checkout feature/123-add-login
-     git pull --rebase origin main
-     ```
+  ```bash
+  gh pr review <PR_NUMBER> --approve --body "LGTM"
+  ```
 
-   - 競合を解消し、動作確認を行う
-   - rebase 後にリモートに反映する場合 (必要時):
+- CI 結果確認:
 
-     ```bash
-     git push --force-with-lease
-     ```
+  ```bash
+  gh pr checks <PR_NUMBER>
+  ```
 
-   - (注意) `--force-with-lease` 使用時は PR に注記し、レビュー承認を得てください
-   - rebase 後の push は必要に応じて `git push --force-with-lease` (使用時は PR に注記し、レビュー承認を得る)
-7. マージとブランチ削除
-   - マージ (CLI 例):
+  または GitHub UI の Checks タブを参照
 
-     ```bash
-     gh pr merge <PR_NUMBER> --squash
-     # または
-     gh pr merge <PR_NUMBER> --merge
-     ```
+### 2-### 2-6. マージ前の最終調整 (rebase)
+- rebase して main と同期:
 
-   - ブランチ削除:
+  ```bash
+  git checkout feature/123-add-login
+  git pull --rebase origin main
+  ```
 
-     ```bash
-     git push origin --delete feature/123-add-login
-     ```
-8. リリースとタグ付け
-   - main を取得:
+- 競合を解消し、動作確認を行う
+- rebase 後にリモートに反映する場合 (必要時):
 
-     ```bash
-     git checkout main
-     git pull origin main
-     ```
+  ```bash
+  git push --force-with-lease
+  ```
 
-   - タグ付け:
+- (注意) `--force-with-lease` 使用時は PR に注記し、レビュー承認を得てください
 
-     ```bash
-     git tag -a v1.2.3 -m "release v1.2.3"
-     git push origin v1.2.3
-     ```
+### 2-### 2-7. マージとブランチ削除
+- マージ (CLI 例):
+
+  ```bash
+  gh pr merge <PR_NUMBER> --squash
+  # または
+  gh pr merge <PR_NUMBER> --merge
+  ```
+
+- ブランチ削除:
+
+  ```bash
+  git push origin --delete feature/123-add-login
+  ```
+
+### 2-### 2-8. リリースとタグ付け
+- main を取得:
+
+  ```bash
+  git checkout main
+  git pull origin main
+  ```
+
+- タグ付け:
+
+  ```bash
+  git tag -a v1.2.3 -m "release v1.2.3"
+  git push origin v1.2.3
+  ```
 
 ---
 
