@@ -28,7 +28,7 @@
 6. マージの前に必ず最新の `main` に対して rebase を行い、**fast-forward が可能な状態**にすること（`git pull --rebase origin main`、競合解消、動作確認）。
 7. マージは基本的に Fast-Forward（または Squash）を推奨。履歴の整合性が必要な場合にのみ Merge commit を用いる。
 
-> 注意: `git.pull --rebase` と fast-forward を徹底することで、不要なマージコミットや複雑な履歴を避けられます。
+> 注意: `git pull --rebase` と fast-forward を徹底することで、不要なマージコミットや複雑な履歴を避けられます。
 
 ---
 
@@ -74,4 +74,36 @@
 
 ---
 
-更新: このファイルを更新するときは、PR に変更理由と影響範囲を明記してください。
+更新: このファイルを更新するときは、変更理由と影響範囲を PR に明記してレビューを受けてください。
+
+---
+
+## 10. 採用理由
+- **Rebase / Fast-Forward を推奨する理由**: 履歴が直線的になり、不要なマージコミットが減るため、履歴の可読性とバグの追跡が容易になります。スクラムの短いリリースサイクルにも適しています。 
+- **SemVer（タグ）を採用する理由**: バージョニングの互換性を明確にし、リリースや依存管理を一貫して行えるためです。
+
+## 11. タグ付け（リリース）ルール
+- タグは **SemVer** に従う（例: `v1.2.3`）。
+- プリリリースは `-rc.1` や `-beta.1` の形式を付与する。
+- タグ付けは `main` に対して行い、可能であれば GPG 署名を行うことを推奨します。
+
+## 12. スクラム向け追加ルール
+- ブランチはスプリント内で完結することを目標とし、原則スプリント終了までにマージまたはクローズすること。長期化が見込まれる場合はスコープを分割するか、事前にスクラムマスターと相談すること。
+- ブランチ命名例: `feature/SPRINT<番号>-<ISSUE番号>-<短い説明>` または `feature/<ISSUE番号>-<短説明>` を推奨。
+- PR 本文にスプリント番号や関連タスクを明記し、スプリントレビューでのチェックリスト（QA、ドキュメント更新等）を用意すること。
+
+## 13. GitHub Flow の限定運用
+- 本プロジェクトは GitHub Flow を採用し、運用ブランチは **`main` と `feature/*` のみ**を使用します（`develop` や `release` は使いません）。
+- 参考: https://docs.github.com/ja/get-started/using-github/github-flow
+
+## 14. Force push の扱い（`--force-with-lease`）
+- `git push --force-with-lease` の使用は原則禁止です。例外的に個人ブランチ内で履歴を整理（rebase/squash）する場合のみ許可されますが、その際は**事前に PR に注記**し、レビューで承認を得ることを必須とします。
+- 絶対に `git push --force` を使わず、`--force-with-lease` を使用してください（衝突の安全性を高めるため）。
+
+## 15. 参考資料
+- GitHub Flow: https://docs.github.com/ja/get-started/using-github/github-flow
+- Agent skills: https://docs.github.com/ja/copilot/concepts/agents/about-agent-skills
+- Semantic Versioning: https://semver.org/
+- Conventional Commits: https://www.conventionalcommits.org/
+
+---
