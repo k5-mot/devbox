@@ -15,31 +15,120 @@
 以下は、日常的に実行する開発フローの通し手順です。各ステップに CLI コマンドの例を示します。
 
 1. Issue の起票 (必要に応じて)
-   - GitHub CLI: `gh issue create --title "Short title" --body "Describe the problem or feature" --label "type:feature"`
+   - GitHub CLI:
+
+     ```bash
+     gh issue create \
+       --title "Short title" \
+       --body "Describe the problem or feature" \
+       --label "type:feature"
+     ```
 2. ブランチの作成
-   - 最新の main を取得: `git checkout main && git pull --rebase origin main`
-   - ブランチ作成: `git checkout -b feature/123-add-login` (Issue と紐付ける場合)
+   - 最新の main を取得:
+
+     ```bash
+     git checkout main
+     git pull --rebase origin main
+     ```
+
+   - ブランチ作成 (Issue と紐付ける場合):
+
+     ```bash
+     git checkout -b feature/123-add-login
+     ```
 3. 実装とコミット
-   - ステージング: `git add <files>`
-   - コミット: `git commit -m "feat(auth): add login endpoint"`
-   - 履歴整理 (任意): `git rebase -i HEAD~<n>`
+   - ステージング:
+
+     ```bash
+     git add <files>
+     ```
+
+   - コミット:
+
+     ```bash
+     git commit -m "feat(auth): add login endpoint"
+     ```
+
+   - 履歴整理 (任意):
+
+     ```bash
+     git rebase -i HEAD~<n>
+     ```
 4. リモートへ push と PR の作成
-   - push: `git push -u origin feature/123-add-login`
-   - PR 作成 (CLI): `gh pr create --title "feat: add login" --body "What / Why / How to test / Closes #123" --base main --head feature/123-add-login`
+   - push:
+
+     ```bash
+     git push -u origin feature/123-add-login
+     ```
+
+   - PR 作成 (CLI):
+
+     ```bash
+     gh pr create \
+       --title "feat: add login" \
+       --body "What / Why / How to test / Closes #123" \
+       --base main \
+       --head feature/123-add-login
+     ```
 5. レビューと CI の確認
-   - レビュー承認: `gh pr review <PR_NUMBER> --approve --body "LGTM"`
-   - CI 結果確認: GitHub UI の Checks タブや `gh pr checks <PR_NUMBER>` を参照
+   - レビュー承認 (レビュワー側):
+
+     ```bash
+     gh pr review <PR_NUMBER> --approve --body "LGTM"
+     ```
+
+   - CI 結果確認:
+
+     ```bash
+     gh pr checks <PR_NUMBER>
+     ```
+
+     または GitHub UI の Checks タブを参照
 6. マージ前の最終調整 (rebase)
-   - `git checkout feature/123-add-login && git pull --rebase origin main`
-   - 競合解消と動作確認を行う
+   - rebase して main と同期:
+
+     ```bash
+     git checkout feature/123-add-login
+     git pull --rebase origin main
+     ```
+
+   - 競合を解消し、動作確認を行う
+   - rebase 後にリモートに反映する場合 (必要時):
+
+     ```bash
+     git push --force-with-lease
+     ```
+
+   - (注意) `--force-with-lease` 使用時は PR に注記し、レビュー承認を得てください
    - rebase 後の push は必要に応じて `git push --force-with-lease` (使用時は PR に注記し、レビュー承認を得る)
 7. マージとブランチ削除
-   - CLI マージ例: `gh pr merge <PR_NUMBER> --squash` または `gh pr merge <PR_NUMBER> --merge` (運用方針に応じて選択)
-   - ブランチ削除: `gh pr close <PR_NUMBER>` または GitHub が自動で削除
+   - マージ (CLI 例):
+
+     ```bash
+     gh pr merge <PR_NUMBER> --squash
+     # または
+     gh pr merge <PR_NUMBER> --merge
+     ```
+
+   - ブランチ削除:
+
+     ```bash
+     git push origin --delete feature/123-add-login
+     ```
 8. リリースとタグ付け
-   - main を取得: `git checkout main && git pull origin main`
-   - タグ付け: `git tag -a v1.2.3 -m "release v1.2.3"`
-   - タグを push: `git push origin v1.2.3`
+   - main を取得:
+
+     ```bash
+     git checkout main
+     git pull origin main
+     ```
+
+   - タグ付け:
+
+     ```bash
+     git tag -a v1.2.3 -m "release v1.2.3"
+     git push origin v1.2.3
+     ```
 
 ---
 
@@ -122,35 +211,30 @@
 
 ---
 
-## 8. 緊急対応（hotfix）の扱い（GitHub Flow と整合）
-- 補足: GitHub Flow は hotfix を明文化していませんが、緊急修正が必要な場合は次の運用を推奨します。
-  1. `hotfix/<short-desc>` のトピックブランチを作成する（必要なら Issue を作成）。
-  2. 最小限の修正を行い、直ちに PR を作成してレビュー・CI を行う。
-  3. 承認後 `main` にマージし、必要ならタグ付けしてリリースする。関連ブランチへ修正をバックポートすること。
-- hotfix も通常の PR フロー（レビュー・CI）を基本にしつつ、迅速に対応すること。
+
 
 ---
 
-## 9. タグ付け (リリース) と SemVer
+## 8. タグ付け (リリース) と SemVer
 - タグは SemVer に従う (例: `v1.2.3`).
 - プリリリースは `-rc.1` などを使用します.
 - タグは `main` に対して付与し、可能なら GPG 署名を推奨します.
 
 ---
 
-## 10. スクラムを踏まえた追加ルール
+## 9. スクラムを踏まえた追加ルール
 - スプリント内で完結する単位でブランチを管理し、原則スプリント終了までにマージまたはクローズします.
 - ブランチ命名例 (スクラム): `feature/SPRINT<番号>-<ISSUE番号>-<短い説明>` (任意).
 - PR にスプリント番号やレビューチェックリストを含めてください.
 
 ---
 
-## 11. エージェント (Copilot / Claude) 向けの使い方
+## 10. エージェント (Copilot / Claude) 向けの使い方
 - エージェントは本ドキュメントに従い、助言とチェックリストを提示してください。自動でマージやブロックは行わないこと.
 
 ---
 
-## 12. 更新手順
+## 11. 更新手順
 - ドキュメントを更新する場合は、PR に変更理由と影響範囲を明記してレビューを受けてください.
 
 ---
@@ -163,7 +247,7 @@
 
 ---
 
-## 13. 参考資料
+## 12. 参考資料
 - GitHub Flow: https://docs.github.com/ja/get-started/using-github/github-flow
 - Agent skills: https://docs.github.com/ja/copilot/concepts/agents/about-agent-skills
 - Semantic Versioning: https://semver.org/
