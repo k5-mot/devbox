@@ -12,8 +12,8 @@
         "DOCKER_BUILDKIT=1",
         // "--env-file",
         // "./.devcontainer/devcontainer.env",
-        "--name=${localWorkspaceFolderBasename}"
-        // "--rm"
+        "--name=${localWorkspaceFolderBasename}",
+        "--rm"
     ],
     "containerEnv": {
         "DOCKER_BUILDKIT": "1",
@@ -105,7 +105,7 @@
                 // ===============
                 // コーディングエージェント
                 // ===============
-                "saoudrizwan.claude-dev", // Cline
+                // "saoudrizwan.claude-dev", // Cline
                 "anthropic.claude-code", // Claude Code
                 "openai.chatgpt", // Codex
                 // "continue.continue", // Continue
