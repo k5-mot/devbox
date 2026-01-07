@@ -5,6 +5,7 @@
 ---
 
 ## 1. 目的
+
 - 目的: ブランチ運用、Issue/PR の流れ、コミット規約、リリース手順を統一し、品質と可観測性を高める。
 - 適用範囲: このリポジトリ内のすべての開発作業（例外は PR にて合意）。
 
@@ -14,145 +15,162 @@
 
 以下は、日常的に実行する開発フローの通し手順です。各ステップに CLI コマンドの例を示します。
 
-### 2-1. GitHub Issue の起票
-- GitHub CLI:
+### 2-1. 【Planner】GitHub Issue の起票
 
 ```bash
 gh issue create \
---title "Short title" \
---body "Describe the problem or feature" \
---label "type:feature"
+　　--title "Short title" \
+　　--body "Describe the problem or feature" \
+　　--label "type:feature"
 ```
 
-### 2-2. ブランチの作成
-
-- 最新の main を取得:
+### 2-2. 【Committer】最新の main ブランチを取得
 
 ```bash
 git checkout main
 git pull --rebase origin main
 ```
 
-- ブランチ作成 (Issue と紐付ける場合):
+### 2-2. 【Committer】機能開発ブランチの作成
+
+- ブランチ名は、後述のｑ[3. ブランチ戦略と命名](#3-ブランチ戦略と命名) に従うこと
 
 ```bash
+# 【個人開発】Issue 番号 + 短い説明
 git checkout -b feature/123-add-login
+
+# 【組織開発】Sprint 番号 + Issue 番号 + 短い説明
+git checkout -b feature/S5-123-add-login
 ```
 
-### 2-3. 実装とコミット
-- ステージング:
+### 2-3. 【Committer】実装とコミット
+
+- コミットメッセージは、[Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) に従うこと
+- 詳細は、後述の [6. コミットメッセージ作成ルール](#6-コミットメッセージconventional-commits) を参照
 
 ```bash
+# ステージング
 git add <files>
-```
 
-- コミット:
-
-```bash
+# コミット例
 git commit -m "feat(auth): add login endpoint"
 ```
 
-- 履歴整理 (任意):
+### 2-4. 【Committer】最新の main ブランチを反映する
 
 ```bash
-git rebase -i HEAD~<n>
+git pull --rebase origin main
 ```
 
-### 2-4. リモートへ push と PR の作成
-- push:
+### 2-4. 【Committer】リモートへプッシュ
 
 ```bash
 git push -u origin feature/123-add-login
 ```
 
-- PR 作成 (CLI):
+### 2-4. 【Committer】PR (Pull Request) の作成
+
+- 詳細は、後述の [5. Pull Request (PR) ルール](#5-pull-request-pr-ルール) を参照
 
 ```bash
 gh pr create \
---title "feat: add login" \
---body "What / Why / How to test / Closes #123" \
---base main \
---head feature/123-add-login
+  --title "feat: add login" \
+  --body "What / Why / How to test / Closes #123" \
+  --base main \
+  --head feature/123-add-login
 ```
 
-### 2-5. レビューと CI の確認
-- レビュー承認 (レビュワー側):
+### 2-5. 【Reviewer】CI の確認とコードレビュー・承認
 
 ```bash
+# CI の確認
+gh pr checks <PR_NUMBER>
+
+# コードレビューの承認
 gh pr review <PR_NUMBER> --approve --body "LGTM"
 ```
 
-- CI 結果確認:
+### 2-6. 【Committer】マージ前の最終確認
 
-```bash
-gh pr checks <PR_NUMBER>
-```
-
-または GitHub UI の Checks タブを参照
-
-### 2-6. マージ前の最終調整
-- rebase して main と同期:
+- 最新の main ブランチを反映し、プッシュ
 
 ```bash
 git checkout feature/123-add-login
 git pull --rebase origin main
+git push --force-with-lease --force-if-includes
 ```
 
-- 競合を解消し、動作確認を行う
-- rebase 後にリモートに反映する場合 (必要時):
 
-```bash
-git push --force-with-lease
-```
-
+- TODO: 以下は、Github Flavoed Makrdwonで書くこと
 - (注意) 履歴書き換え時は `git push --force-with-lease` または `git push --force-if-includes` を使用してください（詳細は 7. 履歴書き換えと push の扱い を参照）
 
-### 2-7. マージとブランチ削除
-- マージ (CLI 例):
+### 2-7. 【Committer】マージとブランチ削除
+
+- REVIEW: SQuashは基本的に許容しないです。
+- TODO: 「コミットをリベースしてマージする」で基本的にマージします
+
+- 参考資料：[プルリクエストのマージについて - GitHub Docs](https://docs.github.com/ja/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/about-pull-request-merges#rebase-and-merge-your-commits)
 
 ```bash
-gh pr merge <PR_NUMBER> --squash
-# または
-gh pr merge <PR_NUMBER> --merge
+gh pr merge <PR_NUMBER> --rebase --delete-branch
 ```
 
-- ブランチ削除:
+### 2-8. 【Product Owner】リリースとタグ付け
 
 ```bash
-git push origin --delete feature/123-add-login
-```
-
-### 2-8. リリースとタグ付け
-- main を取得:
-
-```bash
+# 1. main を取得
 git checkout main
 git pull origin main
-```
 
-- タグ付け:
-
-```bash
+# 2. リリース用タグを作成
 git tag -a v1.2.3 -m "release v1.2.3"
+
+# 3. タグをリモートにプッシュ
 git push origin v1.2.3
 ```
 
 ---
 
-## 3. ブランチ戦略と命名
-- 採用: GitHub Flow をベースに、**`main` と短いトピックブランチ名** (短く分かりやすい) を使用します。`develop` や `release` ブランチは使用しません。
-- 命名例:
-  - トピックブランチ: `increase-test-timeout`, `add-code-of-conduct`
-  - Issue 紐付け: `feature/123-add-login` (Issue 番号を含めたい場合)
-- チーム方針で `feature/` プレフィックスを必須にしても良いが、短く分かりやすい命名を優先してください。
+## 3. Issue 運用ルール
 
----
-
-## 4. Issue の運用
-- Issue を作成する条件: 新機能、バグ、改善提案、設計上の判断を要する事項。軽微な修正は PR で対応可能。
+- Issue作成時、以下のルールを順守すること
+  - label を必ず設定すること
+    - `type:feature`: 新機能
+    - `type:bug`: バグ
+    - `type:improvement`: 改善提案
+    - `type:docs`: ドキュメント
+    - Issue を作成する条件: 新機能、バグ、改善提案、設計上の判断を要する事項。軽微な修正は PR で対応可能。
 - テンプレートとラベル: `.github/ISSUE_TEMPLATE` とラベル（例: `type:bug`, `type:feature`, `priority:high`, `status:triage`, `sprint:<n>`）を活用する。
 - ライフサイクル: `triage` → `assign` → `in progress` → `review` → `done`。
 - PR との連携: PR に `Closes #<issue>` を含めると自動で Issue を閉じる。コミットや PR に Issue 番号を明示してください。
+
+---
+
+## 4. ブランチ命名ルール
+
+> [!IMPORTANT]
+> シンプルなGitHub Flowを採用することで、
+> ブランチ管理が容易になり、開発速度が向上します。
+
+```bash
+# 【個人開発】Issue 番号 + 短い説明
+git checkout -b feature/123-add-login
+
+# 【組織開発】Sprint 番号 + Issue 番号 + 短い説明
+git checkout -b feature/S5-123-add-login
+```
+
+> [!NOTE]
+> - GitHub Flow
+>   - [GitHub フロー | GitHub Docs](https://docs.github.com/ja/get-started/using-github/github-flow)
+> Git flow
+>   - [A successful Git branching model](https://nvie.com/posts/a-successful-git-branching-model/)
+>   - [Gitflow ワークフロー | Atlassian Git Tutorial](https://www.atlassian.com/ja/git/tutorials/comparing-workflows/gitflow-workflow)
+> GitLab Flow
+>   - [GitLab Flowとは](https://about.gitlab.com/ja-jp/topics/version-control/what-is-gitlab-flow/)
+> Trunk based development
+>   - [DORA | Capabilities: Trunk-based development](https://dora.dev/capabilities/trunk-based-development/)
+>   - [トランク ベース開発 | Atlassian Git Tutorial](https://www.atlassian.com/ja/continuous-delivery/continuous-integration/trunk-based-development)
 
 ---
 
